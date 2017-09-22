@@ -1,0 +1,62 @@
+
+plugins {
+    id "com.github.johnrengelman.shadow" version '1.2.3'
+    id 'application'
+}
+
+// Specifies the entry point of the application
+mainClassName = 'assignment3.MainApp'
+
+allprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "https://repo.eclipse.org/content/repositories/egit-releases/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+    
+    project.ext {
+        guavaVersion = '23.0'
+        junitVersion = '4.12'
+
+        libDir = 'lib'
+    }
+
+    dependencies {
+        compile "com.google.guava:guava:$guavaVersion"
+
+        testCompile "junit:junit:$junitVersion"
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDir 'src/main/java'
+            }
+            resources {
+                srcDir 'src/main/resources'
+            }
+        }
+
+        test {
+            java {
+                srcDir 'test/java'
+            }
+        }
+    }
+
+    shadowJar {
+        archiveName = "CIR_QuerySystem.jar"
+
+        destinationDir = file("${buildDir}/jar/")
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.12'
+}
