@@ -21,6 +21,13 @@ public class XmlDataParser implements DataParser {
         }
 
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        XmlDataParserHandler handler = new XmlDataParserHandler();
+
+        try {
+            saxParserFactory.newSAXParser().parse(file, handler);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }
