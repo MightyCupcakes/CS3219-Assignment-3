@@ -1,0 +1,59 @@
+package assignment3.dataparser.xmlparser.elementparser;
+
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+
+import assignment3.dataparser.SerializedCitation;
+
+public class CitationElementParser implements ElementParser {
+
+    private static Map<String, BiConsumer<SerializedCitation.Builder, String>> elementHandler;
+
+    private Deque<String> currentElement;
+    private List<SerializedCitation> citations;
+    private SerializedCitation.Builder builder;
+
+    static {
+        elementHandler = new HashMap<>();
+
+        elementHandler.put("author", (b, s) -> b.withAuthor(s));
+        elementHandler.put("title", (b, s) -> b.withTitle(s));
+        elementHandler.put("date", (b, s) -> b.withYear(s));
+    }
+
+    public CitationElementParser() {
+        currentElement = new LinkedList<>();
+        citations = new LinkedList<>();
+        builder = new SerializedCitation.Builder();
+    }
+
+    @Override
+    public void openElement(String element) {
+        currentElement.push(element.toLowerCase());
+    }
+
+    @Override
+    public void closeElement(String element) {
+        String closed = currentElement.pop();
+
+        if (closed.equalsIgnoreCase("citation")) {
+            citations.add(builder.build());
+            builder = new SerializedCitation.Builder();
+        }
+    }
+
+    @Override
+    public void parse(String text) {
+        if (elementHandler.containsKey(currentElement)) {
+            elementHandler.get(currentElement).accept(builder, text);
+        }
+    }
+
+    public List<SerializedCitation> getCitations() {
+        return citations;
+    }
+}

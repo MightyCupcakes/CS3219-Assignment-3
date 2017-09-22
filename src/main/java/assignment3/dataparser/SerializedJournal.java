@@ -5,11 +5,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class SerializedJournal {
-    private final String title;
-    private final String author;
-    private final String affiliation;
-    private final String abstractText;
-    private final int yearOfPublication;
+    public final String title;
+    public final String author;
+    public final String affiliation;
+    public final String abstractText;
+    public final int yearOfPublication;
 
     private final List<SerializedCitation> citations;
 
@@ -28,6 +28,10 @@ public class SerializedJournal {
 
         citedArticles.forEach(citations::add);
 
+    }
+
+    public List<SerializedCitation> getCitations() {
+        return Collections.unmodifiableList(citations);
     }
 
     public static class Builder {
@@ -63,8 +67,8 @@ public class SerializedJournal {
             return this;
         }
 
-        public Builder withYear(int yearOfPublication) {
-            this.yearOfPublication = yearOfPublication;
+        public Builder withYear(String yearOfPublication) {
+            this.yearOfPublication = Integer.parseInt(yearOfPublication);
 
             return this;
         }

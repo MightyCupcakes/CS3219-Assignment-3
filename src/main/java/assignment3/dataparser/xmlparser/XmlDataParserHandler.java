@@ -1,38 +1,26 @@
 package assignment3.dataparser.xmlparser;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import static java.util.Objects.requireNonNull;
+
 import java.util.function.BiConsumer;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import assignment3.dataparser.SerializedCitation;
 import assignment3.dataparser.SerializedJournal;
+import assignment3.dataparser.xmlparser.elementparser.CitationElementParser;
+import assignment3.dataparser.xmlparser.elementparser.ElementParser;
+import assignment3.dataparser.xmlparser.elementparser.JournalElementParser;
 
 public class XmlDataParserHandler extends DefaultHandler {
 
-    private static final BiConsumer<SerializedJournal.Builder, String> NOOP = (b, s) -> {};
-
-    private static Map<String, BiConsumer<SerializedJournal.Builder, String>> elementHandler;
-
-    private SerializedJournal.Builder builder;
-    private List<SerializedCitation> citationList;
     private BiConsumer<SerializedJournal.Builder, String> handler;
 
     private SerializedJournal journal;
-
-    static {
-        elementHandler = new HashMap<>();
-
-        elementHandler.put("title", (b, s) -> b.withTitle(s));
-        elementHandler.put("author", (b, s) -> b.withAuthor(s));
-        elementHandler.put("affiliation", (b, s) -> b.withAffiliation(s));
-        elementHandler.put("abstract", (b, s) -> b.withAbstract(s));
-    }
+    private SerializedJournal.Builder builder;
+    private ElementParser currentElementParser;
+    private JournalElementParser journalElementParser;
 
     public SerializedJournal getJournal() {
         return journal;
@@ -43,25 +31,29 @@ public class XmlDataParserHandler extends DefaultHandler {
         if (qName.equalsIgnoreCase("algorithm")
                 && attributes.getValue("name").equalsIgnoreCase("ParsHed")) {
 
-            builder = new SerializedJournal.Builder();
+            currentElementParser = new JournalElementParser();
         } else if (qName.equalsIgnoreCase("citationList")) {
-            citationList = new LinkedList<>();
-        } else if (builder != null && elementHandler.containsKey(qName.toLowerCase())) {
-            handler = elementHandler.get(qName.toLowerCase());
+            journalElementParser = (JournalElementParser) currentElementParser;
+            currentElementParser = new CitationElementParser();
         } else {
-            handler = NOOP;
+            currentElementParser.openElement(qName);
         }
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (citationList != null && qName.equalsIgnoreCase("algorithm")) {
-            journal = builder.build();
+        if (qName.equalsIgnoreCase("algorithms")) {
+            assert currentElementParser instanceof CitationElementParser;
+
+            journalElementParser.setCitations(((CitationElementParser) currentElementParser).getCitations());
+            journal = journalElementParser.getJournal();
+        } else {
+            currentElementParser.closeElement(qName);
         }
     }
 
     @Override
     public void characters(char ch[], int start, int length) throws SAXException {
-        handler.accept(builder, new String(ch, start, length));
+        currentElementParser.parse(new String(ch, start, length));
     }
 }
