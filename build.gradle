@@ -45,7 +45,7 @@ allprojects {
 
         test {
             java {
-                srcDir 'test/java'
+                srcDir 'src/test/java'
             }
         }
     }

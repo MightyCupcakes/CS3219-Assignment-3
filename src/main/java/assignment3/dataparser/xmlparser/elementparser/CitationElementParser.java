@@ -48,8 +48,8 @@ public class CitationElementParser implements ElementParser {
 
     @Override
     public void parse(String text) {
-        if (elementHandler.containsKey(currentElement)) {
-            elementHandler.get(currentElement).accept(builder, text);
+        if (elementHandler.containsKey(currentElement.peek())) {
+            elementHandler.get(currentElement.peek()).accept(builder, text);
         }
     }
 

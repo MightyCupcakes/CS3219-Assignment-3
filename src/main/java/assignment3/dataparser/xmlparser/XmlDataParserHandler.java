@@ -35,8 +35,11 @@ public class XmlDataParserHandler extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("citationList")) {
             journalElementParser = (JournalElementParser) currentElementParser;
             currentElementParser = new CitationElementParser();
+            currentElementParser.openElement("citationList");
         } else {
-            currentElementParser.openElement(qName);
+            if (currentElementParser != null) {
+                currentElementParser.openElement(qName);
+            }
         }
     }
 
@@ -47,13 +50,15 @@ public class XmlDataParserHandler extends DefaultHandler {
 
             journalElementParser.setCitations(((CitationElementParser) currentElementParser).getCitations());
             journal = journalElementParser.getJournal();
-        } else {
+        } else if (currentElementParser != null) {
             currentElementParser.closeElement(qName);
         }
     }
 
     @Override
     public void characters(char ch[], int start, int length) throws SAXException {
-        currentElementParser.parse(new String(ch, start, length));
+        if (currentElementParser != null) {
+            currentElementParser.parse(new String(ch, start, length));
+        }
     }
 }

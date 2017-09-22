@@ -1,6 +1,7 @@
 package assignment3.dataparser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SerializedCitation {
@@ -14,6 +15,16 @@ public class SerializedCitation {
         this.authors = new ArrayList<>();
 
         authorsList.forEach(authors::add);
+        Collections.sort(authorsList);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this
+                || (other instanceof SerializedCitation
+                && this.title.equals(((SerializedCitation) other).title)
+                && this.year == ((SerializedCitation) other).year
+                && this.authors.equals(((SerializedCitation) other).authors));
     }
 
     public static class Builder {
@@ -39,6 +50,8 @@ public class SerializedCitation {
 
         public Builder withAuthor(String author) {
             authors.add(author);
+
+            return this;
         }
 
         public SerializedCitation build() {
