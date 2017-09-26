@@ -32,12 +32,26 @@ public class NormalQueryTest {
         SchemaString author = new SchemaString("author");
         SchemaString title = new SchemaString("title");
 
+        JsonGenerator json = new JsonGenerator();
+        JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
+
+        rowJson.generateJson(author.getNameOfAttribute(), "a");
+        rowJson.generateJson(title.getNameOfAttribute(), "A title");
+        json.addObjectToArray(rowJson);
+
+        rowJson = new JsonGenerator.JsonGeneratorBuilder();
+
+        rowJson.generateJson(author.getNameOfAttribute(), "a");
+        rowJson.generateJson(title.getNameOfAttribute(), "A title 1");
+        json.addObjectToArray(rowJson);
+
         ImmutableList<SchemaComparable> columnsToShow = ImmutableList.of(author, title);
         SchemaPredicate predicate = author.equalsTo("a");
 
         TestNormalQuery query = new TestNormalQuery(columnsToShow, predicate);
         query.setData(journals);
-        assertEquals("", query.execute());
+
+        assertEquals(json.getJsonString(), query.execute());
     }
 
     public static void createDummyJournals(List<SerializedJournal> journals) {
