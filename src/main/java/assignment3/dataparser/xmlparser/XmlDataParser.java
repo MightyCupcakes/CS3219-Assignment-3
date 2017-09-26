@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import javax.xml.parsers.SAXParserFactory;
 
 import assignment3.dataparser.DataParser;
-import assignment3.dataparser.SerializedJournal;
+import assignment3.datarepresentation.SerializedJournal;
 
 public class XmlDataParser implements DataParser {
 

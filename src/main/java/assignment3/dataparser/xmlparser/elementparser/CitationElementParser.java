@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import assignment3.dataparser.SerializedCitation;
+import assignment3.datarepresentation.SerializedCitation;
 
 public class CitationElementParser implements ElementParser {
 

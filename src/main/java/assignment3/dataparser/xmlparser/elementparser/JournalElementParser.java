@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import assignment3.dataparser.SerializedCitation;
-import assignment3.dataparser.SerializedJournal;
+import assignment3.datarepresentation.SerializedCitation;
+import assignment3.datarepresentation.SerializedJournal;
 
 public class JournalElementParser implements ElementParser {
 

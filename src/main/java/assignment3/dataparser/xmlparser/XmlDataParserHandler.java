@@ -8,7 +8,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import assignment3.dataparser.SerializedJournal;
+import assignment3.datarepresentation.SerializedJournal;
 import assignment3.dataparser.xmlparser.elementparser.CitationElementParser;
 import assignment3.dataparser.xmlparser.elementparser.ElementParser;
 import assignment3.dataparser.xmlparser.elementparser.JournalElementParser;

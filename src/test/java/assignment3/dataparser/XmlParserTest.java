@@ -3,7 +3,6 @@ package assignment3.dataparser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -11,6 +10,8 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 
 import assignment3.dataparser.xmlparser.XmlDataParser;
+import assignment3.datarepresentation.SerializedCitation;
+import assignment3.datarepresentation.SerializedJournal;
 
 public class XmlParserTest {
 
@@ -40,6 +41,6 @@ public class XmlParserTest {
                         .withAuthor("John DeNero").withAuthor("Dan Klein").build()
                 ).build();
 
-        assertTrue(expectedCitations.equals(journal.getCitations()));
+        assertTrue(expectedCitations.equals(journal.citations));
     }
 }

@@ -1,4 +1,4 @@
-package assignment3.dataparser;
+package assignment3.datarepresentation;
 
 import java.util.ArrayList;
 import java.util.Collections;

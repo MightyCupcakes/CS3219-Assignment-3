@@ -1,4 +1,4 @@
-package assignment3.dataparser;
+package assignment3.datarepresentation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,7 @@ public class SerializedJournal {
     public final String abstractText;
     public final int yearOfPublication;
 
-    private final List<SerializedCitation> citations;
+    public final List<SerializedCitation> citations;
 
     private SerializedJournal (String title,
                                String author,
@@ -30,10 +30,6 @@ public class SerializedJournal {
 
     }
 
-    public List<SerializedCitation> getCitations() {
-        return Collections.unmodifiableList(citations);
-    }
-
     public static class Builder {
         private String title;
         private String author;
@@ -41,7 +37,7 @@ public class SerializedJournal {
         private String abstractText;
         private int yearOfPublication;
 
-        private List<SerializedCitation> citations;
+        private List<SerializedCitation> citations = Collections.emptyList();
 
         public Builder withTitle(String title) {
             this.title = title;
