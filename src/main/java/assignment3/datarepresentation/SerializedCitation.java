@@ -7,7 +7,7 @@ import java.util.List;
 public class SerializedCitation {
     public String title;
     public int year;
-    private List<String> authors;
+    public List<String> authors;
 
     private SerializedCitation(String title, int year, List<String> authorsList) {
         this.title = title;

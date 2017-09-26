@@ -3,6 +3,7 @@ package assignment3.datarepresentation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class SerializedJournal {
     public final String title;
@@ -28,6 +29,20 @@ public class SerializedJournal {
 
         citedArticles.forEach(citations::add);
 
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, author, yearOfPublication);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this
+                || (other instanceof SerializedJournal
+                && this.title.equals(((SerializedJournal) other).title)
+                && this.author.equals(((SerializedJournal) other).author)
+                && this.yearOfPublication == ((SerializedJournal) other).yearOfPublication);
     }
 
     public static class Builder {

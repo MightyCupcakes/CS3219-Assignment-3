@@ -6,8 +6,8 @@ import assignment3.datarepresentation.SerializedJournal;
 
 public class SchemaPredicate {
 
-    private SchemaBase column;
-    private Predicate<SerializedJournal> conditional;
+    public SchemaBase column;
+    public Predicate<SerializedJournal> conditional;
 
     public SchemaPredicate(SchemaBase column, Predicate<SerializedJournal> conditional) {
         this.column = column;
