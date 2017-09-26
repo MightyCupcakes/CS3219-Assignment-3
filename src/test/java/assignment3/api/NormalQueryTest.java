@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.schema.SchemaComparable;
+import assignment3.schema.SchemaInt;
 import assignment3.schema.SchemaPredicate;
 import assignment3.schema.SchemaString;
 
@@ -47,6 +48,28 @@ public class NormalQueryTest {
 
         ImmutableList<SchemaComparable> columnsToShow = ImmutableList.of(author, title);
         SchemaPredicate predicate = author.equalsTo("a");
+
+        TestNormalQuery query = new TestNormalQuery(columnsToShow, predicate);
+        query.setData(journals);
+
+        assertEquals(json.getJsonString(), query.execute());
+    }
+
+    @Test
+    public void testQuery2() {
+        SchemaString author = new SchemaString("author");
+        SchemaString title = new SchemaString("title");
+        SchemaInt year = new SchemaInt("yearOfPublication");
+
+        JsonGenerator json = new JsonGenerator();
+        JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
+
+        rowJson.generateJson(author.getNameOfAttribute(), "c");
+        rowJson.generateJson(title.getNameOfAttribute(), "C title");
+        json.addObjectToArray(rowJson);
+
+        ImmutableList<SchemaComparable> columnsToShow = ImmutableList.of(author, title);
+        SchemaPredicate predicate = author.equalsTo("c").and(year.equalsTo(2011));
 
         TestNormalQuery query = new TestNormalQuery(columnsToShow, predicate);
         query.setData(journals);
