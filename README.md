@@ -65,7 +65,7 @@ The planned API calls for each question are:
 ```java
 PaperPublishedInConference conf = new PaperPublishedInConference();
 Query query = QueryBuilder
-  .select(COUNT(conf.authorName))
+  .select(new SchemaCount(conf.id))
   .from("D12", "D13", "D14", "D15", "K14", "W14", "Q14")
   .build();
   
