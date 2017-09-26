@@ -30,6 +30,7 @@ allprojects {
     dependencies {
         compile "com.google.guava:guava:$guavaVersion"
         compile "javax.json:javax.json-api:1.0"
+        compile "org.glassfish:javax.json:1.0.4"
 
         testCompile "junit:junit:$junitVersion"
     }
