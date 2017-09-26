@@ -50,6 +50,13 @@ public class SchemaTest {
 
         assertFalse(predicate.test(journals.get(0)));
         assertFalse(predicate.test(journals.get(2)));
+
+        SchemaString title = new SchemaString("title");
+
+        predicate = author.equalsTo("a").and(year.equalsTo(2012)).and(title.equalsTo("A title"));
+
+        assertTrue(predicate.test(journals.get(0)));
+        assertFalse(predicate.test(journals.get(2)));
     }
 
     public static void createDummyJournals(List<SerializedJournal> journals) {
