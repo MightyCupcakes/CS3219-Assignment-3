@@ -5,18 +5,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import assignment3.datarepresentation.SerializedJournal;
+import assignment3.model.Model;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 
-public class NormalQuery {
+public class NormalQuery implements Query {
     private List<SchemaComparable> columnsToShow;
     private SchemaPredicate predicate;
+    private List<String> tablesToRead;
+    private Model model;
 
     protected List<SerializedJournal> journals;
 
-    public NormalQuery(List<SchemaComparable> columnsToShow, SchemaPredicate predicate) {
+    public NormalQuery(List<SchemaComparable> columnsToShow, SchemaPredicate predicate, List<String> tablesToRead) {
         this.columnsToShow = Collections.unmodifiableList(columnsToShow);
         this.predicate = predicate;
+        this.tablesToRead = tablesToRead;
     }
 
     private List<SerializedJournal> filterOutRows(List<SerializedJournal> data) {
@@ -25,6 +29,12 @@ public class NormalQuery {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void setDataSource(Model model) {
+        this.model = model;
+    }
+
+    @Override
     public String execute() {
 
         journals = filterOutRows(journals);

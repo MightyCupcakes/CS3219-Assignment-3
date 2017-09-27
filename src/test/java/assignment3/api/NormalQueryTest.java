@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -49,7 +50,7 @@ public class NormalQueryTest {
         ImmutableList<SchemaComparable> columnsToShow = ImmutableList.of(author, title);
         SchemaPredicate predicate = author.equalsTo("a");
 
-        TestNormalQuery query = new TestNormalQuery(columnsToShow, predicate);
+        TestNormalQuery query = new TestNormalQuery(columnsToShow, predicate, Collections.emptyList());
         query.setData(journals);
 
         assertEquals(json.getJsonString(), query.execute());
@@ -71,7 +72,7 @@ public class NormalQueryTest {
         ImmutableList<SchemaComparable> columnsToShow = ImmutableList.of(author, title);
         SchemaPredicate predicate = author.equalsTo("c").and(year.equalsTo(2011));
 
-        TestNormalQuery query = new TestNormalQuery(columnsToShow, predicate);
+        TestNormalQuery query = new TestNormalQuery(columnsToShow, predicate, Collections.emptyList());
         query.setData(journals);
 
         assertEquals(json.getJsonString(), query.execute());
@@ -111,9 +112,12 @@ public class NormalQueryTest {
         journals.add(builder.build());
     }
 
+    /**
+     * A stub class that allows the overriding of the list of journals bypassing the Model.
+     */
     public static class TestNormalQuery extends NormalQuery {
-        public TestNormalQuery(List<SchemaComparable> columnsToShow, SchemaPredicate predicate) {
-            super (columnsToShow, predicate);
+        public TestNormalQuery(List<SchemaComparable> columnsToShow, SchemaPredicate predicate, List<String> tablesToRead) {
+            super (columnsToShow, predicate, tablesToRead);
         }
 
         public void setData(List<SerializedJournal> data) {
