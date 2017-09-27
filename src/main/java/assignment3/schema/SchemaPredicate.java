@@ -42,9 +42,9 @@ public class SchemaPredicate {
 
     @Override
     public boolean equals(Object other) {
+        String hi = conditional.toString();
         return other == this
                 || (other instanceof SchemaPredicate
-                && this.column.equals(((SchemaPredicate) other).column)
-                && this.conditional.equals(((SchemaPredicate) other).conditional));
+                && this.column.equals(((SchemaPredicate) other).column));
     }
 }
