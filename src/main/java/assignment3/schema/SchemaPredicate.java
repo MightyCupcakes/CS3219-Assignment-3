@@ -35,4 +35,16 @@ public class SchemaPredicate {
 
         return this;
     }
+
+    public SchemaPredicate copy() {
+        return new SchemaPredicate(column, conditional);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this
+                || (other instanceof SchemaPredicate
+                && this.column.equals(((SchemaPredicate) other).column)
+                && this.conditional.equals(((SchemaPredicate) other).conditional));
+    }
 }

@@ -39,7 +39,7 @@ public class QueryBuilder {
     }
 
     public QueryBuilder where(SchemaPredicate predicate) {
-        whereClause = predicate;
+        whereClause = predicate.copy();
         return this;
     }
 
@@ -51,6 +51,17 @@ public class QueryBuilder {
     public Query build() throws QueryException {
         if (selectColumns.isEmpty()) {
             throw new QueryException("At least one column needs to be selected");
+        }
+
+        if (!groupByClause.isEmpty()) {
+            // If group by is not empty, then check that all columns to be printed out are in the group by clause
+            boolean allMatch = selectColumns.stream()
+                    .filter(schemaBase -> schemaBase instanceof SchemaComparable)
+                    .allMatch(groupByClause::contains);
+
+            if (!allMatch) {
+                throw new QueryException("Only attributes in the group by clause and aggregrate queries can be used in the select clause.");
+            }
         }
 
         if (selectColumns.stream().allMatch(schemaBase -> schemaBase instanceof SchemaComparable)) {

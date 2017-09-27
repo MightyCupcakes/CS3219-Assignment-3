@@ -50,4 +50,13 @@ public class NormalQuery implements Query {
 
         return json.getJsonString();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this
+                || (other instanceof NormalQuery
+                && this.columnsToShow.equals(((NormalQuery) other).columnsToShow)
+                && this.tablesToRead.equals(((NormalQuery) other).tablesToRead)
+                && this.predicate.equals(((NormalQuery) other).predicate));
+    }
 }
