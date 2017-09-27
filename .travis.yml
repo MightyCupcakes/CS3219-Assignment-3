@@ -3,6 +3,7 @@ matrix:
   include:
     - jdk: oraclejdk8
 
-before_script: - chmod +x gradlew
+before_install:
+ - chmod +x gradlew
 
 script: ./gradlew clean test
