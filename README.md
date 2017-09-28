@@ -1,5 +1,9 @@
 # CS3219-Assignment-3
 
+## Architecture
+
+![diagram](architecture.png "diagram")
+
 ## API Documentation (Planned!!)
 
 The various files provided are downloaded and parsed by the `DataParser` package. All these data will be saved in a seperate files
