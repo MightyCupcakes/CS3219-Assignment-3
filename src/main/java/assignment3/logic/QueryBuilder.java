@@ -1,23 +1,30 @@
-package assignment3.api;
+package assignment3.logic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import assignment3.logic.NormalQuery;
+import assignment3.api.APIQueryBuilder;
+import assignment3.api.Query;
 import assignment3.api.exceptions.QueryException;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 
-public class QueryBuilder {
+public class QueryBuilder implements APIQueryBuilder {
 
     private List<SchemaBase> selectColumns;
     private List<String> fromTables;
     private SchemaPredicate whereClause;
     private List<SchemaComparable> groupByClause;
 
-    public static QueryBuilder createNewBuilder() {
+    private static Logic logic;
+
+    public static void setLogicTo(Logic controller) {
+        QueryBuilder.logic = controller;
+    }
+
+    public static APIQueryBuilder createNewBuilder() {
         return new QueryBuilder();
     }
 
@@ -28,26 +35,31 @@ public class QueryBuilder {
         groupByClause = new ArrayList<>();
     }
 
-    public QueryBuilder select(SchemaBase... columns) {
+    @Override
+    public APIQueryBuilder select(SchemaBase... columns) {
         Arrays.stream(columns).forEach(selectColumns::add);
         return this;
     }
 
-    public QueryBuilder from(String... tables) {
+    @Override
+    public APIQueryBuilder from(String... tables) {
         Arrays.stream(tables).forEach(fromTables::add);
         return this;
     }
 
-    public QueryBuilder where(SchemaPredicate predicate) {
+    @Override
+    public APIQueryBuilder where(SchemaPredicate predicate) {
         whereClause = predicate.copy();
         return this;
     }
 
-    public QueryBuilder groupBy(SchemaComparable... columns) {
+    @Override
+    public APIQueryBuilder groupBy(SchemaComparable... columns) {
         Arrays.stream(columns).forEach(groupByClause::add);
         return this;
     }
 
+    @Override
     public Query build() throws QueryException {
         if (selectColumns.isEmpty()) {
             throw new QueryException("At least one column needs to be selected");

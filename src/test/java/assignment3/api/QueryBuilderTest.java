@@ -7,6 +7,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 
 import assignment3.logic.NormalQuery;
+import assignment3.logic.QueryBuilder;
 import assignment3.schema.SchemaString;
 
 
