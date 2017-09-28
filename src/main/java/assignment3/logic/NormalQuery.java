@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import assignment3.api.Query;
 import assignment3.datarepresentation.SerializedJournal;
-import assignment3.model.Model;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 
@@ -14,7 +13,7 @@ public class NormalQuery implements Query {
     private List<SchemaComparable> columnsToShow;
     private SchemaPredicate predicate;
     private List<String> tablesToRead;
-    private Model model;
+    private Logic logic;
 
     protected List<SerializedJournal> journals;
 
@@ -30,9 +29,8 @@ public class NormalQuery implements Query {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public void setDataSource(Model model) {
-        this.model = model;
+    public void setDataSource(Logic logic) {
+        this.logic = logic;
     }
 
     @Override

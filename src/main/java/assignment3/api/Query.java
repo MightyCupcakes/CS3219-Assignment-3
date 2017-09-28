@@ -1,9 +1,10 @@
 package assignment3.api;
 
-import assignment3.model.Model;
-
 public interface Query {
-
+    /**
+     * Executes this query and returns a JSON string representing the
+     * results of this query
+     *
+     */
     String execute();
-    void setDataSource(Model model);
 }

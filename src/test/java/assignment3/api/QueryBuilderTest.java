@@ -2,6 +2,8 @@ package assignment3.api;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Objects;
+
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -30,6 +32,5 @@ public class QueryBuilderTest {
                 ImmutableList.of(""));
 
         assertTrue(expectedQuery.equals(query));
-
     }
 }

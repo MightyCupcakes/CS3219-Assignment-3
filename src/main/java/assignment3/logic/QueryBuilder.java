@@ -83,7 +83,10 @@ public class QueryBuilder implements APIQueryBuilder {
                     .map(schemaBase -> (SchemaComparable) schemaBase)
                     .forEach(normalSelectColumns::add);
 
-            return new NormalQuery(normalSelectColumns, whereClause, fromTables);
+            NormalQuery query = new NormalQuery(normalSelectColumns, whereClause, fromTables);
+            query.setDataSource(logic);
+
+            return query;
         }
 
         return null;
