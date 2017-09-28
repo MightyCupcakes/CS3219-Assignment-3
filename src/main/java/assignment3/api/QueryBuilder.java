@@ -3,8 +3,8 @@ package assignment3.api;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import assignment3.logic.NormalQuery;
 import assignment3.api.exceptions.QueryException;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;

@@ -1,9 +1,10 @@
-package assignment3.api;
+package assignment3.logic;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import assignment3.api.Query;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.model.Model;
 import assignment3.schema.SchemaComparable;

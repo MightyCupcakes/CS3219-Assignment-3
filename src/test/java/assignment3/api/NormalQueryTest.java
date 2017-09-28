@@ -1,7 +1,6 @@
 package assignment3.api;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +11,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import assignment3.logic.JsonGenerator;
+import assignment3.logic.NormalQuery;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaInt;

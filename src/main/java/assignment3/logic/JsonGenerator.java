@@ -1,4 +1,4 @@
-package assignment3.api;
+package assignment3.logic;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
