@@ -2,14 +2,14 @@
 <algorithms version="110505">
 
   <algorithm name="SectLabel" version="110505">
-  <variant no="0" confidence="0.000322">
-    <title confidence="0.987981">
-      Wiki-ly Supervised Part-of-Speech Tagging
-    </title>
-    <author confidence="0.985166">
-      Shen Li Jo˜ao V. Grac¸a Ben Taskar
-    </author>
-  </variant>
+    <variant no="0" confidence="0.000322">
+      <title confidence="0.987981">
+        Wiki-ly Supervised Part-of-Speech Tagging
+      </title>
+      <author confidence="0.985166">
+        Shen Li Jo˜ao V. Grac¸a Ben Taskar
+      </author>
+    </variant>
   </algorithm>
 
   <algorithm name="ParsHed" version="110505">
@@ -22,29 +22,31 @@
     </variant>
   </algorithm>
 
-  <citationList>
-    <citation valid="true">
-      <authors>
-        <author>A Abeill</author>
-      </authors>
-      <title>Treebanks: Building and Using Parsed Corpora.</title>
-      <date>2003</date>
-      <publisher>Springer.</publisher>
-      <marker>Abeill´e, 2003</marker>
-      <rawString>A. Abeill´e. 2003. Treebanks: Building and Using Parsed Corpora. Springer.</rawString>
-    </citation>
-    <citation valid="true">
-      <authors>
-        <author>Taylor Berg-Kirkpatrick</author>
-        <author>Alexandre Bouchard</author>
-        <author>John DeNero</author>
-        <author>Dan Klein</author>
-      </authors>
-      <title>Painless unsupervised learning with features.</title>
-      <date>2010</date>
-      <booktitle>In Proc. NAACL,</booktitle>
-      <marker>Berg-Kirkpatrick, Bouchard-Cˆot´e, DeNero, Klein, 2010</marker>
-      <rawString>Taylor Berg-Kirkpatrick, Alexandre Bouchard-Cˆot´e, John DeNero, and Dan Klein. 2010. Painless unsupervised learning with features. In Proc. NAACL, June.</rawString>
-    </citation>
-  </citationList>
+  <algorithm name="ParsCit" version="110505">
+    <citationList>
+      <citation valid="true">
+        <authors>
+          <author>A Abeill</author>
+        </authors>
+        <title>Treebanks: Building and Using Parsed Corpora.</title>
+        <date>2003</date>
+        <publisher>Springer.</publisher>
+        <marker>Abeill´e, 2003</marker>
+        <rawString>A. Abeill´e. 2003. Treebanks: Building and Using Parsed Corpora. Springer.</rawString>
+      </citation>
+      <citation valid="true">
+        <authors>
+          <author>Taylor Berg-Kirkpatrick</author>
+          <author>Alexandre Bouchard</author>
+          <author>John DeNero</author>
+          <author>Dan Klein</author>
+        </authors>
+        <title>Painless unsupervised learning with features.</title>
+        <date>2010</date>
+        <booktitle>In Proc. NAACL,</booktitle>
+        <marker>Berg-Kirkpatrick, Bouchard-Cˆot´e, DeNero, Klein, 2010</marker>
+        <rawString>Taylor Berg-Kirkpatrick, Alexandre Bouchard-Cˆot´e, John DeNero, and Dan Klein. 2010. Painless unsupervised learning with features. In Proc. NAACL, June.</rawString>
+      </citation>
+    </citationList>
+  </algorithm>
 </algorithms>
