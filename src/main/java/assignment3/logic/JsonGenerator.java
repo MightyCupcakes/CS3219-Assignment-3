@@ -40,6 +40,7 @@ public class JsonGenerator {
             nestedBuilder.add("authors", moreNested);
             nestedBuilder.add("title", citation.title);
             nestedBuilder.add("year", citation.year);
+            nestedBuilder.add("booktitle", citation.booktitle);
 
             return nestedBuilder;
         }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import assignment3.datarepresentation.SerializedCitation;
@@ -16,13 +17,14 @@ public class CitationElementParser implements ElementParser {
     private Deque<String> currentElement;
     private List<SerializedCitation> citations;
     private SerializedCitation.Builder builder;
-
+    
     static {
         elementHandler = new HashMap<>();
 
         elementHandler.put("author", (b, s) -> b.withAuthor(s));
         elementHandler.put("title", (b, s) -> b.withTitle(s));
         elementHandler.put("date", (b, s) -> b.withYear(s));
+        elementHandler.put("booktitle", (b, s) -> b.withBooktitle(s));
     }
 
     public CitationElementParser() {
@@ -39,7 +41,6 @@ public class CitationElementParser implements ElementParser {
     @Override
     public void closeElement(String element) {
         String closed = currentElement.pop();
-
         if (closed.equalsIgnoreCase("citation")) {
             citations.add(builder.build());
             builder = new SerializedCitation.Builder();
