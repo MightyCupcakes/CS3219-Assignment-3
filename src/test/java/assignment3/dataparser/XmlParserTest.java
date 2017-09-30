@@ -38,7 +38,8 @@ public class XmlParserTest {
                         .withTitle("Painless unsupervised learning with features.")
                         .withYear("2010")
                         .withAuthor("Taylor Berg-Kirkpatrick").withAuthor("Alexandre Bouchard")
-                        .withAuthor("John DeNero").withAuthor("Dan Klein").build()
+                        .withAuthor("John DeNero").withAuthor("Dan Klein")
+                        .withBooktitle("In Proc. NAACL,").build()
                 ).build();
 
         assertTrue(expectedCitations.equals(journal.citations));
