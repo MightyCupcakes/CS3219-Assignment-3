@@ -2,7 +2,9 @@ package assignment3.logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.HashMultimap;
@@ -15,7 +17,8 @@ import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 
 public class AggregrateQuery implements Query {
-    private List<SchemaAggregate> columnsToShow;
+    private Set<SchemaAggregate> aggregateColumnsToShow;
+    private Set<SchemaComparable> normalColumnsToShow;
     private SchemaPredicate predicate;
     private List<String> tablesToRead;
     private List<SchemaComparable> groupByColumns;
@@ -26,11 +29,13 @@ public class AggregrateQuery implements Query {
     private Multimap<List<Object>, SerializedJournal> groupedRows;
 
     public AggregrateQuery(List<SchemaAggregate> columnsToShow,
+                           List<SchemaComparable> normalColumnsToShow,
                            SchemaPredicate predicate,
                            List<String> tablesToRead,
                            List<SchemaComparable> groupByColumns) {
 
-        this.columnsToShow = Collections.unmodifiableList(columnsToShow);
+        this.aggregateColumnsToShow = new HashSet<>(columnsToShow);
+        this.normalColumnsToShow = new HashSet<>(normalColumnsToShow);
         this.predicate = predicate;
         this.tablesToRead = tablesToRead;
         this.groupByColumns = Collections.unmodifiableList(groupByColumns);
@@ -56,19 +61,44 @@ public class AggregrateQuery implements Query {
 
     @Override
     public String execute() {
+
+        // TODO: Get data from logic instead of an empty list like this
+        journals = filterOutRows(journals);
+
+        JsonGenerator json = new JsonGenerator();
+
         if (groupByColumns.isEmpty()) {
-            // Do something...
-            return "";
+            // No group by means all one big group (we assume the query is valid at this stage
+            // since invalid queries will throw an exception during QueryBuilder)
+            JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
+
+            journals.forEach(
+                    journal -> aggregateColumnsToShow.forEach(schemaAggregate -> schemaAggregate.accumulate(journal))
+            );
+
+            aggregateColumnsToShow.forEach(schemaAggregate ->
+                    rowJson.generateJson(schemaAggregate.getNameOfAttribute(), schemaAggregate.getResult()));
+
+            json.addObjectToArray(rowJson);
+
+            return json.getJsonString();
+
         } else {
-            JsonGenerator json = new JsonGenerator();
+            groupRows(journals);
+
             for (List<Object> key : groupedRows.keySet()) {
                 JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
 
                 Iterable<SerializedJournal> rows = groupedRows.get(key);
 
                 // Print out the groups to the json as columns
-                // Like if it is group by names, print out the name first
+                // Like if it is group by names, print out the name first (if they are in normal columns to show)
+                // if they are not then the user only wants to group journals by these columns but not show them
+                // as columns in the results
                 for (int i = 0; i < groupByColumns.size(); i ++) {
+                    if (!normalColumnsToShow.contains(groupByColumns)) {
+                        continue;
+                    }
                     rowJson.generateJson(groupByColumns.get(i).getNameOfAttribute(), key.get(i));
                 }
 
@@ -78,12 +108,12 @@ public class AggregrateQuery implements Query {
                 // is going to do - we just pass it to them
                 for (SerializedJournal row : rows) {
                     // Pass it to the aggregate function (so that they can count or do something to it)
-                    columnsToShow.forEach( schemaAggregate -> schemaAggregate.accumulate(row));
+                    aggregateColumnsToShow.forEach(schemaAggregate -> schemaAggregate.accumulate(row));
                 }
 
                 // Then print out the aggregate for this group by asking the aggregate for the result
                 // Like the number of names for a count aggregate
-                columnsToShow.forEach( schemaAggregate ->
+                aggregateColumnsToShow.forEach(schemaAggregate ->
                         rowJson.generateJson(schemaAggregate.getNameOfAttribute(), schemaAggregate.getResult()));
 
                 json.addObjectToArray(rowJson);

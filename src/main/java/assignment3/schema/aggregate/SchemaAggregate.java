@@ -4,23 +4,14 @@ import java.util.function.BiConsumer;
 
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.schema.SchemaBase;
+import assignment3.schema.SchemaComparable;
 
 public abstract class SchemaAggregate extends SchemaBase<Integer> {
 
-    private BiConsumer<Integer, Integer> accumulationFunction;
-    private int result;
-
-    private SchemaAggregate(String name, BiConsumer<Integer, Integer> accumulationFunction) {
-        super(name);
-        this.accumulationFunction = accumulationFunction;
-        result = 0;
+    public SchemaAggregate(SchemaComparable column) {
+        super(column.getNameOfAttribute());
     }
 
-    public void accumulate(SerializedJournal row){
-
-    }
-
-    public int getResult() {
-        return result;
-    }
+    public abstract void accumulate(SerializedJournal row);
+    public abstract int getResult();
 }
