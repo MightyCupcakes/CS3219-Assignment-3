@@ -28,13 +28,13 @@ public class AggregrateQuery implements Query {
 
     private Multimap<List<Object>, SerializedJournal> groupedRows;
 
-    public AggregrateQuery(List<SchemaAggregate> columnsToShow,
+    public AggregrateQuery(List<SchemaAggregate> aggregatecolumnsToShow,
                            List<SchemaComparable> normalColumnsToShow,
                            SchemaPredicate predicate,
                            List<String> tablesToRead,
                            List<SchemaComparable> groupByColumns) {
 
-        this.aggregateColumnsToShow = new HashSet<>(columnsToShow);
+        this.aggregateColumnsToShow = new HashSet<>(aggregatecolumnsToShow);
         this.normalColumnsToShow = new HashSet<>(normalColumnsToShow);
         this.predicate = predicate;
         this.tablesToRead = tablesToRead;
@@ -57,6 +57,9 @@ public class AggregrateQuery implements Query {
             groupByColumns.forEach( column -> group.add(column.getValue(row)));
             groupedRows.put(group, row);
         }
+    }
+
+    public void setDataSource(Logic logic) {
     }
 
     @Override
@@ -121,5 +124,16 @@ public class AggregrateQuery implements Query {
 
             return json.getJsonString();
         }
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this
+                || (other instanceof AggregrateQuery
+                && this.aggregateColumnsToShow.equals(((AggregrateQuery) other).aggregateColumnsToShow)
+                && this.normalColumnsToShow.equals(((AggregrateQuery) other).normalColumnsToShow)
+                && this.tablesToRead.equals(((AggregrateQuery) other).tablesToRead)
+                && this.groupByColumns.equals(((AggregrateQuery) other).groupByColumns)
+                && this.predicate.equals(((AggregrateQuery) other).predicate));
     }
 }

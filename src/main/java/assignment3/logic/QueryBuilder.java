@@ -10,6 +10,7 @@ import assignment3.api.exceptions.QueryException;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
+import assignment3.schema.aggregate.SchemaAggregate;
 
 public class QueryBuilder implements APIQueryBuilder {
 
@@ -31,7 +32,7 @@ public class QueryBuilder implements APIQueryBuilder {
     private QueryBuilder() {
         selectColumns = new ArrayList<>();
         fromTables = new ArrayList<>();
-        whereClause = null;
+        whereClause = SchemaPredicate.ALWAYS_TRUE;
         groupByClause = new ArrayList<>();
     }
 
@@ -77,6 +78,8 @@ public class QueryBuilder implements APIQueryBuilder {
         }
 
         if (selectColumns.stream().allMatch(schemaBase -> schemaBase instanceof SchemaComparable)) {
+            // If all columns selected are normal comparable columns (like author, title) etc,
+            // then it is a normal query.
             List<SchemaComparable> normalSelectColumns = new ArrayList<>();
 
             selectColumns.stream()
@@ -87,9 +90,27 @@ public class QueryBuilder implements APIQueryBuilder {
             query.setDataSource(logic);
 
             return query;
-        }
+        } else {
+            // Some columns are not normal columns as they are counting the number of rows or something.
+            // First seperate the aggregate columns and the normal ones
+            List<SchemaComparable> normalColumns = new ArrayList<>();
+            List<SchemaAggregate> aggregateColumns = new ArrayList<>();
 
-        return null;
+            selectColumns.stream()
+                    .filter(schemaBase -> schemaBase instanceof SchemaComparable)
+                    .map(schemaBase -> (SchemaComparable) schemaBase)
+                    .forEach(normalColumns::add);
+
+            selectColumns.stream()
+                    .filter(schemaBase -> schemaBase instanceof SchemaAggregate)
+                    .map(schemaBase -> (SchemaAggregate) schemaBase)
+                    .forEach(aggregateColumns::add);
+
+            AggregrateQuery query = new AggregrateQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
+            query.setDataSource(logic);
+
+            return query;
+        }
     }
 
 }
