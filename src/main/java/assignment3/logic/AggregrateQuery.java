@@ -10,8 +10,7 @@ import com.google.common.collect.Multimap;
 
 import assignment3.api.Query;
 import assignment3.datarepresentation.SerializedJournal;
-import assignment3.schema.SchemaAggregate;
-import assignment3.schema.SchemaBase;
+import assignment3.schema.aggregate.SchemaAggregate;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 

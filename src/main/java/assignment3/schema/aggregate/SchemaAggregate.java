@@ -1,8 +1,9 @@
-package assignment3.schema;
+package assignment3.schema.aggregate;
 
 import java.util.function.BiConsumer;
 
 import assignment3.datarepresentation.SerializedJournal;
+import assignment3.schema.SchemaBase;
 
 public abstract class SchemaAggregate extends SchemaBase<Integer> {
 
