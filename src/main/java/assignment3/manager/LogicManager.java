@@ -23,6 +23,7 @@ import com.google.common.base.Strings;
 import assignment3.dataparser.xmlparser.XmlDataParser;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
+import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.logic.Logic;
 
 
@@ -45,9 +46,13 @@ public class LogicManager implements Logic{
 	}
 
 	@Override
-	public void getDataFromTable(String tableName) {
-		// TODO Auto-generated method stub
+	public List<SerializedJournalCitation> getDataFromTableWithNoCitations(String tableName) {
+		return null;
+	}
 
+	@Override
+	public List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName) {
+		return null;
 	}
 
 	private List<String> getListOfConferences(String folder) throws Exception {
