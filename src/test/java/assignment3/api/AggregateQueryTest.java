@@ -114,7 +114,7 @@ public class AggregateQueryTest {
         SchemaString title = new SchemaString("title");
         SchemaCount countPapers = new SchemaCount(title);
 
-        // Get the number of papers written by all authors in each year
+        // Get the total number of rows (no group by)
         TestAggregrateQuery query = new TestAggregrateQuery(
                 ImmutableList.of(countPapers),
                 Collections.emptyList(),
