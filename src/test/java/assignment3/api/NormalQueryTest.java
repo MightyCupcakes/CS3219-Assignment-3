@@ -35,6 +35,18 @@ public class NormalQueryTest {
         SchemaString author = new SchemaString("author");
         SchemaString title = new SchemaString("title");
 
+        JsonGenerator json = getExpectedJsonForTest1(author, title);
+
+        ImmutableList<SchemaComparable> columnsToShow = ImmutableList.of(author, title);
+        SchemaPredicate predicate = author.equalsTo("a");
+
+        TestNormalQuery query = new TestNormalQuery(columnsToShow, predicate, Collections.emptyList());
+        query.setData(journals);
+
+        assertEquals(json.getJsonString(), query.execute());
+    }
+
+    private JsonGenerator getExpectedJsonForTest1(SchemaString author, SchemaString title) {
         JsonGenerator json = new JsonGenerator();
         JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
 
@@ -47,14 +59,7 @@ public class NormalQueryTest {
         rowJson.generateJson(author.getNameOfAttribute(), "a");
         rowJson.generateJson(title.getNameOfAttribute(), "A title 1");
         json.addObjectToArray(rowJson);
-
-        ImmutableList<SchemaComparable> columnsToShow = ImmutableList.of(author, title);
-        SchemaPredicate predicate = author.equalsTo("a");
-
-        TestNormalQuery query = new TestNormalQuery(columnsToShow, predicate, Collections.emptyList());
-        query.setData(journals);
-
-        assertEquals(json.getJsonString(), query.execute());
+        return json;
     }
 
     @Test
@@ -63,12 +68,7 @@ public class NormalQueryTest {
         SchemaString title = new SchemaString("title");
         SchemaInt year = new SchemaInt("yearOfPublication");
 
-        JsonGenerator json = new JsonGenerator();
-        JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
-
-        rowJson.generateJson(author.getNameOfAttribute(), "c");
-        rowJson.generateJson(title.getNameOfAttribute(), "C title");
-        json.addObjectToArray(rowJson);
+        JsonGenerator json = getExpectedJsonForTest2(author, title);
 
         ImmutableList<SchemaComparable> columnsToShow = ImmutableList.of(author, title);
         SchemaPredicate predicate = author.equalsTo("c").and(year.equalsTo(2011));
@@ -77,6 +77,16 @@ public class NormalQueryTest {
         query.setData(journals);
 
         assertEquals(json.getJsonString(), query.execute());
+    }
+
+    private JsonGenerator getExpectedJsonForTest2(SchemaString author, SchemaString title) {
+        JsonGenerator json = new JsonGenerator();
+        JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
+
+        rowJson.generateJson(author.getNameOfAttribute(), "c");
+        rowJson.generateJson(title.getNameOfAttribute(), "C title");
+        json.addObjectToArray(rowJson);
+        return json;
     }
 
     public static void createDummyJournals(List<SerializedJournal> journals) {

@@ -1,5 +1,7 @@
 package assignment3.logic;
 
+import static java.util.Objects.requireNonNull;
+
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
