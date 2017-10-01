@@ -3,6 +3,7 @@ package assignment3.api;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -104,6 +105,37 @@ public class AggregateQueryTest {
 
             json.addObjectToArray(rowJson);
         }
+
+        return json;
+    }
+
+    @Test
+    public void testAggregateQuery_NoGroupBy() {
+        SchemaString title = new SchemaString("title");
+        SchemaCount countPapers = new SchemaCount(title);
+
+        // Get the number of papers written by all authors in each year
+        TestAggregrateQuery query = new TestAggregrateQuery(
+                ImmutableList.of(countPapers),
+                Collections.emptyList(),
+                SchemaPredicate.ALWAYS_TRUE,
+                ImmutableList.of(""),
+                Collections.emptyList()
+        );
+
+        query.setData(journals);
+
+        assertEquals(getExpectedJsonForTest3(countPapers).getJsonString(), query.execute());
+    }
+
+    private JsonGenerator getExpectedJsonForTest3(SchemaAggregate count) {
+
+        JsonGenerator json = new JsonGenerator();
+
+        JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
+        rowJson.generateJson(count.getNameOfAttribute(), journals.size());
+
+        json.addObjectToArray(rowJson);
 
         return json;
     }
