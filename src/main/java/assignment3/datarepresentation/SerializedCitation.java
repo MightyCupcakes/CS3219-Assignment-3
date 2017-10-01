@@ -3,7 +3,6 @@ package assignment3.datarepresentation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class SerializedCitation {
 	private static final String EMPTY_BOOK_TITLE ="";
