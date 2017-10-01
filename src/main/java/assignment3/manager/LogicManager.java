@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,6 +66,11 @@ public class LogicManager implements Logic{
 	}
 	
 	private void writeToXmlFile(List<SerializedJournal> journalList, String conferenceName) throws Exception {
+		int totalNoOfAuthor =  0;
+		int totalNoOfCitation = 0;
+		int lowestYear = 9999;
+		int highestYear = 0;
+		HashSet<SerializedJournal> journalSet = new HashSet<>();
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder xmlBuilder = builderFactory.newDocumentBuilder();
 		Document doc = xmlBuilder.newDocument();
@@ -74,28 +80,55 @@ public class LogicManager implements Logic{
 		
 		Element main = doc.createElement("main");
 		Element citationslists = doc.createElement("citationlists");
+		Element authorElement = doc.createElement("NoOfAuthor");
+		Element noOfcitationElement = doc.createElement("noOfCitation");
+		Element yearRangeElement = doc.createElement("yearRange");
+		rootElement.appendChild(authorElement);
+		rootElement.appendChild(noOfcitationElement);
+		rootElement.appendChild(yearRangeElement);
 		rootElement.appendChild(main);
 		rootElement.appendChild(citationslists);
 		
+		
 		for (SerializedJournal journal : journalList) {
-
-			appendChildToELement("title", journal.title, main, doc);
-			appendChildToELement("authir", journal.author, main, doc);
-			appendChildToELement("affiliation", journal.affiliation, main, doc);
-			appendChildToELement("abstractText", journal.abstractText, main, doc);
+			if (!journalSet.contains(journal)) {
+				Element journalElement = doc.createElement("journal");
+				appendChildToELement("title", journal.title, journalElement, doc);
+				appendChildToELement("authir", journal.author, journalElement, doc);
+				appendChildToELement("affiliation", journal.affiliation, journalElement, doc);
+				appendChildToELement("abstractText", journal.abstractText, journalElement, doc);
+				main.appendChild(journalElement);
+				journalSet.add(journal);
+			}
+			totalNoOfCitation+= journal.citations.size();
 			
-			for (SerializedCitation citation : journal.citations) {
-				appendChildToELement("title", citation.title, citationslists, doc);
-				appendChildToELement("booktitle", citation.booktitle, citationslists, doc);
+			for (SerializedCitation citation : journal.citations) {	
+				Element citationElement = doc.createElement("citation");
+				appendChildToELement("title", citation.title, citationElement, doc);
+				appendChildToELement("booktitle", citation.booktitle, citationElement, doc);
 				if (citation.year != 0) {
-					appendChildToELement("year", Integer.toString(citation.year), citationslists, doc);
+					if (citation.year < lowestYear) {
+						lowestYear = citation.year;
+					}
+					if (citation.year > highestYear) {
+						highestYear = citation.year;
+					}
+					appendChildToELement("year", Integer.toString(citation.year), citationElement, doc);
 				}
 				
+				totalNoOfAuthor+= citation.authors.size();
+				
 				for(String citation_author : citation.authors) {
-					appendChildToELement("author", citation_author, citationslists, doc);
+					appendChildToELement("author", citation_author, citationElement, doc);
 				}
+				citationslists.appendChild(citationElement);
 			}
 		}
+		
+		noOfcitationElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfCitation)));
+		authorElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfAuthor)));
+		String yearRange = lowestYear + " to " + highestYear;
+		yearRangeElement.appendChild(doc.createTextNode(yearRange));
 		String outputLocation = SAVED_LOCATION + conferenceName + XML_FORMAT;
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         DOMSource source = new DOMSource(doc);
