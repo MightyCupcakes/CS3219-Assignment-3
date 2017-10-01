@@ -11,10 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import assignment3.datarepresentation.SerializedJournal;
+import assignment3.datarepresentation.SerializedJournalCitation;
 
 public class SchemaTest {
 
-    public List<SerializedJournal> journals;
+    public List<SerializedJournalCitation> journals;
 
     @Before
     public void setUp() {
@@ -59,14 +60,14 @@ public class SchemaTest {
         assertFalse(predicate.test(journals.get(2)));
     }
 
-    public static void createDummyJournals(List<SerializedJournal> journals) {
+    public static void createDummyJournals(List<SerializedJournalCitation> journals) {
         SerializedJournal.Builder builder = new SerializedJournal.Builder();
         builder.withAuthor("a");
         builder.withAbstract("a123");
         builder.withTitle("A title");
         builder.withYear("2012");
 
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("b");
@@ -74,7 +75,7 @@ public class SchemaTest {
         builder.withTitle("B title");
         builder.withYear("2013");
 
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("c");
@@ -82,6 +83,6 @@ public class SchemaTest {
         builder.withTitle("C title");
         builder.withYear("2011");
 
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
     }
 }

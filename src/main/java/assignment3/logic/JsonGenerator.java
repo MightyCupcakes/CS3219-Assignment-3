@@ -40,7 +40,7 @@ public class JsonGenerator {
             JsonObjectBuilder nestedBuilder = Json.createObjectBuilder();
             JsonArrayBuilder moreNested = Json.createArrayBuilder();
 
-            citation.authors.forEach(moreNested::add);
+            citation.authorsList.forEach(moreNested::add);
 
             nestedBuilder.add("authors", moreNested);
             nestedBuilder.add("title", citation.title);

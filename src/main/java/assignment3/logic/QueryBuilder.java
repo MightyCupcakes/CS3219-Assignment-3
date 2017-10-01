@@ -11,6 +11,7 @@ import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 import assignment3.schema.aggregate.SchemaAggregate;
+import assignment3.schema.citations.CitationAttribute;
 
 public class QueryBuilder implements APIQueryBuilder {
 
@@ -77,7 +78,24 @@ public class QueryBuilder implements APIQueryBuilder {
             }
         }
 
-        if (selectColumns.stream().allMatch(schemaBase -> schemaBase instanceof SchemaComparable)) {
+        if (selectColumns.stream().anyMatch(schemaBase -> schemaBase instanceof CitationAttribute)) {
+
+            List<SchemaComparable> normalColumns = new ArrayList<>();
+            List<SchemaAggregate> aggregateColumns = new ArrayList<>();
+
+            selectColumns.stream()
+                    .filter(schemaBase -> schemaBase instanceof SchemaComparable)
+                    .map(schemaBase -> (SchemaComparable) schemaBase)
+                    .forEach(normalColumns::add);
+
+            selectColumns.stream()
+                    .filter(schemaBase -> schemaBase instanceof SchemaAggregate)
+                    .map(schemaBase -> (SchemaAggregate) schemaBase)
+                    .forEach(aggregateColumns::add);
+
+            return new JoinTableQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
+
+        } else if (selectColumns.stream().allMatch(schemaBase -> schemaBase instanceof SchemaComparable)) {
             // If all columns selected are normal comparable columns (like author, title) etc,
             // then it is a normal query.
             List<SchemaComparable> normalSelectColumns = new ArrayList<>();
@@ -90,6 +108,7 @@ public class QueryBuilder implements APIQueryBuilder {
             query.setDataSource(logic);
 
             return query;
+
         } else {
             // Some columns are not normal columns as they are counting the number of rows or something.
             // First seperate the aggregate columns and the normal ones

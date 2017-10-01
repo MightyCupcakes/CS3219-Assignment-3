@@ -4,15 +4,16 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import assignment3.datarepresentation.SerializedJournal;
+import assignment3.datarepresentation.SerializedJournalCitation;
 
 public class SchemaPredicate {
 
     public SchemaBase column;
-    public Predicate<SerializedJournal> conditional;
+    public Predicate<SerializedJournalCitation> conditional;
 
     public static final SchemaPredicate ALWAYS_TRUE = new SchemaPredicate();
 
-    public SchemaPredicate(SchemaBase column, Predicate<SerializedJournal> conditional) {
+    public SchemaPredicate(SchemaBase column, Predicate<SerializedJournalCitation> conditional) {
         Objects.requireNonNull(column);
         Objects.requireNonNull(conditional);
 
@@ -25,16 +26,16 @@ public class SchemaPredicate {
         this.conditional = null;
     }
 
-    public boolean test(SerializedJournal journal) {
+    public boolean test(SerializedJournalCitation serializedJournalCitation) {
 
         if (Objects.isNull(column)) {
             return true;
         }
 
-        Object value = column.getValue(journal);
+        Object value = column.getValue(serializedJournalCitation);
 
         if (value != null) {
-            return conditional.test(journal);
+            return conditional.test(serializedJournalCitation);
         }
 
         return false;

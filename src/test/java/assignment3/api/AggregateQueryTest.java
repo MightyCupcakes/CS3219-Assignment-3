@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import assignment3.datarepresentation.SerializedJournal;
+import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.logic.AggregrateQuery;
 import assignment3.logic.JsonGenerator;
 import assignment3.schema.SchemaComparable;
@@ -25,7 +26,7 @@ import assignment3.schema.aggregate.SchemaCount;
 
 public class AggregateQueryTest {
 
-    public List<SerializedJournal> journals;
+    public List<SerializedJournalCitation> journals;
 
     @Before
     public void setUp() {
@@ -140,51 +141,51 @@ public class AggregateQueryTest {
         return json;
     }
 
-    public static void createDummyJournals(List<SerializedJournal> journals) {
+    public static void createDummyJournals(List<SerializedJournalCitation> journals) {
 
         SerializedJournal.Builder builder = new SerializedJournal.Builder();
         builder.withAuthor("a").withAbstract("a123").withTitle("A title").withYear("2012");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("a").withAbstract("a12346").withTitle("A title 1").withYear("2013");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("a").withAbstract("a12345").withTitle("A title 2").withYear("2014");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("a").withAbstract("a12344").withTitle("A title 3").withYear("2015");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("a").withAbstract("a12434").withTitle("A title 4").withYear("2015");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("a").withAbstract("a12434").withTitle("A title 5").withYear("2015");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("b").withAbstract("b123").withTitle("B title").withYear("2013");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("b").withAbstract("b123e").withTitle("B title 1").withYear("2014");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("b").withAbstract("b123e").withTitle("B title 2").withYear("2014");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("c").withAbstract("c123").withTitle("C title").withYear("2011");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("c").withAbstract("c1d23").withTitle("C title 1").withYear("2015");
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
     }
 
     /**
@@ -199,7 +200,7 @@ public class AggregateQueryTest {
             super (aggregatecolumnsToShow, normalColumnsToShow, predicate, tablesToRead, groupByColumns);
         }
 
-        public void setData(List<SerializedJournal> data) {
+        public void setData(List<SerializedJournalCitation> data) {
             this.journals = data;
         }
     }

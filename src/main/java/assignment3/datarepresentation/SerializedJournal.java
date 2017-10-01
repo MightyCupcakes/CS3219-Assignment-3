@@ -10,14 +10,16 @@ public class SerializedJournal {
     public final String author;
     public final String affiliation;
     public final String abstractText;
+    public final String conference;
     public final int yearOfPublication;
 
     public final List<SerializedCitation> citations;
 
-    private SerializedJournal (String title,
+    protected SerializedJournal (String title,
                                String author,
                                String affiliation,
                                String abstractText,
+                               String conference,
                                int yearOfPublication,
                                List<SerializedCitation> citedArticles) {
         this.title = title;
@@ -25,6 +27,7 @@ public class SerializedJournal {
         this.affiliation = affiliation;
         this.abstractText = abstractText;
         this.yearOfPublication = yearOfPublication;
+        this.conference = conference;
         this.citations = new ArrayList<>();
 
         citedArticles.forEach(citations::add);
@@ -42,6 +45,7 @@ public class SerializedJournal {
                 || (other instanceof SerializedJournal
                 && this.title.equals(((SerializedJournal) other).title)
                 && this.author.equals(((SerializedJournal) other).author)
+                && this.conference.equals(((SerializedJournal) other).conference)
                 && this.yearOfPublication == ((SerializedJournal) other).yearOfPublication);
     }
 
@@ -50,6 +54,7 @@ public class SerializedJournal {
         private String author;
         private String affiliation;
         private String abstractText;
+        private String conference;
         private int yearOfPublication;
 
         private List<SerializedCitation> citations = Collections.emptyList();
@@ -84,14 +89,26 @@ public class SerializedJournal {
             return this;
         }
 
+        public Builder withYear(int yearOfPublication) {
+            this.yearOfPublication = yearOfPublication;
+
+            return this;
+        }
+
         public Builder withCitations(List<SerializedCitation> citations) {
             this.citations = citations;
 
             return this;
         }
 
+        public Builder withConference(String conference) {
+            this.conference = conference;
+
+            return this;
+        }
+
         public SerializedJournal build() {
-            return new SerializedJournal(title, author, affiliation, abstractText, yearOfPublication, citations);
+            return new SerializedJournal(title, author, affiliation, abstractText, conference, yearOfPublication, citations);
         }
     }
 }
