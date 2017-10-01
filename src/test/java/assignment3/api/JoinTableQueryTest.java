@@ -22,6 +22,7 @@ import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 import assignment3.schema.aggregate.SchemaAggregate;
 import assignment3.schema.aggregate.SchemaCount;
+import assignment3.schema.aggregate.SchemaCountUnique;
 import assignment3.schema.citations.CitationAttribute;
 import assignment3.schema.citations.SchemaCitation;
 
@@ -51,15 +52,15 @@ public class JoinTableQueryTest {
         );
 
         query.setData(journals);
-        assertEquals(getExpectedJsonForTest1(citationsCount).getJsonString(), query.execute());
+        assertEquals(getExpectedJsonForTestCount(citationsCount, 7).getJsonString(), query.execute());
     }
 
-    private JsonGenerator getExpectedJsonForTest1(SchemaAggregate count) {
+    private JsonGenerator getExpectedJsonForTestCount(SchemaAggregate count, int value) {
 
         JsonGenerator json = new JsonGenerator();
 
         JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
-        rowJson.generateJson(count.getNameOfAttribute(), 7);
+        rowJson.generateJson(count.getNameOfAttribute(), value);
 
         json.addObjectToArray(rowJson);
 
@@ -101,6 +102,23 @@ public class JoinTableQueryTest {
         }
 
         return json;
+    }
+
+    @Test
+    public void test_JoinTableQuery_CountUnique() {
+        CitationAttribute title = new SchemaCitation("citations").title;
+        SchemaAggregate uniqueCitationsCount = new SchemaCountUnique(title);
+
+        TestTableJoinQuery query = new TestTableJoinQuery(
+                ImmutableList.of(uniqueCitationsCount),
+                Collections.emptyList(),
+                title.isNotNull(),
+                ImmutableList.of(""),
+                Collections.emptyList()
+        );
+
+        query.setData(journals);
+        assertEquals(getExpectedJsonForTestCount(uniqueCitationsCount, 6).getJsonString(), query.execute());
     }
 
     public static void createDummyJournals(List<SerializedJournalCitation> journals, List<SerializedCitation> citationsList) {
