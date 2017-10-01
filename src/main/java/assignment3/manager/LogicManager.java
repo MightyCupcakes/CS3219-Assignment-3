@@ -78,56 +78,21 @@ public class LogicManager implements Logic{
 		rootElement.appendChild(citationslists);
 		
 		for (SerializedJournal journal : journalList) {
-			if (!Strings.isNullOrEmpty(journal.title)) {
-				Element title = doc.createElement("title");
-				title.appendChild(doc.createTextNode(journal.title));
-				main.appendChild(title);
-			}
-			if (!Strings.isNullOrEmpty(journal.author)) {
-				Element author = doc.createElement("author");
-				author.appendChild(doc.createTextNode(journal.author));
-				main.appendChild(author);
-			}
-			
-			if (!Strings.isNullOrEmpty(journal.affiliation)) {
-				Element affiliation = doc.createElement("affiliation");
-				affiliation.appendChild(doc.createTextNode(journal.affiliation));
-				main.appendChild(affiliation);
-			}
-			if (!Strings.isNullOrEmpty(journal.abstractText)) {
-				Element abstractText = doc.createElement("abstractText");
-				abstractText.appendChild(doc.createTextNode(journal.abstractText));
-				main.appendChild(abstractText);
-			}
-			if (journal.yearOfPublication != 0 ) {
-				Element yearOfPublication = doc.createElement("yearOfPublication");
-				yearOfPublication.appendChild(doc.createTextNode(Integer.toString(journal.yearOfPublication)));
-				main.appendChild(yearOfPublication);
-			}
+
+			appendChildToELement("title", journal.title, main, doc);
+			appendChildToELement("authir", journal.author, main, doc);
+			appendChildToELement("affiliation", journal.affiliation, main, doc);
+			appendChildToELement("abstractText", journal.abstractText, main, doc);
 			
 			for (SerializedCitation citation : journal.citations) {
-				if (!Strings.isNullOrEmpty(citation.title)) {
-					Element citationtitle = doc.createElement("title");
-					citationtitle.appendChild(doc.createTextNode(citation.title));
-					citationslists.appendChild(citationtitle);
-				}
-				if (!Strings.isNullOrEmpty(citation.booktitle)) {
-					Element citationBooktitle = doc.createElement("booktitle");
-					citationBooktitle.appendChild(doc.createTextNode(citation.booktitle));
-					citationslists.appendChild(citationBooktitle);
-				}
+				appendChildToELement("title", citation.title, citationslists, doc);
+				appendChildToELement("booktitle", citation.booktitle, citationslists, doc);
 				if (citation.year != 0) {
-					Element citationYear = doc.createElement("year");
-					citationYear.appendChild(doc.createTextNode(Integer.toString(citation.year)));
-					citationslists.appendChild(citationYear);
+					appendChildToELement("year", Integer.toString(citation.year), citationslists, doc);
 				}
 				
 				for(String citation_author : citation.authors) {
-					if (!Strings.isNullOrEmpty(citation_author)) {
-						Element citationAuthor = doc.createElement("author");
-						citationAuthor.appendChild(doc.createTextNode(citation_author));
-						citationslists.appendChild(citationAuthor);
-					}
+					appendChildToELement("author", citation_author, citationslists, doc);
 				}
 			}
 		}
@@ -137,6 +102,15 @@ public class LogicManager implements Logic{
         StreamResult result = new StreamResult(new File(outputLocation));
         transformer.transform(source,  result);
         
+		
+	}
+	private static void appendChildToELement(String elementName, String elementValue,
+			Element element, Document doc) {
+		if (!Strings.isNullOrEmpty(elementValue)) {
+			Element child = doc.createElement(elementName);
+			child.appendChild(doc.createTextNode(elementValue));
+			element.appendChild(child);
+		}
 		
 	}
 }
