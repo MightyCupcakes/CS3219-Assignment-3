@@ -6,6 +6,13 @@ public abstract class SchemaComparable<T extends Comparable> extends SchemaBase<
         super(name);
     }
 
+    public SchemaPredicate isNotNull() {
+        return new SchemaPredicate(this, o -> {
+            T v = this.getValue(o);
+            return (v != null);
+        });
+    }
+
     public SchemaPredicate greaterThan(T value) {
         return new SchemaPredicate(this, o -> {
             T v = this.getValue(o);

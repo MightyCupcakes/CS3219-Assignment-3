@@ -63,11 +63,7 @@ public class AggregrateQuery implements Query {
     public void setDataSource(Logic logic) {
     }
 
-    @Override
-    public String execute() {
-
-        // TODO: Get data from logic instead of an empty list like this
-        journals = filterOutRows(journals);
+    public String executeAndGetResult(List<SerializedJournalCitation> journalCitations) {
 
         JsonGenerator json = new JsonGenerator();
 
@@ -76,7 +72,7 @@ public class AggregrateQuery implements Query {
             // since invalid queries will throw an exception during QueryBuilder)
             JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
 
-            journals.forEach(
+            journalCitations.forEach(
                     journal -> aggregateColumnsToShow
                             .forEach(schemaAggregate -> schemaAggregate.accumulate(journal))
             );
@@ -89,7 +85,7 @@ public class AggregrateQuery implements Query {
             return json.getJsonString();
 
         } else {
-            groupRows(journals);
+            groupRows(journalCitations);
 
             for (List<Object> key : groupedRows.keySet()) {
                 JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
@@ -104,7 +100,7 @@ public class AggregrateQuery implements Query {
                     if (!normalColumnsToShow.contains(groupByColumns.get(i))) {
                         continue;
                     }
-                    
+
                     rowJson.generateJson(groupByColumns.get(i).getNameOfAttribute(), key.get(i));
                 }
 
@@ -127,6 +123,15 @@ public class AggregrateQuery implements Query {
 
             return json.getJsonString();
         }
+
+    }
+
+    @Override
+    public String execute() {
+        // TODO: Get data from logic instead of an empty list like this
+        journals = filterOutRows(journals);
+
+        return executeAndGetResult(journals);
     }
 
     @Override
