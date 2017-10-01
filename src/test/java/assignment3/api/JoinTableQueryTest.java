@@ -59,7 +59,7 @@ public class JoinTableQueryTest {
         JsonGenerator json = new JsonGenerator();
 
         JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
-        rowJson.generateJson(count.getNameOfAttribute(), 6);
+        rowJson.generateJson(count.getNameOfAttribute(), 7);
 
         json.addObjectToArray(rowJson);
 
