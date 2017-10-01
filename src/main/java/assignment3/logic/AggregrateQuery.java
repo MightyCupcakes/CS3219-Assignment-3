@@ -99,9 +99,10 @@ public class AggregrateQuery implements Query {
                 // if they are not then the user only wants to group journals by these columns but not show them
                 // as columns in the results
                 for (int i = 0; i < groupByColumns.size(); i ++) {
-                    if (!normalColumnsToShow.contains(groupByColumns)) {
+                    if (!normalColumnsToShow.contains(groupByColumns.get(i))) {
                         continue;
                     }
+                    
                     rowJson.generateJson(groupByColumns.get(i).getNameOfAttribute(), key.get(i));
                 }
 

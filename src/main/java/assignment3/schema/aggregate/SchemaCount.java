@@ -13,11 +13,19 @@ public class SchemaCount extends SchemaAggregate {
     }
 
     @Override
+    public String getNameOfAttribute() {
+        return "COUNT(" + this.nameOfAttribute + ")";
+    }
+
+    @Override
     public void accumulate(SerializedJournal row) {
         count ++;
     }
     @Override
     public int getResult() {
-        return count;
+        int result = count;
+        count = 0;
+
+        return result;
     }
 }

@@ -2,9 +2,6 @@ package assignment3.api;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Collections;
-import java.util.Objects;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
