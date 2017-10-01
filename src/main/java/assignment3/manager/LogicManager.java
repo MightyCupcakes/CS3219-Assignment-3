@@ -89,7 +89,6 @@ public class LogicManager implements Logic{
 		rootElement.appendChild(main);
 		rootElement.appendChild(citationslists);
 
-
 		for (SerializedJournal journal : journalList) {
 			if (!journalSet.contains(journal)) {
 				Element journalElement = doc.createElement("journal");
@@ -115,7 +114,7 @@ public class LogicManager implements Logic{
 					}
 					appendChildToELement("year", Integer.toString(citation.year), citationElement, doc);
 				}
-
+        
 				totalNoOfAuthor+= citation.authorsList.size();
 
 				for(String citation_author : citation.authorsList) {
@@ -124,7 +123,7 @@ public class LogicManager implements Logic{
 				citationslists.appendChild(citationElement);
 			}
 		}
-
+    
 		noOfcitationElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfCitation)));
 		authorElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfAuthor)));
 		String yearRange = lowestYear + " to " + highestYear;
