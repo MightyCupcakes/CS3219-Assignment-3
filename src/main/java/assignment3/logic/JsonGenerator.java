@@ -1,6 +1,7 @@
 package assignment3.logic;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
@@ -21,7 +22,9 @@ public class JsonGenerator {
     public String getJsonString() {
         return listOfObjects.build().toString();
     }
-
+    public JsonArray getJsonArray() {
+    	return listOfObjects.build();
+    }
 
     public static class JsonGeneratorBuilder {
 
@@ -39,7 +42,7 @@ public class JsonGenerator {
 
             nestedBuilder.add("authors", moreNested);
             nestedBuilder.add("title", citation.title);
-            nestedBuilder.add("year", citation.year);
+            nestedBuilder.add("year",  citation.year);
             nestedBuilder.add("booktitle", citation.booktitle);
 
             return nestedBuilder;
