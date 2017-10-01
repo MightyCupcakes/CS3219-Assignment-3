@@ -91,7 +91,7 @@ public class LogicManager implements Logic{
 					appendChildToELement("year", Integer.toString(citation.year), citationslists, doc);
 				}
 				
-				for(String citation_author : citation.authors) {
+				for(String citation_author : citation.authorsList) {
 					appendChildToELement("author", citation_author, citationslists, doc);
 				}
 			}

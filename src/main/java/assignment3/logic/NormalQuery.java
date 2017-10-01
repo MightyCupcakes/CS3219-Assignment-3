@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import assignment3.api.Query;
 import assignment3.datarepresentation.SerializedJournal;
+import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 
@@ -15,7 +16,7 @@ public class NormalQuery implements Query {
     private List<String> tablesToRead;
     private Logic logic;
 
-    protected List<SerializedJournal> journals;
+    protected List<SerializedJournalCitation> journals;
 
     public NormalQuery(List<SchemaComparable> columnsToShow, SchemaPredicate predicate, List<String> tablesToRead) {
         this.columnsToShow = Collections.unmodifiableList(columnsToShow);
@@ -23,9 +24,9 @@ public class NormalQuery implements Query {
         this.tablesToRead = tablesToRead;
     }
 
-    private List<SerializedJournal> filterOutRows(List<SerializedJournal> data) {
+    private List<SerializedJournalCitation> filterOutRows(List<SerializedJournalCitation> data) {
         return data.stream()
-                .filter(serializedJournal -> predicate.test(serializedJournal))
+                .filter(serializedJournalCitation -> predicate.test(serializedJournalCitation))
                 .collect(Collectors.toList());
     }
 
@@ -40,7 +41,7 @@ public class NormalQuery implements Query {
 
         JsonGenerator json = new JsonGenerator();
 
-        for (SerializedJournal journal : journals) {
+        for (SerializedJournalCitation journal : journals) {
             JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
 
             columnsToShow.forEach(schema -> rowJson.generateJson(schema.getNameOfAttribute(), schema.getValue(journal)));

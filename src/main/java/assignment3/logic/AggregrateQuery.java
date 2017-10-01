@@ -12,6 +12,7 @@ import com.google.common.collect.Multimap;
 
 import assignment3.api.Query;
 import assignment3.datarepresentation.SerializedJournal;
+import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.aggregate.SchemaAggregate;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
@@ -24,9 +25,9 @@ public class AggregrateQuery implements Query {
     private List<SchemaComparable> groupByColumns;
     private Logic logic;
 
-    protected List<SerializedJournal> journals;
+    protected List<SerializedJournalCitation> journals;
 
-    private Multimap<List<Object>, SerializedJournal> groupedRows;
+    private Multimap<List<Object>, SerializedJournalCitation> groupedRows;
 
     public AggregrateQuery(List<SchemaAggregate> aggregatecolumnsToShow,
                            List<SchemaComparable> normalColumnsToShow,
@@ -43,15 +44,15 @@ public class AggregrateQuery implements Query {
         this.groupedRows = HashMultimap.create();
     }
 
-    private List<SerializedJournal> filterOutRows(List<SerializedJournal> data) {
+    private List<SerializedJournalCitation> filterOutRows(List<SerializedJournalCitation> data) {
         return data.stream()
-                .filter(serializedJournal -> predicate.test(serializedJournal))
+                .filter(serializedJournalCitation -> predicate.test(serializedJournalCitation))
                 .collect(Collectors.toList());
     }
 
-    private void groupRows(List<SerializedJournal> data) {
+    private void groupRows(List<SerializedJournalCitation> data) {
 
-        for (SerializedJournal row : data) {
+        for (SerializedJournalCitation row : data) {
             List<Object> group = new ArrayList<>();
 
             groupByColumns.forEach( column -> group.add(column.getValue(row)));
@@ -76,7 +77,8 @@ public class AggregrateQuery implements Query {
             JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
 
             journals.forEach(
-                    journal -> aggregateColumnsToShow.forEach(schemaAggregate -> schemaAggregate.accumulate(journal))
+                    journal -> aggregateColumnsToShow
+                            .forEach(schemaAggregate -> schemaAggregate.accumulate(journal))
             );
 
             aggregateColumnsToShow.forEach(schemaAggregate ->
@@ -92,7 +94,7 @@ public class AggregrateQuery implements Query {
             for (List<Object> key : groupedRows.keySet()) {
                 JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
 
-                Iterable<SerializedJournal> rows = groupedRows.get(key);
+                Iterable<SerializedJournalCitation> rows = groupedRows.get(key);
 
                 // Print out the groups to the json as columns
                 // Like if it is group by names, print out the name first (if they are in normal columns to show)
@@ -110,7 +112,7 @@ public class AggregrateQuery implements Query {
                 // For example if the aggregate function is a count, it simply counts the number
                 // of SerializedJournal in the group and etc. Here we don't care what the aggregate function
                 // is going to do - we just pass it to them
-                for (SerializedJournal row : rows) {
+                for (SerializedJournalCitation row : rows) {
                     // Pass it to the aggregate function (so that they can count or do something to it)
                     aggregateColumnsToShow.forEach(schemaAggregate -> schemaAggregate.accumulate(row));
                 }

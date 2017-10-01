@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.logic.JsonGenerator;
 import assignment3.logic.NormalQuery;
 import assignment3.datarepresentation.SerializedJournal;
@@ -22,7 +23,7 @@ import assignment3.schema.SchemaString;
 
 public class NormalQueryTest {
 
-    public List<SerializedJournal> journals;
+    public List<SerializedJournalCitation> journals;
 
     @Before
     public void setUp() {
@@ -89,14 +90,14 @@ public class NormalQueryTest {
         return json;
     }
 
-    public static void createDummyJournals(List<SerializedJournal> journals) {
+    public static void createDummyJournals(List<SerializedJournalCitation> journals) {
         SerializedJournal.Builder builder = new SerializedJournal.Builder();
         builder.withAuthor("a");
         builder.withAbstract("a123");
         builder.withTitle("A title");
         builder.withYear("2012");
 
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("b");
@@ -104,7 +105,7 @@ public class NormalQueryTest {
         builder.withTitle("B title");
         builder.withYear("2013");
 
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("c");
@@ -112,7 +113,7 @@ public class NormalQueryTest {
         builder.withTitle("C title");
         builder.withYear("2011");
 
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
 
         builder = new SerializedJournal.Builder();
         builder.withAuthor("a");
@@ -120,7 +121,7 @@ public class NormalQueryTest {
         builder.withTitle("A title 1");
         builder.withYear("2013");
 
-        journals.add(builder.build());
+        journals.add(new SerializedJournalCitation(builder.build(), null));
     }
 
     /**
@@ -131,7 +132,7 @@ public class NormalQueryTest {
             super (columnsToShow, predicate, tablesToRead);
         }
 
-        public void setData(List<SerializedJournal> data) {
+        public void setData(List<SerializedJournalCitation> data) {
             this.journals = data;
         }
     }

@@ -6,22 +6,40 @@ import java.util.List;
 
 public class SerializedCitation {
 	private static final String EMPTY_BOOK_TITLE ="";
-    public String title;
-    public int year;
-    public List<String> authors;
-    public String booktitle;
 
-    private SerializedCitation(String title, int year, List<String> authorsList, 
+	public String title;
+    public int year;
+    public String booktitle;
+    public String authors;
+
+    public List<String> authorsList;
+
+    private SerializedCitation(String title, int year, List<String> listOfAuthors,
     		String booktitle) {
+
         this.title = title;
         this.year = year;
-        this.authors = new ArrayList<>();
+        this.authorsList = new ArrayList<>();
         this.booktitle = isEmpty(booktitle) ? EMPTY_BOOK_TITLE : booktitle;
-        authorsList.forEach(authors::add);
+
+        listOfAuthors.forEach(authorsList::add);
         Collections.sort(authorsList);
+
+        createAuthorsString();
     }
     private boolean isEmpty(String value) {
     	return value == null;
+    }
+
+    private void createAuthorsString() {
+        StringBuilder builder = new StringBuilder();
+
+        authorsList.forEach( author -> {
+            builder.append(author);
+            builder.append(",");
+        });
+
+        this.authors = builder.toString();
     }
 
     @Override
@@ -30,7 +48,7 @@ public class SerializedCitation {
                 || (other instanceof SerializedCitation
                 && this.title.equals(((SerializedCitation) other).title)
                 && this.year == ((SerializedCitation) other).year
-                && this.authors.equals(((SerializedCitation) other).authors)
+                && this.authorsList.equals(((SerializedCitation) other).authorsList)
                 && this.booktitle.equals(((SerializedCitation) other).booktitle));
     }
 

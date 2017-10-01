@@ -1,6 +1,7 @@
 package assignment3.schema.aggregate;
 
 import assignment3.datarepresentation.SerializedJournal;
+import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.SchemaComparable;
 
 public class SchemaCount extends SchemaAggregate {
@@ -18,7 +19,7 @@ public class SchemaCount extends SchemaAggregate {
     }
 
     @Override
-    public void accumulate(SerializedJournal row) {
+    public void accumulate(SerializedJournalCitation row) {
         count ++;
     }
     @Override

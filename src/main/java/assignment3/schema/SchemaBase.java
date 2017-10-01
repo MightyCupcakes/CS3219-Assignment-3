@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.logging.Logger;
 
 import assignment3.datarepresentation.SerializedJournal;
+import assignment3.datarepresentation.SerializedJournalCitation;
 
 /**
  * Represents an attribute of an PersistentObject
@@ -20,12 +21,12 @@ public abstract class SchemaBase<T> {
     /**
      * Gets the value of this attribute from the specified SerializedJournal
      */
-    public T getValue(SerializedJournal journal) {
+    public T getValue(SerializedJournalCitation journalCitation) {
         assert !nameOfAttribute.equals("");
 
         try {
             Field field = SerializedJournal.class.getDeclaredField(nameOfAttribute);
-            return (T) field.get(journal);
+            return (T) field.get(journalCitation.journal);
         } catch (NoSuchFieldException | IllegalAccessException e) {
 
             Logger.getLogger(this.getClass().toString())
