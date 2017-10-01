@@ -40,7 +40,7 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery() {
-        CitationAttribute title = new SchemaCitation("citations").title;
+        CitationAttribute title = SchemaCitation.title;
         SchemaAggregate citationsCount = new SchemaCount(title);
 
         TestTableJoinQuery query = new TestTableJoinQuery(
@@ -69,8 +69,8 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery_GroupBy() {
-        CitationAttribute title = new SchemaCitation("citations").title;
-        CitationAttribute year = new SchemaCitation("citations").year;
+        CitationAttribute title = SchemaCitation.title;
+        CitationAttribute year = SchemaCitation.year;
         SchemaAggregate citationsCount = new SchemaCount(title);
 
         TestTableJoinQuery query = new TestTableJoinQuery(
@@ -106,7 +106,7 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery_CountUnique() {
-        CitationAttribute title = new SchemaCitation("citations").title;
+        CitationAttribute title = SchemaCitation.title;
         SchemaAggregate uniqueCitationsCount = new SchemaCountUnique(title);
 
         TestTableJoinQuery query = new TestTableJoinQuery(
