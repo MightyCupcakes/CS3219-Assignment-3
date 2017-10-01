@@ -121,6 +121,24 @@ public class JoinTableQueryTest {
         assertEquals(getExpectedJsonForTestCount(uniqueCitationsCount, 6).getJsonString(), query.execute());
     }
 
+    @Test
+    public void test_JoinTableQuery_CountAuthor() {
+        CitationAttribute title = SchemaCitation.title;
+        CitationAttribute author = SchemaCitation.authors;
+        SchemaAggregate uniqueCitationsCount = new SchemaCountUnique(title);
+
+        TestTableJoinQuery query = new TestTableJoinQuery(
+                ImmutableList.of(uniqueCitationsCount),
+                Collections.emptyList(),
+                author.like("cA"),
+                ImmutableList.of(""),
+                Collections.emptyList()
+        );
+
+        query.setData(journals);
+        assertEquals(getExpectedJsonForTestCount(uniqueCitationsCount, 2).getJsonString(), query.execute());
+    }
+
     public static void createDummyJournals(List<SerializedJournalCitation> journals, List<SerializedCitation> citationsList) {
 
         createDummyCitations(citationsList);

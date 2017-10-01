@@ -7,10 +7,11 @@ import java.util.List;
 public class SerializedCitation {
 	private static final String EMPTY_BOOK_TITLE ="";
 
-	public String title;
-    public int year;
-    public String booktitle;
+	public final String title;
+    public final int year;
+    public final String booktitle;
     public String authors;
+    public final int numOfAuthors;
 
     public List<String> authorsList;
 
@@ -26,6 +27,7 @@ public class SerializedCitation {
         Collections.sort(authorsList);
 
         createAuthorsString();
+        numOfAuthors = authorsList.size();
     }
     private boolean isEmpty(String value) {
     	return value == null;
