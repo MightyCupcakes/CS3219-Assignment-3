@@ -21,6 +21,7 @@ public class XmlDataParserHandler extends DefaultHandler {
     private SerializedJournal.Builder builder;
     private ElementParser currentElementParser;
     private JournalElementParser journalElementParser;
+    private boolean isVaLidCitation = true;
 
     public SerializedJournal getJournal() {
         return journal;
@@ -39,9 +40,13 @@ public class XmlDataParserHandler extends DefaultHandler {
             currentElementParser.openElement(qName);
         } else if(qName.equalsIgnoreCase("citation")
         		&& attributes.getValue("valid").equalsIgnoreCase("false")) {
-        	return;
+        	isVaLidCitation = false;
+        } else if (qName.equalsIgnoreCase("citation")
+        		&& attributes.getValue("valid").equalsIgnoreCase("true")) {
+        	isVaLidCitation = true;
+            currentElementParser.openElement(qName);
         } else {
-            if (currentElementParser != null) {
+            if (currentElementParser != null && isVaLidCitation == true) {
                 currentElementParser.openElement(qName);
             }
         }

@@ -41,7 +41,6 @@ public class XmlParserTest {
                         .withAuthor("John DeNero").withAuthor("Dan Klein")
                         .withBooktitle("In Proc. NAACL,").build()
                 ).build();
-
         assertTrue(expectedCitations.equals(journal.citations));
     }
 }
