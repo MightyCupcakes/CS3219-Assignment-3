@@ -1,6 +1,8 @@
 package assignment3.model;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -19,20 +21,33 @@ import com.google.common.base.Strings;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.model.Model;
+import assignment3.storage.Storage;
+import assignment3.storage.StorageManager;
 
 public class ModelManager implements Model {
 
     private final String SAVED_LOCATION = "Dataset/";
     private final String XML_FORMAT = ".xml";
-
+    private final HashMap<String, List<SerializedJournal>> serializedJournalMap;
+    private final Storage storage;
+    public ModelManager () {
+    	 serializedJournalMap = new HashMap<>();
+    	 storage = new StorageManager();
+    }
     @Override
     public void saveJournalData(List<SerializedJournal> journalList, String conferenceName) throws Exception{
         writeToXmlFile(journalList, conferenceName);
     }
 
     @Override
-    public List<SerializedJournal> getJournalData(String conferenceName) {
-        return null;
+    public List<SerializedJournal> getJournalData(String conferenceName) throws Exception {
+        if (serializedJournalMap.containsKey(conferenceName)) {
+        	return (serializedJournalMap.get(conferenceName));
+        } else {
+        	SerializedJournal journal = storage.retrieveFile(conferenceName);
+        	serializedJournalMap.put(conferenceName, Arrays.asList(journal));
+        	return Arrays.asList(journal);
+        }
     }
 
     private void writeToXmlFile(List<SerializedJournal> journalList, String conferenceName) throws Exception {
@@ -46,14 +61,14 @@ public class ModelManager implements Model {
         DocumentBuilder xmlBuilder = builderFactory.newDocumentBuilder();
         Document doc = xmlBuilder.newDocument();
 
-        Element rootElement = doc.createElement(conferenceName);
+        Element rootElement = doc.createElement("algorithms");
         doc.appendChild(rootElement);
 
         Element parshed = doc.createElement("algorithm");
         parshed.setAttribute("name", "ParsHed");
         Element parschit = doc.createElement("algorithm");
         parschit.setAttribute("name", "ParsCit");
-        Element citationslists = doc.createElement("citationlists");
+        Element citationslists = doc.createElement("citationLists");
         parschit.appendChild(citationslists);
         Element authorElement = doc.createElement("NoOfAuthor");
         Element noOfcitationElement = doc.createElement("noOfCitation");
@@ -62,13 +77,15 @@ public class ModelManager implements Model {
         rootElement.appendChild(authorElement);
         rootElement.appendChild(noOfcitationElement);
         rootElement.appendChild(yearRangeElement);
+        rootElement.appendChild(noOfJournalElement);
         rootElement.appendChild(parshed);
         rootElement.appendChild(parschit);
         
         noOfJournal+= journalList.size();
+
         for (SerializedJournal journal : journalList) {
             if (!journalSet.contains(journal)) {
-                Element journalElement = doc.createElement("journal");
+            	Element journalElement = doc.createElement("journal");
                 appendChildToELement("title", journal.title, journalElement, doc);
                 appendChildToELement("authir", journal.author, journalElement, doc);
                 appendChildToELement("affiliation", journal.affiliation, journalElement, doc);
@@ -77,10 +94,12 @@ public class ModelManager implements Model {
                 journalSet.add(journal);
             }
             totalNoOfCitation+= journal.citations.size();
-
             for (SerializedCitation citation : journal.citations) {
                 Element citationElement = doc.createElement("citation");
-                citationElement.setIdAttribute("value", true);
+                Element authorsElement = doc.createElement("authors");
+
+                citationElement.appendChild(authorsElement);
+                citationElement.setAttribute("value", "true");
                 appendChildToELement("title", citation.title, citationElement, doc);
                 appendChildToELement("booktitle", citation.booktitle, citationElement, doc);
                 if (citation.year != 0) {
@@ -90,13 +109,12 @@ public class ModelManager implements Model {
                     if (citation.year > highestYear) {
                         highestYear = citation.year;
                     }
-                    appendChildToELement("year", Integer.toString(citation.year), citationElement, doc);
+                    appendChildToELement("date", Integer.toString(citation.year), citationElement, doc);
                 }
 
                 totalNoOfAuthor+= citation.authorsList.size();
-
                 for(String citation_author : citation.authorsList) {
-                    appendChildToELement("author", citation_author, citationElement, doc);
+                    appendChildToELement("author", citation_author, authorsElement, doc);
                 }
                 citationslists.appendChild(citationElement);
             }

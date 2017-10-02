@@ -17,6 +17,7 @@ public interface Model {
      * Retrieves the list of SerializedJournal from the given conferenceName
      * @param conferenceName
      * @return
+     * @throws Exception 
      */
-    List<SerializedJournal> getJournalData(String conferenceName);
+    List<SerializedJournal> getJournalData(String conferenceName) throws Exception;
 }
