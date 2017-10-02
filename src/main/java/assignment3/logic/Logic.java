@@ -26,6 +26,7 @@ public interface Logic {
      *
      * @param tableName the table the data is requested from
      * @return
+     * @throws Exception 
      */
-    List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName);
+    List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName) throws Exception;
 }

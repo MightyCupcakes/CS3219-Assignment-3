@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import assignment3.dataparser.xmlparser.XmlDataParser;
+import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.logic.Logic;
@@ -42,8 +43,15 @@ public class LogicManager implements Logic{
 	}
 
 	@Override
-	public List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName) {
-		return null;
+	public List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName) throws Exception {
+		List<SerializedJournalCitation> journalCitationList = new ArrayList<>();
+		List<SerializedJournal> journalList = model.getJournalData(tableName);
+		SerializedJournal journal = journalList.get(0);
+		for (SerializedCitation citation : journal.citations) {
+			journalCitationList.add(new SerializedJournalCitation(journal, citation));
+		}
+		return journalCitationList;
+		
 	}
 
 	private List<String> getListOfConferences(String folder) throws Exception {
