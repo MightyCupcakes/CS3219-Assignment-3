@@ -39,7 +39,7 @@ public class LogicManager implements Logic{
 	}
 
 	@Override
-	public List<SerializedJournalCitation> getDataFromTableWithNoCitations(String tableName) {
+	public List<SerializedJournalCitation> getDataFromTableWithNoCitations(String tableName) throws Exception {
 		HashMap<Integer, SerializedJournal> journalMap = model.getJournal(tableName);
 		return journalMap.values().stream().map(journal -> {
 			return new SerializedJournalCitation(journal, null);
