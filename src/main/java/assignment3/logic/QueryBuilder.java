@@ -44,8 +44,8 @@ public class QueryBuilder implements APIQueryBuilder {
     }
 
     @Override
-    public APIQueryBuilder from(String... tables) {
-        Arrays.stream(tables).forEach(fromTables::add);
+    public APIQueryBuilder from(String table) {
+        fromTables.add(table);
         return this;
     }
 
@@ -93,7 +93,12 @@ public class QueryBuilder implements APIQueryBuilder {
                     .map(schemaBase -> (SchemaAggregate) schemaBase)
                     .forEach(aggregateColumns::add);
 
-            return new JoinTableQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
+            AggregrateQuery query = new AggregrateQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
+
+            query.setDataSource(logic);
+            query.setQueryToRetrieveCitations();
+
+            return query;
 
         } else if (selectColumns.stream().allMatch(schemaBase -> schemaBase instanceof SchemaComparable)) {
             // If all columns selected are normal comparable columns (like author, title) etc,

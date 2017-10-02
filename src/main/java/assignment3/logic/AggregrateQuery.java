@@ -1,10 +1,13 @@
 package assignment3.logic;
 
+import static java.util.Objects.isNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.HashMultimap;
@@ -24,6 +27,7 @@ public class AggregrateQuery implements Query {
     private List<String> tablesToRead;
     private List<SchemaComparable> groupByColumns;
     private Logic logic;
+    private boolean isJoinTable;
 
     protected List<SerializedJournalCitation> journals;
 
@@ -40,6 +44,7 @@ public class AggregrateQuery implements Query {
         this.predicate = predicate;
         this.tablesToRead = tablesToRead;
         this.groupByColumns = Collections.unmodifiableList(groupByColumns);
+        this.isJoinTable = false;
 
         this.groupedRows = HashMultimap.create();
     }
@@ -61,6 +66,15 @@ public class AggregrateQuery implements Query {
     }
 
     public void setDataSource(Logic logic) {
+        this.logic = logic;
+    }
+
+    public void setQueryToRetrieveCitations() {
+        this.isJoinTable = true;
+    }
+
+    public boolean isQueryRetrivingCitations() {
+        return this.isJoinTable;
     }
 
     public String executeAndGetResult(List<SerializedJournalCitation> journalCitations) {
@@ -128,7 +142,21 @@ public class AggregrateQuery implements Query {
 
     @Override
     public String execute() {
-        // TODO: Get data from logic instead of an empty list like this
+
+        try {
+
+            if (!isNull(logic) && isQueryRetrivingCitations()) {
+                journals = logic.getDataFromTableWithCitations(tablesToRead.get(0));
+            } else if (!isNull(logic) && !isQueryRetrivingCitations()) {
+                journals = logic.getDataFromTableWithNoCitations(tablesToRead.get(0));
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().toString())
+                    .warning("Exception thrown while trying to get data from LogicLayer: " + e.getMessage());
+            return EMPTY_JSON;
+        }
+
         journals = filterOutRows(journals);
 
         return executeAndGetResult(journals);

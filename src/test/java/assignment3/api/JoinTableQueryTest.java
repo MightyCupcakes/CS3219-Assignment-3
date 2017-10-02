@@ -16,10 +16,7 @@ import com.google.common.collect.ImmutableMap;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
-import assignment3.logic.JoinTableQuery;
 import assignment3.logic.JsonGenerator;
-import assignment3.schema.SchemaComparable;
-import assignment3.schema.SchemaPredicate;
 import assignment3.schema.aggregate.SchemaAggregate;
 import assignment3.schema.aggregate.SchemaCount;
 import assignment3.schema.aggregate.SchemaCountUnique;
@@ -43,7 +40,7 @@ public class JoinTableQueryTest {
         CitationAttribute title = SchemaCitation.title;
         SchemaAggregate citationsCount = new SchemaCount(title);
 
-        TestTableJoinQuery query = new TestTableJoinQuery(
+        AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
                 ImmutableList.of(citationsCount),
                 Collections.emptyList(),
                 title.isNotNull(),
@@ -73,7 +70,7 @@ public class JoinTableQueryTest {
         CitationAttribute year = SchemaCitation.year;
         SchemaAggregate citationsCount = new SchemaCount(title);
 
-        TestTableJoinQuery query = new TestTableJoinQuery(
+        AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
                 ImmutableList.of(citationsCount),
                 ImmutableList.of(year),
                 title.isNotNull(),
@@ -109,7 +106,7 @@ public class JoinTableQueryTest {
         CitationAttribute title = SchemaCitation.title;
         SchemaAggregate uniqueCitationsCount = new SchemaCountUnique(title);
 
-        TestTableJoinQuery query = new TestTableJoinQuery(
+        AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
                 ImmutableList.of(uniqueCitationsCount),
                 Collections.emptyList(),
                 title.isNotNull(),
@@ -127,7 +124,7 @@ public class JoinTableQueryTest {
         CitationAttribute author = SchemaCitation.authors;
         SchemaAggregate uniqueCitationsCount = new SchemaCountUnique(title);
 
-        TestTableJoinQuery query = new TestTableJoinQuery(
+        AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
                 ImmutableList.of(uniqueCitationsCount),
                 Collections.emptyList(),
                 author.like("cA"),
@@ -221,22 +218,5 @@ public class JoinTableQueryTest {
                 .withAuthor("cG").withAuthor("cK").withTitle("Interesting title 6").withYear("2011")
                 .build();
         citationsList.add(citation);
-    }
-
-    /**
-     * A stub class that allows the overriding of the list of journals bypassing the Logic.
-     */
-    public static class TestTableJoinQuery extends JoinTableQuery {
-        public TestTableJoinQuery (List<SchemaAggregate> aggregatecolumnsToShow,
-                                    List<SchemaComparable> normalColumnsToShow,
-                                    SchemaPredicate predicate,
-                                    List<String> tablesToRead,
-                                    List<SchemaComparable> groupByColumns) {
-            super (aggregatecolumnsToShow, normalColumnsToShow, predicate, tablesToRead, groupByColumns);
-        }
-
-        public void setData(List<SerializedJournalCitation> data) {
-            this.journals = data;
-        }
     }
 }

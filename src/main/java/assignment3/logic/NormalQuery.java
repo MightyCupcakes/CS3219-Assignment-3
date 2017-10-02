@@ -1,5 +1,7 @@
 package assignment3.logic;
 
+import static java.util.Objects.isNull;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +38,10 @@ public class NormalQuery implements Query {
 
     @Override
     public String execute() {
+
+        if(!isNull(logic)) {
+            journals = logic.getDataFromTableWithNoCitations(tablesToRead.get(0));
+        }
 
         journals = filterOutRows(journals);
 

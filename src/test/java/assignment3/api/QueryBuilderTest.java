@@ -2,6 +2,8 @@ package assignment3.api;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collections;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -15,6 +17,8 @@ import assignment3.logic.QueryBuilder;
 import assignment3.schema.SchemaPredicate;
 import assignment3.schema.SchemaString;
 import assignment3.schema.aggregate.SchemaCount;
+import assignment3.schema.citations.CitationAttribute;
+import assignment3.schema.citations.SchemaCitation;
 
 
 public class QueryBuilderTest {
@@ -77,5 +81,26 @@ public class QueryBuilderTest {
                 .from("")
                 .groupBy(author)
                 .build();
+    }
+
+    @Test
+    public void testCitationQueryBuilder() throws Exception {
+        CitationAttribute citationTitle = SchemaCitation.title;
+
+        Query query = QueryBuilder.createNewBuilder()
+                .select(citationTitle)
+                .from("")
+                .build();
+
+        Query expectedQuery = new AggregrateQuery(
+                Collections.emptyList(),
+                ImmutableList.of(citationTitle),
+                SchemaPredicate.ALWAYS_TRUE,
+                ImmutableList.of(""),
+                Collections.emptyList()
+        );
+
+        assertTrue(expectedQuery.equals(query));
+        assertTrue(((AggregrateQuery) query).isQueryRetrivingCitations());
     }
 }

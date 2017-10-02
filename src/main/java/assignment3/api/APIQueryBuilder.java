@@ -9,7 +9,7 @@ import assignment3.schema.SchemaPredicate;
 public interface APIQueryBuilder {
 
     APIQueryBuilder select(SchemaBase... columns);
-    APIQueryBuilder from(String... tables);
+    APIQueryBuilder from(String table);
     APIQueryBuilder where(SchemaPredicate predicate);
     APIQueryBuilder groupBy(SchemaComparable... columns);
     Query build() throws QueryException;
