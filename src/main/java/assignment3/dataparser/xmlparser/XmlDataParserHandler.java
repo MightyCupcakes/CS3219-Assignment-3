@@ -37,6 +37,9 @@ public class XmlDataParserHandler extends DefaultHandler {
             journalElementParser = (JournalElementParser) currentElementParser;
             currentElementParser = new CitationElementParser();
             currentElementParser.openElement(qName);
+        } else if(qName.equalsIgnoreCase("citation")
+        		&& attributes.getValue("valid").equalsIgnoreCase("false")) {
+        	return;
         } else {
             if (currentElementParser != null) {
                 currentElementParser.openElement(qName);

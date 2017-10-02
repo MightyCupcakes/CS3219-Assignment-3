@@ -34,6 +34,25 @@ public class XmlDataParser implements DataParser {
 
         journal = handler.getJournal();
     }
+    
+    public void parseCompiledFile(String filename, String conferenceName) throws FileNotFoundException{
+        requireNonNull(filename);
+
+        File file = new File(filename);
+
+        if (!file.exists() || !file.isFile()) {
+            throw new FileNotFoundException("File not found : " + file.getAbsolutePath());
+        }
+
+        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        XmlCompiledDataParserHandler  handler = new XmlCompiledDataParserHandler (conferenceName);
+
+        try {
+            saxParserFactory.newSAXParser().parse(file, handler);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public SerializedJournal getJournal() {
         return journal;
