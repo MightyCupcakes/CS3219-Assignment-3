@@ -37,7 +37,7 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery() {
-        CitationAttribute title = SchemaCitation.title;
+        CitationAttribute title = SchemaCitation.INSTANCE.title;
         SchemaAggregate citationsCount = new SchemaCount(title);
 
         AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
@@ -66,8 +66,8 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery_GroupBy() {
-        CitationAttribute title = SchemaCitation.title;
-        CitationAttribute year = SchemaCitation.year;
+        CitationAttribute title = SchemaCitation.INSTANCE.title;
+        CitationAttribute year = SchemaCitation.INSTANCE.year;
         SchemaAggregate citationsCount = new SchemaCount(title);
 
         AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
@@ -103,7 +103,7 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery_CountUnique() {
-        CitationAttribute title = SchemaCitation.title;
+        CitationAttribute title = SchemaCitation.INSTANCE.title;
         SchemaAggregate uniqueCitationsCount = new SchemaCountUnique(title);
 
         AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
@@ -120,8 +120,8 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery_CountAuthor() {
-        CitationAttribute title = SchemaCitation.title;
-        CitationAttribute author = SchemaCitation.authors;
+        CitationAttribute title = SchemaCitation.INSTANCE.title;
+        CitationAttribute author = SchemaCitation.INSTANCE.authors;
         SchemaAggregate uniqueCitationsCount = new SchemaCountUnique(title);
 
         AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(

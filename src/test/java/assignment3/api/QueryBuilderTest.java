@@ -85,7 +85,7 @@ public class QueryBuilderTest {
 
     @Test
     public void testCitationQueryBuilder() throws Exception {
-        CitationAttribute citationTitle = SchemaCitation.title;
+        CitationAttribute citationTitle = SchemaCitation.INSTANCE.title;
 
         Query query = QueryBuilder.createNewBuilder()
                 .select(citationTitle)

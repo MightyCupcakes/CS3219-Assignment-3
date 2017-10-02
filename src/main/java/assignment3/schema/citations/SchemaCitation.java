@@ -6,10 +6,12 @@ import assignment3.schema.SchemaBase;
 
 public class SchemaCitation extends SchemaBase<SerializedCitation> {
 
-    public static final CitationAttribute<String> title = new CitationAttribute<String>("title");
-    public static final CitationAttribute<Integer> year = new CitationAttribute<Integer>("year");
-    public static final CitationAttribute<String> authors = new CitationAttribute<String>("authors");
-    public static final CitationAttribute<String> booktitle = new CitationAttribute<String>("booktitle");
+    public final CitationAttribute<String> title = new CitationAttribute<String>("title");
+    public final CitationAttribute<Integer> year = new CitationAttribute<Integer>("year");
+    public final CitationAttribute<String> authors = new CitationAttribute<String>("authors");
+    public final CitationAttribute<String> booktitle = new CitationAttribute<String>("booktitle");
+
+    public static final SchemaCitation INSTANCE = new SchemaCitation();
 
     private SchemaCitation() {
         super("");

@@ -27,8 +27,8 @@ public class SchemaCitationTest {
 
     @Test
     public void testSchemaCitation() {
-        CitationAttribute citationsTitle = SchemaCitation.title;
-        CitationAttribute citationsYear = SchemaCitation.year;
+        CitationAttribute citationsTitle = SchemaCitation.INSTANCE.title;
+        CitationAttribute citationsYear = SchemaCitation.INSTANCE.year;
 
         assertEquals("B 1", citationsTitle.getValue(journals.get(0)));
         assertEquals("c 1", citationsTitle.getValue(journals.get(1)));
