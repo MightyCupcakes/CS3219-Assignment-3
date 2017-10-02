@@ -38,6 +38,7 @@ public class ModelManager implements Model {
     private void writeToXmlFile(List<SerializedJournal> journalList, String conferenceName) throws Exception {
         int totalNoOfAuthor =  0;
         int totalNoOfCitation = 0;
+        int noOfJournal = 0;
         int lowestYear = 9999;
         int highestYear = 0;
         HashSet<SerializedJournal> journalSet = new HashSet<>();
@@ -48,17 +49,23 @@ public class ModelManager implements Model {
         Element rootElement = doc.createElement(conferenceName);
         doc.appendChild(rootElement);
 
-        Element main = doc.createElement("main");
+        Element parshed = doc.createElement("algorithm");
+        parshed.setAttribute("name", "ParsHed");
+        Element parschit = doc.createElement("algorithm");
+        parschit.setAttribute("name", "ParsCit");
         Element citationslists = doc.createElement("citationlists");
+        parschit.appendChild(citationslists);
         Element authorElement = doc.createElement("NoOfAuthor");
         Element noOfcitationElement = doc.createElement("noOfCitation");
         Element yearRangeElement = doc.createElement("yearRange");
+        Element noOfJournalElement = doc.createElement("noOfJournal");
         rootElement.appendChild(authorElement);
         rootElement.appendChild(noOfcitationElement);
         rootElement.appendChild(yearRangeElement);
-        rootElement.appendChild(main);
-        rootElement.appendChild(citationslists);
-
+        rootElement.appendChild(parshed);
+        rootElement.appendChild(parschit);
+        
+        noOfJournal+= journalList.size();
         for (SerializedJournal journal : journalList) {
             if (!journalSet.contains(journal)) {
                 Element journalElement = doc.createElement("journal");
@@ -66,13 +73,14 @@ public class ModelManager implements Model {
                 appendChildToELement("authir", journal.author, journalElement, doc);
                 appendChildToELement("affiliation", journal.affiliation, journalElement, doc);
                 appendChildToELement("abstractText", journal.abstractText, journalElement, doc);
-                main.appendChild(journalElement);
+                parshed.appendChild(journalElement);
                 journalSet.add(journal);
             }
             totalNoOfCitation+= journal.citations.size();
 
             for (SerializedCitation citation : journal.citations) {
                 Element citationElement = doc.createElement("citation");
+                citationElement.setIdAttribute("value", true);
                 appendChildToELement("title", citation.title, citationElement, doc);
                 appendChildToELement("booktitle", citation.booktitle, citationElement, doc);
                 if (citation.year != 0) {
@@ -96,6 +104,7 @@ public class ModelManager implements Model {
 
         noOfcitationElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfCitation)));
         authorElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfAuthor)));
+        noOfJournalElement.appendChild(doc.createTextNode(Integer.toString(noOfJournal)));
         String yearRange = lowestYear + " to " + highestYear;
         yearRangeElement.appendChild(doc.createTextNode(yearRange));
         String outputLocation = SAVED_LOCATION + conferenceName + XML_FORMAT;
