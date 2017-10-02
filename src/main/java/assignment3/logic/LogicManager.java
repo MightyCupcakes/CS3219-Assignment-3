@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,19 +40,25 @@ public class LogicManager implements Logic{
 
 	@Override
 	public List<SerializedJournalCitation> getDataFromTableWithNoCitations(String tableName) {
-		return null;
+		HashMap<Integer, SerializedJournal> journalMap = model.getJournal(tableName);
+		return journalMap.values().stream().map(journal -> {
+			return new SerializedJournalCitation(journal, null);
+		}).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName) throws Exception {
-		List<SerializedJournalCitation> journalCitationList = new ArrayList<>();
-		List<SerializedJournal> journalList = model.getJournalData(tableName);
-		SerializedJournal journal = journalList.get(0);
-		for (SerializedCitation citation : journal.citations) {
-			journalCitationList.add(new SerializedJournalCitation(journal, citation));
-		}
-		return journalCitationList;
+		HashMap<Integer, SerializedJournal> journalMap = model.getJournal(tableName);
+		HashMap<Integer, List<SerializedCitation>> citationMap = model.getCitations(tableName);
+		List<SerializedJournalCitation> journalCitationLists = new ArrayList<>();
 		
+		journalMap.forEach( (id, journal) -> {
+			List<SerializedCitation> citationList = citationMap.get(id);
+			for (SerializedCitation citation : citationList) {
+				journalCitationLists.add(new SerializedJournalCitation(journal, citation));
+			}
+		});
+		return journalCitationLists;
 	}
 
 	private List<String> getListOfConferences(String folder) throws Exception {
