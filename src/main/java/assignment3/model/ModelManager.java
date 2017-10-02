@@ -61,45 +61,43 @@ public class ModelManager implements Model {
         DocumentBuilder xmlBuilder = builderFactory.newDocumentBuilder();
         Document doc = xmlBuilder.newDocument();
 
-        Element rootElement = doc.createElement("algorithms");
+        Element rootElement = doc.createElement(conferenceName);
         doc.appendChild(rootElement);
 
-        Element parshed = doc.createElement("algorithm");
-        parshed.setAttribute("name", "ParsHed");
-        Element parschit = doc.createElement("algorithm");
-        parschit.setAttribute("name", "ParsCit");
+        Element mainElement = doc.createElement("main");
         Element citationslists = doc.createElement("citationLists");
-        parschit.appendChild(citationslists);
+    
         Element authorElement = doc.createElement("NoOfAuthor");
         Element noOfcitationElement = doc.createElement("noOfCitation");
         Element yearRangeElement = doc.createElement("yearRange");
         Element noOfJournalElement = doc.createElement("noOfJournal");
+        rootElement.appendChild(mainElement);
+        rootElement.appendChild(citationslists);
         rootElement.appendChild(authorElement);
         rootElement.appendChild(noOfcitationElement);
         rootElement.appendChild(yearRangeElement);
         rootElement.appendChild(noOfJournalElement);
-        rootElement.appendChild(parshed);
-        rootElement.appendChild(parschit);
+
         
         noOfJournal+= journalList.size();
-
+        int id = 1;
         for (SerializedJournal journal : journalList) {
             if (!journalSet.contains(journal)) {
             	Element journalElement = doc.createElement("journal");
+            	journalElement.setAttribute("id" , Integer.toString(id));
                 appendChildToELement("title", journal.title, journalElement, doc);
-                appendChildToELement("authir", journal.author, journalElement, doc);
+                appendChildToELement("author", journal.author, journalElement, doc);
                 appendChildToELement("affiliation", journal.affiliation, journalElement, doc);
                 appendChildToELement("abstractText", journal.abstractText, journalElement, doc);
-                parshed.appendChild(journalElement);
+                mainElement.appendChild(journalElement);
                 journalSet.add(journal);
             }
             totalNoOfCitation+= journal.citations.size();
             for (SerializedCitation citation : journal.citations) {
                 Element citationElement = doc.createElement("citation");
                 Element authorsElement = doc.createElement("authors");
-
+                citationElement.setAttribute("id", Integer.toString(id));
                 citationElement.appendChild(authorsElement);
-                citationElement.setAttribute("value", "true");
                 appendChildToELement("title", citation.title, citationElement, doc);
                 appendChildToELement("booktitle", citation.booktitle, citationElement, doc);
                 if (citation.year != 0) {
@@ -118,6 +116,7 @@ public class ModelManager implements Model {
                 }
                 citationslists.appendChild(citationElement);
             }
+            id++;
         }
 
         noOfcitationElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfCitation)));

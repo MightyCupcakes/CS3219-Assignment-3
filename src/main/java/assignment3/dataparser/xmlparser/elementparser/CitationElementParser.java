@@ -40,6 +40,9 @@ public class CitationElementParser implements ElementParser {
 
     @Override
     public void closeElement(String element) {
+    	if (currentElement.peek() == null) {
+    		return;
+    	}
         String closed = currentElement.pop();
         if (closed.equalsIgnoreCase("citation")) {
             citations.add(builder.build());
@@ -57,4 +60,5 @@ public class CitationElementParser implements ElementParser {
     public List<SerializedCitation> getCitations() {
         return citations;
     }
+
 }
