@@ -9,8 +9,12 @@ import assignment3.schema.SchemaComparable;
 
 public abstract class SchemaAggregate extends SchemaBase<Integer> {
 
+    protected SchemaComparable column;
+
     public SchemaAggregate(SchemaComparable column) {
         super(column.getNameOfAttribute());
+
+        this.column = column;
     }
 
     public abstract void accumulate(SerializedJournalCitation row);

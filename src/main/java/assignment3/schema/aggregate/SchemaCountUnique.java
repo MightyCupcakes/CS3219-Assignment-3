@@ -9,13 +9,11 @@ import assignment3.schema.SchemaComparable;
 public class SchemaCountUnique extends SchemaAggregate{
 
     private int count;
-    private SchemaComparable column;
     private Set<Object> countedValues;
 
     public SchemaCountUnique(SchemaComparable column) {
         super(column);
 
-        this.column = column;
         count = 0;
         countedValues = new HashSet<>();
     }
