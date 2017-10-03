@@ -114,9 +114,12 @@ public class ModelManager implements Model {
             totalNoOfCitation+= journal.citations.size();
             for (SerializedCitation citation : journal.citations) {
                 Element citationElement = doc.createElement("citation");
+
                 Element authorsElement = doc.createElement("authors");
                 citationElement.setAttribute("id", Integer.toString(id));
-                citationElement.appendChild(authorsElement);
+                if (!citation.authorsList.isEmpty()) {
+                    citationElement.appendChild(authorsElement);
+                }
                 appendChildToELement("title", citation.title, citationElement, doc);
                 appendChildToELement("booktitle", citation.booktitle, citationElement, doc);
                 if (citation.year != 0) {
