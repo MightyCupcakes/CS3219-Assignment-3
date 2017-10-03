@@ -1,11 +1,10 @@
 package assignment3.model;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
-import javafx.util.Pair;
 
 public interface Model {
 
@@ -22,21 +21,21 @@ public interface Model {
      * @return
      * @throws Exception 
      */
-    HashMap<Integer, SerializedJournal> getJournal(String conferenceName) throws Exception;
+    Map<Integer, SerializedJournal> getJournal(String conferenceName) throws Exception;
     /**
      * Retrieves the  HashMap<Integer, List<SerializedCitation>>from the given conferenceName with Integer representing the list of citations for that specific document in that confernceName
      * @param conferenceName
      * @return
      * @throws Exception 
      */
-    HashMap<Integer, List<SerializedCitation>> getCitations(String conferenceName) throws Exception;
+    Map<Integer, List<SerializedCitation>> getCitations(String conferenceName) throws Exception;
     
     
     /**
      * return journal/citations that are mapped to a given conference as key
      * @return
      */
-    HashMap<String, HashMap<Integer, SerializedJournal>> getJournalMap();
-    HashMap<String, HashMap<Integer, List<SerializedCitation>>> getCitationMap();
+    Map<String, Map<Integer, SerializedJournal>> getJournalMap();
+    Map<String, Map<Integer, List<SerializedCitation>>> getCitationMap();
 
 }

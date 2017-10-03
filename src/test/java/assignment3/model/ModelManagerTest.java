@@ -1,11 +1,9 @@
 package assignment3.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,8 +15,8 @@ public class ModelManagerTest {
 	private static String CONFERENCE_FILE = "D12";
 
 	private static Model model;
-	HashMap<String, HashMap<Integer, SerializedJournal>> journalMap;
-	HashMap<String, HashMap<Integer, List<SerializedCitation>>> citationMap;
+	Map<String, Map<Integer, SerializedJournal>> journalMap;
+	Map<String, Map<Integer, List<SerializedCitation>>> citationMap;
 	
 	@BeforeClass
 	public static void setUp() {

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,18 +20,18 @@ import com.google.common.base.Strings;
 
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
-import assignment3.model.Model;
+import assignment3.storage.RetrievedFileData;
 import assignment3.storage.Storage;
 import assignment3.storage.StorageManager;
-import javafx.util.Pair;
 
 public class ModelManager implements Model {
 
     private final String SAVED_LOCATION = "Dataset/";
     private final String XML_FORMAT = ".xml";
     private final Storage storage;
-    private final HashMap<String, HashMap<Integer, SerializedJournal>> journalMap;
-    private final HashMap<String, HashMap<Integer, List<SerializedCitation>>> citationMap;
+    private final Map<String, Map<Integer, SerializedJournal>> journalMap;
+    private final Map<String, Map<Integer, List<SerializedCitation>>> citationMap;
+
     public ModelManager () {
     	journalMap = new HashMap<>();
     	citationMap = new HashMap<>();
@@ -43,7 +44,7 @@ public class ModelManager implements Model {
 
 
 	@Override
-	public HashMap<Integer, SerializedJournal> getJournal(String conferenceName) throws Exception {
+	public Map<Integer, SerializedJournal> getJournal(String conferenceName) throws Exception {
 		if (journalMap.containsKey(conferenceName)) {
 			return journalMap.get(conferenceName);
 		}
@@ -52,19 +53,19 @@ public class ModelManager implements Model {
 	}
 
 	@Override
-	public HashMap<Integer, List<SerializedCitation>> getCitations(String conferenceName) throws Exception {
+	public Map<Integer, List<SerializedCitation>> getCitations(String conferenceName) throws Exception {
 		if (citationMap.containsKey(conferenceName)) {
 			return citationMap.get(conferenceName);
 		}
 		getJournalData(conferenceName);
 		return citationMap.get(conferenceName);
 	}
+
 	private void getJournalData(String conferenceName) throws Exception {
-		Pair<HashMap<Integer, SerializedJournal>, HashMap<Integer, List<SerializedCitation>>> pair = storage.retrieveFile(conferenceName);
-		journalMap.put(conferenceName, pair.getKey());
-		citationMap.put(conferenceName, pair.getValue());
+		RetrievedFileData data = storage.retrieveFile(conferenceName);
+		journalMap.put(conferenceName, data.journalsMap);
+		citationMap.put(conferenceName, data.citationsMap);
 	}
-    
 
     private void writeToXmlFile(List<SerializedJournal> journalList, String conferenceName) throws Exception {
         int totalNoOfAuthor =  0;
@@ -161,11 +162,11 @@ public class ModelManager implements Model {
 
     }
 	@Override
-	public HashMap<String, HashMap<Integer, SerializedJournal>> getJournalMap() {
+	public Map<String, Map<Integer, SerializedJournal>> getJournalMap() {
 		return journalMap;
 	}
 	@Override
-	public HashMap<String, HashMap<Integer, List<SerializedCitation>>> getCitationMap() {
+	public Map<String, Map<Integer, List<SerializedCitation>>> getCitationMap() {
 		// TODO Auto-generated method stub
 		return citationMap;
 	}
