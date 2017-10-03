@@ -37,7 +37,7 @@ public class NormalQuery implements Query {
     }
 
     @Override
-    public String execute() {
+    public String execute() throws Exception {
 
         if(!isNull(logic)) {
             journals = logic.getDataFromTableWithNoCitations(tablesToRead.get(0));

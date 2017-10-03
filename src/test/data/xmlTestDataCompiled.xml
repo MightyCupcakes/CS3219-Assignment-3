@@ -1,0 +1,54 @@
+<XmlTestDataCompiled>
+  <main>
+    <journal id="1">
+      <title>THIS IS A TITLE</title>
+      <author>Yejin Choi</author>
+      <affiliation>Joint Inference for Event Timeline Construction</affiliation>
+      <abstract>...</abstract>
+    </journal>
+    <journal id="2">
+      <title>Syntactic Transfer Using a Bilingual Lexicon</title>
+      <author>Adam Pauls Durrett</author>
+      <affiliation>Computer Science University of California,</affiliation>
+      <abstract>i love abstract text</abstract>
+    </journal>
+  </main>
+  <citationLists>
+    <citation id="1">
+      <title>Improved Parsing and POS Tagging Using Inter-Sentence Consistency Constraints</title>
+      <date>2007</date>
+      <authors>
+        <author>Cool</author>
+      </authors>
+        <booktitle>booktitle</booktitle>
+    </citation>
+    <citation id="1">
+      <authors>
+        <author>Saturday</author>
+      </authors>
+      <title>(continued) Session 3-PM-2C: NLP Applications Session Chair: Chikara</title>
+      <booktitle>booktitle2</booktitle>
+      <date>2012</date>
+    </citation>
+    <citation id="2">
+      <authors>
+        <author>Erwin Marsi</author>
+        <author>Sabine Buchholz</author>
+      </authors>
+      <title>CoNLL-X Shared Task on Multilingual Dependency Parsing.</title>
+      <booktitle>In Proceedings of CoNLL,</booktitle>
+      <date>2006</date>
+    </citation>
+    <citation id="2">
+      <authors>
+        <author>Wikimedia Foundation</author>
+      </authors>
+      <date>2012</date>
+      <booktitle>booktitle3</booktitle>
+      <title>a very cool title</title>
+    </citation>
+  </citationLists>
+  <NoOfAuthor>10019</NoOfAuthor>
+  <noOfCitation>3804</noOfCitation>
+  <yearRange>1918 to 2012</yearRange>
+</XmlTestDataCompiled>

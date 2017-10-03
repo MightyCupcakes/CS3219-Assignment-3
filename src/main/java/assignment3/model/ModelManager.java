@@ -23,32 +23,51 @@ import assignment3.datarepresentation.SerializedJournal;
 import assignment3.model.Model;
 import assignment3.storage.Storage;
 import assignment3.storage.StorageManager;
+import javafx.util.Pair;
 
 public class ModelManager implements Model {
 
     private final String SAVED_LOCATION = "Dataset/";
     private final String XML_FORMAT = ".xml";
-    private final HashMap<String, List<SerializedJournal>> serializedJournalMap;
+    private final HashMap<String, Pair<HashMap<Integer, SerializedJournal>, HashMap<Integer, List<SerializedCitation>>>> journalCitationlMap;
     private final Storage storage;
+    private final HashMap<String, HashMap<Integer, SerializedJournal>> journalMap;
+    private final HashMap<String, HashMap<Integer, List<SerializedCitation>>> citationMap;
     public ModelManager () {
-    	 serializedJournalMap = new HashMap<>();
-    	 storage = new StorageManager();
+    	journalCitationlMap = new HashMap<>();
+    	journalMap = new HashMap<>();
+    	citationMap = new HashMap<>();
+    	storage = new StorageManager();
     }
     @Override
     public void saveJournalData(List<SerializedJournal> journalList, String conferenceName) throws Exception{
         writeToXmlFile(journalList, conferenceName);
     }
 
-    @Override
-    public List<SerializedJournal> getJournalData(String conferenceName) throws Exception {
-        if (serializedJournalMap.containsKey(conferenceName)) {
-        	return (serializedJournalMap.get(conferenceName));
-        } else {
-        	SerializedJournal journal = storage.retrieveFile(conferenceName);
-        	serializedJournalMap.put(conferenceName, Arrays.asList(journal));
-        	return Arrays.asList(journal);
-        }
-    }
+
+	@Override
+	public HashMap<Integer, SerializedJournal> getJournal(String conferenceName) throws Exception {
+		if (journalMap.containsKey(conferenceName)) {
+			return journalMap.get(conferenceName);
+		}
+		getJournalData(conferenceName);
+		return journalMap.get(conferenceName);
+	}
+
+	@Override
+	public HashMap<Integer, List<SerializedCitation>> getCitations(String conferenceName) throws Exception {
+		if (citationMap.containsKey(conferenceName)) {
+			return citationMap.get(conferenceName);
+		}
+		getJournalData(conferenceName);
+		return citationMap.get(conferenceName);
+	}
+	private void getJournalData(String conferenceName) throws Exception {
+		Pair<HashMap<Integer, SerializedJournal>, HashMap<Integer, List<SerializedCitation>>> pair = storage.retrieveFile(conferenceName);
+		journalMap.put(conferenceName, pair.getKey());
+		citationMap.put(conferenceName, pair.getValue());
+	}
+    
 
     private void writeToXmlFile(List<SerializedJournal> journalList, String conferenceName) throws Exception {
         int totalNoOfAuthor =  0;
@@ -61,45 +80,46 @@ public class ModelManager implements Model {
         DocumentBuilder xmlBuilder = builderFactory.newDocumentBuilder();
         Document doc = xmlBuilder.newDocument();
 
-        Element rootElement = doc.createElement("algorithms");
+        Element rootElement = doc.createElement(conferenceName);
         doc.appendChild(rootElement);
 
-        Element parshed = doc.createElement("algorithm");
-        parshed.setAttribute("name", "ParsHed");
-        Element parschit = doc.createElement("algorithm");
-        parschit.setAttribute("name", "ParsCit");
+        Element mainElement = doc.createElement("main");
         Element citationslists = doc.createElement("citationLists");
-        parschit.appendChild(citationslists);
+    
         Element authorElement = doc.createElement("NoOfAuthor");
         Element noOfcitationElement = doc.createElement("noOfCitation");
         Element yearRangeElement = doc.createElement("yearRange");
         Element noOfJournalElement = doc.createElement("noOfJournal");
+        rootElement.appendChild(mainElement);
+        rootElement.appendChild(citationslists);
         rootElement.appendChild(authorElement);
         rootElement.appendChild(noOfcitationElement);
         rootElement.appendChild(yearRangeElement);
         rootElement.appendChild(noOfJournalElement);
-        rootElement.appendChild(parshed);
-        rootElement.appendChild(parschit);
+
         
         noOfJournal+= journalList.size();
-
+        int id = 1;
         for (SerializedJournal journal : journalList) {
             if (!journalSet.contains(journal)) {
             	Element journalElement = doc.createElement("journal");
+            	journalElement.setAttribute("id" , Integer.toString(id));
                 appendChildToELement("title", journal.title, journalElement, doc);
-                appendChildToELement("authir", journal.author, journalElement, doc);
+                appendChildToELement("author", journal.author, journalElement, doc);
                 appendChildToELement("affiliation", journal.affiliation, journalElement, doc);
                 appendChildToELement("abstractText", journal.abstractText, journalElement, doc);
-                parshed.appendChild(journalElement);
+                mainElement.appendChild(journalElement);
                 journalSet.add(journal);
             }
             totalNoOfCitation+= journal.citations.size();
             for (SerializedCitation citation : journal.citations) {
                 Element citationElement = doc.createElement("citation");
-                Element authorsElement = doc.createElement("authors");
 
-                citationElement.appendChild(authorsElement);
-                citationElement.setAttribute("value", "true");
+                Element authorsElement = doc.createElement("authors");
+                citationElement.setAttribute("id", Integer.toString(id));
+                if (!citation.authorsList.isEmpty()) {
+                    citationElement.appendChild(authorsElement);
+                }
                 appendChildToELement("title", citation.title, citationElement, doc);
                 appendChildToELement("booktitle", citation.booktitle, citationElement, doc);
                 if (citation.year != 0) {
@@ -118,6 +138,7 @@ public class ModelManager implements Model {
                 }
                 citationslists.appendChild(citationElement);
             }
+            id++;
         }
 
         noOfcitationElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfCitation)));
@@ -142,4 +163,5 @@ public class ModelManager implements Model {
         }
 
     }
+
 }

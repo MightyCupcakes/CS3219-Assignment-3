@@ -32,7 +32,7 @@ public class NormalQueryTest {
     }
 
     @Test
-    public void testQuery() {
+    public void testQuery() throws Exception {
         SchemaString author = new SchemaString("author");
         SchemaString title = new SchemaString("title");
 
@@ -64,7 +64,7 @@ public class NormalQueryTest {
     }
 
     @Test
-    public void testQuery2() {
+    public void testQuery2() throws Exception {
         SchemaString author = new SchemaString("author");
         SchemaString title = new SchemaString("title");
         SchemaInt year = new SchemaInt("yearOfPublication");
