@@ -53,4 +53,58 @@ public class APITest {
 
         //assertEquals("", query.execute());
     }
+
+    @Test
+    public void test_Question7() throws Exception {
+        Query query = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.CITATION.booktitle, new SchemaCountUnique(ConferenceData.CITATION.title))
+                .from("D13")
+                .where(ConferenceData.CITATION.booktitle.like("EMNLP")
+                        .or(ConferenceData.CITATION.booktitle.like("CoNLL")))
+                .groupBy(ConferenceData.CITATION.booktitle)
+                .build();
+    }
+
+    @Test
+    public void test_Question8() throws Exception {
+        Query query = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.CITATION.authors, new SchemaCountUnique(ConferenceData.CITATION.title))
+                .from("D12")
+                .where(ConferenceData.CITATION.authors.like("Yoshua Bengio")
+                        .or(ConferenceData.CITATION.authors.like("Y. Bengio")))
+                .groupBy(ConferenceData.CITATION.year)
+                .build();
+    }
+
+    @Test
+    public void test_Question9() throws Exception {
+        Query query = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.CITATION.year, new SchemaCountUnique(ConferenceData.CITATION.title))
+                .from("J14")
+                .groupBy(ConferenceData.CITATION.year)
+                .build();
+
+        Query query2 = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.CITATION.year, new SchemaCountUnique(ConferenceData.CITATION.title))
+                .from("W14")
+                .groupBy(ConferenceData.CITATION.year)
+                .build();
+    }
+
+    @Test
+    public void test_Question10() throws Exception {
+        Query query = QueryBuilder.createNewBuilder()
+                .select(new SchemaCountUnique(ConferenceData.CITATION.title))
+                .from("Q14")
+                .where(ConferenceData.CITATION.booktitle.like("NAACL"))
+                .groupBy(ConferenceData.CITATION.booktitle)
+                .build();
+
+        Query query2 = QueryBuilder.createNewBuilder()
+                .select(new SchemaCountUnique(ConferenceData.CITATION.title))
+                .from("D14")
+                .where(ConferenceData.CITATION.booktitle.like("NAACL"))
+                .groupBy(ConferenceData.CITATION.booktitle)
+                .build();
+    }
 }
