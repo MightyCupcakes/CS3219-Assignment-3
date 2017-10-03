@@ -7,6 +7,8 @@ import org.junit.Test;
 import assignment3.logic.QueryBuilder;
 import assignment3.schema.aggregate.SchemaCount;
 import assignment3.schema.aggregate.SchemaCountUnique;
+import assignment3.schema.aggregate.SchemaMax;
+import assignment3.schema.aggregate.SchemaMin;
 import assignment3.schema.aggregate.SchemaSum;
 
 public class APITest {
@@ -39,6 +41,14 @@ public class APITest {
     public void test_Question4() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
                 .select(new SchemaSum(ConferenceData.CITATION.numOfAuthors))
+                .from("D12", "D13", "D14", "D15", "J14", "W14", "Q14")
+                .build();
+    }
+
+    @Test
+    public void test_Question5() throws Exception {
+        Query query = QueryBuilder.createNewBuilder()
+                .select(new SchemaMin(ConferenceData.CITATION.year), new SchemaMax(ConferenceData.CITATION.year))
                 .from("D12", "D13", "D14", "D15", "J14", "W14", "Q14")
                 .build();
     }

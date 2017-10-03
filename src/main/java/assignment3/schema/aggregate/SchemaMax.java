@@ -5,18 +5,18 @@ import java.util.logging.Logger;
 import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.SchemaComparable;
 
-public class SchemaSum extends SchemaAggregate {
+public class SchemaMax extends SchemaAggregate {
 
-    private int sum;
+    private int max;
 
-    public SchemaSum(SchemaComparable column) {
+    public SchemaMax(SchemaComparable column) {
         super(column);
-        sum = 0;
+        max = Integer.MIN_VALUE;
     }
 
     @Override
     public String getNameOfAttribute() {
-        return "SUM(" + this.nameOfAttribute + ")";
+        return "MAX(" + this.nameOfAttribute + ")";
     }
 
     @Override
@@ -32,13 +32,13 @@ public class SchemaSum extends SchemaAggregate {
                     .warning(column.getNameOfAttribute() + " : value cannot parsed into integer!");
         }
 
-        sum += integerValue;
+        max = Integer.max(integerValue, max);
     }
 
     @Override
     public int getResult() {
-        int result = sum;
-        sum = 0;
+        int result = max;
+        max = Integer.MIN_VALUE;
 
         return result;
     }
