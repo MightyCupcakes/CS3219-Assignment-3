@@ -1,14 +1,6 @@
 package assignment3.storage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.List;
-
 import assignment3.dataparser.xmlparser.XmlDataParser;
-import assignment3.datarepresentation.SerializedCitation;
-import assignment3.datarepresentation.SerializedJournal;
-import javafx.util.Pair;
 
 public class StorageManager implements Storage {
 	private final static String DEFAULT_STORAGE = "dataset/";
@@ -17,19 +9,20 @@ public class StorageManager implements Storage {
 		    
 
 	@Override
-	public Pair<HashMap<Integer, SerializedJournal>, HashMap<Integer, List<SerializedCitation>>> retrieveFile(String conferenceName) throws Exception  {
+	public RetrievedFileData retrieveFile(String conferenceName) throws Exception  {
 		parser.parseCompiledFile(DEFAULT_STORAGE + conferenceName + XML_FORMAT, conferenceName);
-		Pair journalCitationPair = new Pair(parser.getJournalMap(), parser.getCitationMap());
-		return journalCitationPair;
+        RetrievedFileData data = new RetrievedFileData(parser.getJournalMap(), parser.getCitationMap());
+
+		return data;
 		
 	}
 
 
 	@Override
-	public Pair<HashMap<Integer, SerializedJournal>, HashMap<Integer, List<SerializedCitation>>> retrieveFile(
-			String conferenceName, String fileLocation) throws Exception {
+	public RetrievedFileData retrieveFile(String conferenceName, String fileLocation) throws Exception {
 		parser.parseCompiledFile(fileLocation + conferenceName + XML_FORMAT, conferenceName);
-		Pair journalCitationPair = new Pair(parser.getJournalMap(), parser.getCitationMap());
-		return journalCitationPair;
+        RetrievedFileData data = new RetrievedFileData(parser.getJournalMap(), parser.getCitationMap());
+
+        return data;
 	} 
 }
