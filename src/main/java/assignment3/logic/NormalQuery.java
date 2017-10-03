@@ -2,6 +2,7 @@ package assignment3.logic;
 
 import static java.util.Objects.isNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -42,7 +43,11 @@ public class NormalQuery implements Query {
         try {
 
             if (!isNull(logic)) {
-                journals = logic.getDataFromTableWithNoCitations(tablesToRead.get(0));
+                journals = new ArrayList<>(150);
+
+                for (String table : tablesToRead) {
+                    journals.addAll(logic.getDataFromTableWithNoCitations(table));
+                }
             }
 
         } catch (Exception e) {

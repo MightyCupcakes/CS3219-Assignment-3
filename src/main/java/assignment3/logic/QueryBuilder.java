@@ -44,8 +44,8 @@ public class QueryBuilder implements APIQueryBuilder {
     }
 
     @Override
-    public APIQueryBuilder from(String table) {
-        fromTables.add(table);
+    public APIQueryBuilder from(String... table) {
+        Arrays.stream(table).forEach(fromTables::add);
         return this;
     }
 

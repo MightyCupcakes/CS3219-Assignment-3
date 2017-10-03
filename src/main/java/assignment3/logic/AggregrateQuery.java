@@ -143,18 +143,27 @@ public class AggregrateQuery implements Query {
     @Override
     public String execute() {
 
-        try {
+        if (!isNull(logic)) {
 
-            if (!isNull(logic) && isQueryRetrivingCitations()) {
-                journals = logic.getDataFromTableWithCitations(tablesToRead.get(0));
-            } else if (!isNull(logic) && !isQueryRetrivingCitations()) {
-                journals = logic.getDataFromTableWithNoCitations(tablesToRead.get(0));
+            journals = new ArrayList<>(150);
+
+            try {
+
+                if (isQueryRetrivingCitations()) {
+                    for (String table : tablesToRead) {
+                        journals.addAll(logic.getDataFromTableWithCitations(table));
+                    }
+                } else if (!isQueryRetrivingCitations()) {
+                    for (String table : tablesToRead) {
+                        journals.addAll(logic.getDataFromTableWithNoCitations(table));
+                    }
+                }
+
+            } catch (Exception e) {
+                Logger.getLogger(this.getClass().toString())
+                        .warning("Exception thrown while trying to get data from LogicLayer: " + e.getMessage());
+                return EMPTY_JSON;
             }
-
-        } catch (Exception e) {
-            Logger.getLogger(this.getClass().toString())
-                    .warning("Exception thrown while trying to get data from LogicLayer: " + e.getMessage());
-            return EMPTY_JSON;
         }
 
         journals = filterOutRows(journals);
