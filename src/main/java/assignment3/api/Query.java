@@ -7,8 +7,7 @@ public interface Query {
     /**
      * Executes this query and returns a JSON string representing the
      * results of this query
-     * @throws Exception 
      *
      */
-    String execute() throws Exception;
+    String execute();
 }

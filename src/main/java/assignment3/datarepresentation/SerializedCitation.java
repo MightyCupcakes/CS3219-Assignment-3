@@ -3,6 +3,7 @@ package assignment3.datarepresentation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class SerializedCitation {
 	private static final String EMPTY_BOOK_TITLE ="";
@@ -23,7 +24,7 @@ public class SerializedCitation {
         this.authorsList = new ArrayList<>();
         this.booktitle = isEmpty(booktitle) ? EMPTY_BOOK_TITLE : booktitle;
 
-        listOfAuthors.forEach(authorsList::add);
+        listOfAuthors.addAll(authorsList);
         Collections.sort(authorsList);
 
         createAuthorsString();
@@ -52,6 +53,11 @@ public class SerializedCitation {
                 && this.year == ((SerializedCitation) other).year
                 && this.authorsList.equals(((SerializedCitation) other).authorsList)
                 && this.booktitle.equals(((SerializedCitation) other).booktitle));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(authors, title, year);
     }
 
     public static class Builder {

@@ -65,7 +65,7 @@ public class AggregrateQuery implements Query {
         }
     }
 
-    public void setDataSource(Logic logic) {
+    void setDataSource(Logic logic) {
         this.logic = logic;
     }
 

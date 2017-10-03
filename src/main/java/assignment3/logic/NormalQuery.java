@@ -4,6 +4,7 @@ import static java.util.Objects.isNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import assignment3.api.Query;
@@ -32,15 +33,22 @@ public class NormalQuery implements Query {
                 .collect(Collectors.toList());
     }
 
-    public void setDataSource(Logic logic) {
+    void setDataSource(Logic logic) {
         this.logic = logic;
     }
 
     @Override
-    public String execute() throws Exception {
+    public String execute() {
+        try {
 
-        if(!isNull(logic)) {
-            journals = logic.getDataFromTableWithNoCitations(tablesToRead.get(0));
+            if (!isNull(logic)) {
+                journals = logic.getDataFromTableWithNoCitations(tablesToRead.get(0));
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().toString())
+                    .warning("Exception thrown while trying to get data from LogicLayer: " + e.getMessage());
+            return EMPTY_JSON;
         }
 
         journals = filterOutRows(journals);
