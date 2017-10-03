@@ -24,7 +24,7 @@ public class SerializedCitation {
         this.authorsList = new ArrayList<>();
         this.booktitle = isEmpty(booktitle) ? EMPTY_BOOK_TITLE : booktitle;
 
-        listOfAuthors.addAll(authorsList);
+        authorsList.addAll(listOfAuthors);
         Collections.sort(authorsList);
 
         createAuthorsString();
