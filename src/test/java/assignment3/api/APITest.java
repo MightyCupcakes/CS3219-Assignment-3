@@ -68,7 +68,7 @@ public class APITest {
     @Test
     public void test_Question8() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.CITATION.authors, new SchemaCountUnique(ConferenceData.CITATION.title))
+                .select(ConferenceData.CITATION.year, new SchemaCountUnique(ConferenceData.CITATION.title))
                 .from("D12")
                 .where(ConferenceData.CITATION.authors.like("Yoshua Bengio")
                         .or(ConferenceData.CITATION.authors.like("Y. Bengio")))
