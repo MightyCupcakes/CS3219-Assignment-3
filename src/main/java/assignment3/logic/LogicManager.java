@@ -25,6 +25,7 @@ public class LogicManager implements Logic{
 	public LogicManager () {
 		parser = new XmlDataParser();
 		model = new ModelManager();
+		QueryBuilder.setLogicTo(this);
 	}
 
 	@Override

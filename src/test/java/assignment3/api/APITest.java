@@ -2,8 +2,10 @@ package assignment3.api;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import assignment3.logic.Logic;
 import assignment3.logic.QueryBuilder;
 import assignment3.schema.aggregate.SchemaCount;
 import assignment3.schema.aggregate.SchemaCountUnique;
@@ -12,6 +14,13 @@ import assignment3.schema.aggregate.SchemaMin;
 import assignment3.schema.aggregate.SchemaSum;
 
 public class APITest {
+
+    private static API api;
+
+    @BeforeClass
+    public static void setUp() {
+        api = new APIManager();
+    }
 
     @Test
     public void test_Question1() throws Exception {
@@ -58,6 +67,8 @@ public class APITest {
         Query query = QueryBuilder.createNewBuilder()
                 .select(ConferenceData.CITATION.year, new SchemaCountUnique(ConferenceData.CITATION.title))
                 .from("D12")
+                .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(2000)
+                        .and(ConferenceData.CITATION.year.LessThanOrEqualsTo(2015)))
                 .groupBy(ConferenceData.CITATION.year)
                 .build();
 
