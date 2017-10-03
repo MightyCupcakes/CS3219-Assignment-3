@@ -14,7 +14,7 @@ import assignment3.dataparser.xmlparser.XmlDataParser;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 
-public class XmlCompiltedParserTest {
+public class XmlCompiledParserTest {
 	private static final String TEST_DATA = "src/test/data/xmlTestDataCompiled.xml";
 	
 	@Test

@@ -9,4 +9,6 @@ import javafx.util.Pair;
 
 public interface Storage {
 	Pair<HashMap<Integer, SerializedJournal>, HashMap<Integer, List<SerializedCitation>>> retrieveFile(String conferenceName) throws Exception;
+	Pair<HashMap<Integer, SerializedJournal>, HashMap<Integer, List<SerializedCitation>>> retrieveFile(String conferenceName, String fileLocation) throws Exception;
+
 }

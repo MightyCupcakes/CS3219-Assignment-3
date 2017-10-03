@@ -30,4 +30,13 @@ public interface Model {
      * @throws Exception 
      */
     HashMap<Integer, List<SerializedCitation>> getCitations(String conferenceName) throws Exception;
+    
+    
+    /**
+     * return journal/citations that are mapped to a given conference as key
+     * @return
+     */
+    HashMap<String, HashMap<Integer, SerializedJournal>> getJournalMap();
+    HashMap<String, HashMap<Integer, List<SerializedCitation>>> getCitationMap();
+
 }
