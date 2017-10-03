@@ -1,7 +1,6 @@
 package assignment3.model;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,12 +28,10 @@ public class ModelManager implements Model {
 
     private final String SAVED_LOCATION = "Dataset/";
     private final String XML_FORMAT = ".xml";
-    private final HashMap<String, Pair<HashMap<Integer, SerializedJournal>, HashMap<Integer, List<SerializedCitation>>>> journalCitationlMap;
     private final Storage storage;
     private final HashMap<String, HashMap<Integer, SerializedJournal>> journalMap;
     private final HashMap<String, HashMap<Integer, List<SerializedCitation>>> citationMap;
     public ModelManager () {
-    	journalCitationlMap = new HashMap<>();
     	journalMap = new HashMap<>();
     	citationMap = new HashMap<>();
     	storage = new StorageManager();
@@ -163,5 +160,14 @@ public class ModelManager implements Model {
         }
 
     }
+	@Override
+	public HashMap<String, HashMap<Integer, SerializedJournal>> getJournalMap() {
+		return journalMap;
+	}
+	@Override
+	public HashMap<String, HashMap<Integer, List<SerializedCitation>>> getCitationMap() {
+		// TODO Auto-generated method stub
+		return citationMap;
+	}
 
 }
