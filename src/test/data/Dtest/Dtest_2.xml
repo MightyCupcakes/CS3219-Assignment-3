@@ -26,9 +26,9 @@
     <citationList>
       <citation valid="true">
         <authors>
-          <author>A Abeill</author>
+          <author>D_test_citation_two_one_author</author>
         </authors>
-        <title>Treebanks: Building and Using Parsed Corpora.</title>
+        <title>D_test_citation_two_one_title</title>
         <date>2003</date>
         <publisher>Springer.</publisher>
         <marker>Abeill´e, 2003</marker>
@@ -46,12 +46,12 @@
       </citation>
       <citation valid="true">
         <authors>
-          <author>Taylor Berg-Kirkpatrick</author>
-          <author>Alexandre Bouchard</author>
-          <author>John DeNero</author>
-          <author>Dan Klein</author>
+          <author>D_test_citation_two_two_author</author>
+          <author>D_test_citation_two_two_author_two</author>
+          <author>D_test_citation_two_two_author_three</author>
+          <author>D_test_citation_two_two_author_four</author>
         </authors>
-        <title>Painless unsupervised learning with features.</title>
+        <title>D_test_citation_two_two_title</title>
         <date>2010</date>
         <booktitle>In Proc. NAACL,</booktitle>
         <marker>Berg-Kirkpatrick, Bouchard-Cˆot´e, DeNero, Klein, 2010</marker>
