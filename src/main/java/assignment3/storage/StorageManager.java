@@ -22,7 +22,7 @@ public class StorageManager implements Storage {
 	@Override
 	public RetrievedFileData retrieveFile(String conferenceName) throws Exception  {
 		parser.parseCompiledFile(getStorageLocation() + conferenceName + XML_FORMAT, conferenceName);
-        RetrievedFileData data = new RetrievedFileData(parser.getJournalMap(), parser.getCitationMap());
+		RetrievedFileData data = new RetrievedFileData(parser.getJournalMap(), parser.getCitationMap());
 
 		return data;
 		
@@ -31,7 +31,8 @@ public class StorageManager implements Storage {
 	@Override
 	public RetrievedFileData retrieveFile(String conferenceName, String fileLocation) throws Exception {
 		parser.parseCompiledFile(fileLocation + conferenceName + XML_FORMAT, conferenceName);
-        RetrievedFileData data = new RetrievedFileData(parser.getJournalMap(), parser.getCitationMap());
+		Thread.sleep(5000);
+		RetrievedFileData data = new RetrievedFileData(parser.getJournalMap(), parser.getCitationMap());
 
         return data;
 	}
