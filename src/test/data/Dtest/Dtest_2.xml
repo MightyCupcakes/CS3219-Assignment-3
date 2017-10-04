@@ -14,8 +14,8 @@
 
   <algorithm name="ParsHed" version="110505">
     <variant no="0" confidence="0.547115">
-      <title confidence="0.999284">Wiki-ly Supervised Part-of-Speech Tagging</title>
-      <author confidence="0.999955">Li V Ben Taskar</author>
+      <title confidence="0.999284">Dtest_2 title</title>
+      <author confidence="0.999955">Dtest_2 author</author>
       <affiliation confidence="0.998526">Information Science INESC-ID Computer</affiliation>
       <email confidence="0.961276">shenli@seas.upenn.edujavg@l2f.inesc-id.pttaskar@cis.upenn.edu</email>
       <abstract confidence="0.999553565217391">Despite significant recent work, purely unsupervised techniques...</abstract>
