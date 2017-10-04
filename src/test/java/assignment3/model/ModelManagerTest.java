@@ -31,7 +31,7 @@ public class ModelManagerTest {
 		assertEquals(0, journalMap.size());
 		assertEquals(0, citationMap.size());
 	}
-/*
+
 	@Test
 	public void testAddConferenceToModel() throws Exception {
 		journalMap = model.getJournalMap();
@@ -48,5 +48,5 @@ public class ModelManagerTest {
 		assertTrue(journalMap.containsKey(CONFERENCE_FILE));
 		assertTrue(citationMap.containsKey(CONFERENCE_FILE));
 	}
-	*/
+	
 }

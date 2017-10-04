@@ -19,7 +19,7 @@ public class StorageManagerTest {
 	@Test
 	public void testStorageManager() throws Exception {
 		storage = new StorageManager();
-		storagePair = storage.retrieveFile("XmlTestDataCompiled", TEST_DATA);
+		storagePair = storage.retrieveFile("xmlTestDataCompiled", TEST_DATA);
 		
 		Map<Integer, SerializedJournal> journalMap = storagePair.journalsMap;
 		Map<Integer, List<SerializedCitation>> citationMap = storagePair.citationsMap;
