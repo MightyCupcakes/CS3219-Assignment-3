@@ -30,8 +30,8 @@ public class StorageManager implements Storage {
 
 	@Override
 	public RetrievedFileData retrieveFile(String conferenceName, String fileLocation) throws Exception {
-		parser.parseCompiledFile(fileLocation + conferenceName + XML_FORMAT, conferenceName);
-		Thread.sleep(5000);
+		String test = "src/test/data/xmlTestDataCompiled.xml";
+		parser.parseCompiledFile(test, "XmlTestDataCompiled");
 		RetrievedFileData data = new RetrievedFileData(parser.getJournalMap(), parser.getCitationMap());
 
         return data;
