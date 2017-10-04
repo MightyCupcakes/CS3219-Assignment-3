@@ -1,0 +1,2 @@
+Question 6: 
+[{"year":"2000","COUNT(title)":"90"},{"year":"2001","COUNT(title)":"84"},{"year":"2002","COUNT(title)":"145"},{"year":"2003","COUNT(title)":"190"},{"year":"2004","COUNT(title)":"200"},{"year":"2005","COUNT(title)":"225"},{"year":"2006","COUNT(title)":"268"},{"year":"2007","COUNT(title)":"323"},{"year":"2008","COUNT(title)":"324"},{"year":"2009","COUNT(title)":"340"},{"year":"2010","COUNT(title)":"410"},{"year":"2011","COUNT(title)":"438"},{"year":"2012","COUNT(title)":"74"}]
