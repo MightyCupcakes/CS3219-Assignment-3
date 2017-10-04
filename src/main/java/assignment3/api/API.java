@@ -10,7 +10,6 @@ public interface API {
 
     /**
      * All queries within this method will be executed.
-     * @return the JSON strings of all the queries
      */
-    String runQueries();
+    void runQueries();
 }
