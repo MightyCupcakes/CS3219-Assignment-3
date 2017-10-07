@@ -1,5 +1,7 @@
 package assignment3.schema.aggregate;
 
+import static java.util.Objects.isNull;
+
 import java.util.logging.Logger;
 
 import assignment3.datarepresentation.SerializedJournalCitation;
@@ -23,6 +25,10 @@ public class SchemaMax extends SchemaAggregate {
     public void accumulate(SerializedJournalCitation row) {
         Object value = column.getValue(row);
 
+        if (isNull(value)) {
+            return;
+        }
+
         int integerValue = 0;
 
         try {
@@ -32,7 +38,9 @@ public class SchemaMax extends SchemaAggregate {
                     .warning(column.getNameOfAttribute() + " : value cannot parsed into integer!");
         }
 
-        max = Integer.max(integerValue, max);
+        if (integerValue != Integer.MIN_VALUE) {
+            max = Integer.max(integerValue, max);
+        }
     }
 
     @Override

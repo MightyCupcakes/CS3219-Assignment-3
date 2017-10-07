@@ -4,10 +4,15 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.SAXException;
 
 import assignment3.dataparser.DataParser;
 import assignment3.datarepresentation.SerializedCitation;
@@ -19,7 +24,7 @@ public class XmlDataParser implements DataParser {
     private HashMap<Integer, SerializedJournal> journalMap;
     private HashMap<Integer, List<SerializedCitation>> citationMap;
 
-    public void parseFile(String filename) throws FileNotFoundException{
+    public void parseFile(String filename) throws FileNotFoundException, SAXException {
         requireNonNull(filename);
 
         File file = new File(filename);
@@ -28,19 +33,21 @@ public class XmlDataParser implements DataParser {
             throw new FileNotFoundException("File not found : " + file.getAbsolutePath());
         }
 
+        Logger.getLogger(this.getClass().toString()).info("Parsing: " + filename);
+
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         XmlDataParserHandler handler = new XmlDataParserHandler();
 
         try {
             saxParserFactory.newSAXParser().parse(file, handler);
-        } catch (Exception e) {
+        } catch (ParserConfigurationException | IOException e) {
             e.printStackTrace();
         }
 
         journal = handler.getJournal();
     }
     
-    public void parseCompiledFile(String filename, String conferenceName) throws FileNotFoundException{
+    public void parseCompiledFile(String filename, String conferenceName) throws FileNotFoundException {
         requireNonNull(filename);
 
         File file = new File(filename);

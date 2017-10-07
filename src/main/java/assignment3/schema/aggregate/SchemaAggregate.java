@@ -6,6 +6,7 @@ import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
+import assignment3.schema.citations.CitationAttribute;
 
 public abstract class SchemaAggregate extends SchemaBase<Integer> {
 
@@ -19,4 +20,9 @@ public abstract class SchemaAggregate extends SchemaBase<Integer> {
 
     public abstract void accumulate(SerializedJournalCitation row);
     public abstract int getResult();
+
+    @Override
+    public boolean isJoinTable() {
+        return column instanceof CitationAttribute;
+    }
 }

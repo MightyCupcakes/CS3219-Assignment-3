@@ -37,4 +37,8 @@ public abstract class SchemaBase<T> {
     public String getNameOfAttribute() {
         return nameOfAttribute;
     }
+
+    public boolean isJoinTable() {
+        return false;
+    }
 }

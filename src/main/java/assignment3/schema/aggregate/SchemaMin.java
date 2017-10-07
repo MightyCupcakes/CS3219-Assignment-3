@@ -1,5 +1,7 @@
 package assignment3.schema.aggregate;
 
+import static java.util.Objects.isNull;
+
 import java.util.logging.Logger;
 
 import assignment3.datarepresentation.SerializedJournalCitation;
@@ -23,16 +25,24 @@ public class SchemaMin extends SchemaAggregate {
     public void accumulate(SerializedJournalCitation row) {
         Object value = column.getValue(row);
 
-        int integerValue = 0;
+        if (isNull(value)) {
+            return;
+        }
+
+        int integerValue;
 
         try {
             integerValue = Integer.parseInt(value.toString());
         } catch (NumberFormatException e) {
             Logger.getLogger(this.getClass().toString())
                     .warning(column.getNameOfAttribute() + " : value cannot parsed into integer!");
+
+            return;
         }
 
-        min = Integer.min(min, integerValue);
+        if (integerValue != Integer.MIN_VALUE) {
+            min = Integer.min(min, integerValue);
+        }
     }
 
     @Override

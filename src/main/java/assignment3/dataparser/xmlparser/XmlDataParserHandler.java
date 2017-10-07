@@ -1,5 +1,6 @@
 package assignment3.dataparser.xmlparser;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 import java.util.function.BiConsumer;
@@ -28,7 +29,7 @@ public class XmlDataParserHandler extends DefaultHandler {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (qName.equalsIgnoreCase("algorithm")
                 && attributes.getValue("name").equalsIgnoreCase("ParsHed")) {
 
@@ -36,6 +37,12 @@ public class XmlDataParserHandler extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("algorithm")
                 && attributes.getValue("name").equalsIgnoreCase("ParsCit")) {
             journalElementParser = (JournalElementParser) currentElementParser;
+
+            if (isNull(journalElementParser)) {
+                // Stop parsing if the document does not contain any journal info.
+                throw new MySAXTerminatorException();
+            }
+
             currentElementParser = new CitationElementParser();
             currentElementParser.openElement(qName);
         } else if(qName.equalsIgnoreCase("citation")
@@ -69,5 +76,9 @@ public class XmlDataParserHandler extends DefaultHandler {
         if (currentElementParser != null) {
             currentElementParser.parse(new String(ch, start, length));
         }
+    }
+
+    public static class MySAXTerminatorException extends SAXException {
+
     }
 }

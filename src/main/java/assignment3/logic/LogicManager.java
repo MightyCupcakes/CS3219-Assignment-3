@@ -7,9 +7,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import assignment3.dataparser.xmlparser.XmlDataParser;
+import assignment3.dataparser.xmlparser.XmlDataParserHandler;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
@@ -67,11 +69,17 @@ public class LogicManager implements Logic{
 				.map(Path::toString)
 				.collect(Collectors.toList());
 	}
-	private List<SerializedJournal> convertToJournals(List<String> conferenceLists) throws Exception{
+	private List<SerializedJournal> convertToJournals(List<String> conferenceLists) throws Exception {
 		List<SerializedJournal> journalList = new ArrayList<>();
+
 		for(String conference : conferenceLists) {
-			parser.parseFile(conference);
-			journalList.add(parser.getJournal());
+		    try {
+                parser.parseFile(conference);
+                journalList.add(parser.getJournal());
+            } catch (XmlDataParserHandler.MySAXTerminatorException e) {
+                Logger.getLogger(this.getClass().toString())
+                        .warning("File has no journal, skipping file: " + conference);
+            }
 		}
 		return journalList;
 	}

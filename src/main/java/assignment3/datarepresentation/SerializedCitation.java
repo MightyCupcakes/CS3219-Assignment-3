@@ -62,7 +62,7 @@ public class SerializedCitation {
 
     public static class Builder {
         private List<String> authors;
-        private int year;
+        private int year = Integer.MIN_VALUE;
         private String title;
         private String booktitle;
 

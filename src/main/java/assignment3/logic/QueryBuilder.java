@@ -78,7 +78,8 @@ public class QueryBuilder implements APIQueryBuilder {
             }
         }
 
-        if (selectColumns.stream().anyMatch(schemaBase -> schemaBase instanceof CitationAttribute)) {
+        if (selectColumns.stream().anyMatch(schemaBase -> schemaBase instanceof CitationAttribute) ||
+                selectColumns.stream().anyMatch(schemaBase -> schemaBase.isJoinTable())) {
 
             List<SchemaComparable> normalColumns = new ArrayList<>();
             List<SchemaAggregate> aggregateColumns = new ArrayList<>();

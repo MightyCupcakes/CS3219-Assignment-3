@@ -50,11 +50,11 @@ public class SerializedJournal {
     }
 
     public static class Builder {
-        private String title;
-        private String author;
+        private String title = "";
+        private String author = "";
         private String affiliation;
         private String abstractText;
-        private String conference;
+        private String conference = "";
         private int yearOfPublication;
 
         private List<SerializedCitation> citations = Collections.emptyList();

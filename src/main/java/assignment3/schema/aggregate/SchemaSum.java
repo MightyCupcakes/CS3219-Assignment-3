@@ -1,5 +1,7 @@
 package assignment3.schema.aggregate;
 
+import static java.util.Objects.isNull;
+
 import java.util.logging.Logger;
 
 import assignment3.datarepresentation.SerializedJournalCitation;
@@ -23,6 +25,10 @@ public class SchemaSum extends SchemaAggregate {
     public void accumulate(SerializedJournalCitation row) {
         Object value = column.getValue(row);
 
+        if (isNull(value)) {
+            return;
+        }
+
         int integerValue = 0;
 
         try {
@@ -32,7 +38,9 @@ public class SchemaSum extends SchemaAggregate {
                     .warning(column.getNameOfAttribute() + " : value cannot parsed into integer!");
         }
 
-        sum += integerValue;
+        if (integerValue != Integer.MIN_VALUE) {
+            sum += integerValue;
+        }
     }
 
     @Override
