@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class SerializedJournal {
+    public final String id;
     public final String title;
     public final String author;
     public final String affiliation;
@@ -15,13 +16,15 @@ public class SerializedJournal {
 
     public final List<SerializedCitation> citations;
 
-    protected SerializedJournal (String title,
+    protected SerializedJournal (String id,
+                               String title,
                                String author,
                                String affiliation,
                                String abstractText,
                                String conference,
                                int yearOfPublication,
                                List<SerializedCitation> citedArticles) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.affiliation = affiliation;
@@ -56,6 +59,7 @@ public class SerializedJournal {
         private String abstractText;
         private String conference = "";
         private int yearOfPublication;
+        private String id;
 
         private List<SerializedCitation> citations = Collections.emptyList();
 
@@ -107,8 +111,14 @@ public class SerializedJournal {
             return this;
         }
 
+        public Builder withId(String id) {
+            this.id = id;
+
+            return this;
+        }
+
         public SerializedJournal build() {
-            return new SerializedJournal(title, author, affiliation, abstractText, conference, yearOfPublication, citations);
+            return new SerializedJournal(id, title, author, affiliation, abstractText, conference, yearOfPublication, citations);
         }
     }
 }
