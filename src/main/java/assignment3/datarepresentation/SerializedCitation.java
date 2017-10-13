@@ -1,26 +1,31 @@
 package assignment3.datarepresentation;
 
+import static assignment3.datarepresentation.SerializedJournal.DEFAULT_JOURNAL_ID;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class SerializedCitation {
-	private static final String EMPTY_BOOK_TITLE ="";
+
+	private static final String EMPTY_BOOK_TITLE = "";
 
 	public final String title;
     public final int year;
     public final String booktitle;
+    public final String journalId;
     public String authors;
     public final int numOfAuthors;
 
     public List<String> authorsList;
 
     private SerializedCitation(String title, int year, List<String> listOfAuthors,
-    		String booktitle) {
+    		String booktitle, String id) {
 
         this.title = title;
         this.year = year;
+        this.journalId = id;
         this.authorsList = new ArrayList<>();
         this.booktitle = isEmpty(booktitle) ? EMPTY_BOOK_TITLE : booktitle;
 
@@ -64,6 +69,7 @@ public class SerializedCitation {
         private List<String> authors;
         private int year = Integer.MIN_VALUE;
         private String title;
+        private String id = DEFAULT_JOURNAL_ID;
         private String booktitle;
         private String journalID;
 
@@ -101,8 +107,14 @@ public class SerializedCitation {
         	return this;
         }
 
+        public Builder withJournalId(String id) {
+            this.id = id;
+
+            return this;
+        }
+
         public SerializedCitation build() {
-            return new SerializedCitation(this.title, this.year, this.authors, this.booktitle);
+            return new SerializedCitation(this.title, this.year, this.authors, this.booktitle, this.id);
         }
 
     }

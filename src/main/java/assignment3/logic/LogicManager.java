@@ -107,7 +107,7 @@ public class LogicManager implements Logic{
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		List<SerializedJournal> journals = new ArrayList<>();
 
-		for (int i = 0; i < 200000; i ++) {
+		for (int i = 0; i < 1000; i ++) {
 			DataParser parser = new JsonDataParser();
 			String line = reader.readLine();
 

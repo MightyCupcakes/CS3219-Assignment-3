@@ -2,6 +2,8 @@ package assignment3.schema;
 
 import static java.util.Objects.isNull;
 
+import java.util.Set;
+
 public abstract class SchemaComparable<T extends Comparable> extends SchemaBase<T> {
 
     public SchemaComparable(String name) {
@@ -21,6 +23,15 @@ public abstract class SchemaComparable<T extends Comparable> extends SchemaBase<
             if (isNull(v)) return false;
 
             return v.toString().contains(value);
+        });
+    }
+
+    public SchemaPredicate in(Set<T> values) {
+        return new SchemaPredicate(this, o -> {
+            T v = this.getValue(o);
+            if (isNull(v)) return false;
+
+            return values.contains(v);
         });
     }
 

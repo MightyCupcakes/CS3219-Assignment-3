@@ -43,6 +43,7 @@ public class JsonIdParserTest {
         assertEquals("0000c8f31b6058b1b42d9580c7afaa2e673a98c2", firstJournal.id);
         assertEquals(2, firstJournal.citations.size());
         assertEquals("A", firstJournal.citations.get(0).title);
+        assertEquals("0000c1c31b6058b1b42d9580c7afaa2e673a98c2", firstJournal.citations.get(0).journalId);
         assertEquals("B", firstJournal.citations.get(1).title);
     }
 }

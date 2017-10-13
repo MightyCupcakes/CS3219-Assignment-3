@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class SerializedJournal {
+
+    public static final String DEFAULT_JOURNAL_ID = String.valueOf(Integer.MIN_VALUE);
+
     public final String id;
     public final String title;
     public final String author;
@@ -65,9 +68,11 @@ public class SerializedJournal {
     public void citeJournal(SerializedJournal journal) {
         SerializedCitation.Builder builder = new SerializedCitation.Builder();
 
-        builder.withAuthor(journal.author);
-        builder.withTitle(journal.title);
-        builder.withYear(journal.yearOfPublication);
+        builder
+                .withAuthor(journal.author)
+                .withTitle(journal.title)
+                .withYear(journal.yearOfPublication)
+                .withJournalId(journal.id);
 
         citations.add(builder.build());
     }
@@ -77,8 +82,8 @@ public class SerializedJournal {
         private String affiliation;
         private String abstractText;
         private String conference = "";
-        private String venue;
-        private String id;
+        private String venue = "";
+        private String id = DEFAULT_JOURNAL_ID;
 
         public int numInCitations;
         private int yearOfPublication;

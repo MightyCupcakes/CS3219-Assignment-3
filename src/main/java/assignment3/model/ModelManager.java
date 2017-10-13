@@ -1,5 +1,7 @@
 package assignment3.model;
 
+import static assignment3.datarepresentation.SerializedJournal.DEFAULT_JOURNAL_ID;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -102,10 +104,18 @@ public class ModelManager implements Model {
             if (!journalSet.contains(journal)) {
             	Element journalElement = doc.createElement("journal");
             	journalElement.setAttribute("id" , Integer.toString(id));
-                appendChildToELement("title", journal.title, journalElement, doc);
-                appendChildToELement("author", journal.author, journalElement, doc);
-                appendChildToELement("affiliation", journal.affiliation, journalElement, doc);
-                appendChildToELement("abstractText", journal.abstractText, journalElement, doc);
+
+            	appendChildToElement("title", journal.title, journalElement, doc);
+                appendChildToElement("author", journal.author, journalElement, doc);
+                appendChildToElement("affiliation", journal.affiliation, journalElement, doc);
+                appendChildToElement("abstractText", journal.abstractText, journalElement, doc);
+                appendChildToElement("venue", journal.venue, journalElement, doc);
+                appendChildToElement("date", Integer.toString(journal.yearOfPublication), journalElement, doc);
+
+                if (!journal.id.equals(DEFAULT_JOURNAL_ID)) {
+                    appendChildToElement("generatedId", journal.id, journalElement, doc);
+                }
+
                 mainElement.appendChild(journalElement);
                 journalSet.add(journal);
             }
@@ -118,8 +128,14 @@ public class ModelManager implements Model {
                 if (!citation.authorsList.isEmpty()) {
                     citationElement.appendChild(authorsElement);
                 }
-                appendChildToELement("title", citation.title, citationElement, doc);
-                appendChildToELement("booktitle", citation.booktitle, citationElement, doc);
+
+                appendChildToElement("title", citation.title, citationElement, doc);
+                appendChildToElement("booktitle", citation.booktitle, citationElement, doc);
+
+                if (!citation.journalId.equals(DEFAULT_JOURNAL_ID)) {
+                    appendChildToElement("citedJournalId", citation.journalId, citationElement, doc);
+                }
+
                 if (citation.year != 0) {
                     if (citation.year < lowestYear) {
                         lowestYear = citation.year;
@@ -127,12 +143,12 @@ public class ModelManager implements Model {
                     if (citation.year > highestYear) {
                         highestYear = citation.year;
                     }
-                    appendChildToELement("date", Integer.toString(citation.year), citationElement, doc);
+                    appendChildToElement("date", Integer.toString(citation.year), citationElement, doc);
                 }
 
                 totalNoOfAuthor+= citation.authorsList.size();
                 for(String citation_author : citation.authorsList) {
-                    appendChildToELement("author", citation_author, authorsElement, doc);
+                    appendChildToElement("author", citation_author, authorsElement, doc);
                 }
                 citationslists.appendChild(citationElement);
             }
@@ -152,7 +168,7 @@ public class ModelManager implements Model {
 
 
     }
-    private static void appendChildToELement(String elementName, String elementValue,
+    private static void appendChildToElement(String elementName, String elementValue,
                                              Element element, Document doc) {
         if (!Strings.isNullOrEmpty(elementValue)) {
             Element child = doc.createElement(elementName);
@@ -167,7 +183,6 @@ public class ModelManager implements Model {
 	}
 	@Override
 	public Map<String, Map<Integer, List<SerializedCitation>>> getCitationMap() {
-		// TODO Auto-generated method stub
 		return citationMap;
 	}
 
