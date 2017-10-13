@@ -57,6 +57,7 @@ public class SerializedCitation {
                 && this.title.equals(((SerializedCitation) other).title)
                 && this.year == ((SerializedCitation) other).year
                 && this.authorsList.equals(((SerializedCitation) other).authorsList)
+                && this.journalId.equals(((SerializedCitation) other).journalId)
                 && this.booktitle.equals(((SerializedCitation) other).booktitle));
     }
 

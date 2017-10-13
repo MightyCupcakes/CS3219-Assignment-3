@@ -41,6 +41,11 @@ public class APIManager implements API{
 
     @Override
     public void runQueries() {
+
+    }
+
+    @Deprecated
+    private void assignment3Queries() {
         BufferedWriter writer;
 
         try {

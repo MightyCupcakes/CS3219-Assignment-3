@@ -5,12 +5,18 @@
       <author>Yejin Choi</author>
       <affiliation>Joint Inference for Event Timeline Construction</affiliation>
       <abstract>...</abstract>
+      <generatedId>ddddq123</generatedId>
+      <venue>At your house</venue>
+      <date>2000</date>
     </journal>
     <journal id="2">
       <title>Syntactic Transfer Using a Bilingual Lexicon</title>
       <author>Adam Pauls Durrett</author>
       <affiliation>Computer Science University of California,</affiliation>
       <abstract>i love abstract text</abstract>
+      <generatedId>12ddddsdadasdasd</generatedId>
+      <venue>Far away</venue>
+      <date>2001</date>
     </journal>
   </main>
   <citationLists>
@@ -20,7 +26,8 @@
       <authors>
         <author>Cool</author>
       </authors>
-        <booktitle>booktitle</booktitle>
+      <booktitle>booktitle</booktitle>
+      <citedJournalId>12f3</citedJournalId>
     </citation>
     <citation id="1">
       <authors>
@@ -28,6 +35,7 @@
       </authors>
       <title>(continued) Session 3-PM-2C: NLP Applications Session Chair: Chikara</title>
       <booktitle>booktitle2</booktitle>
+      <citedJournalId>124s</citedJournalId>
       <date>2012</date>
     </citation>
     <citation id="2">
@@ -46,6 +54,7 @@
       <date>2012</date>
       <booktitle>booktitle3</booktitle>
       <title>a very cool title</title>
+      <citedJournalId>1ddd23</citedJournalId>
     </citation>
   </citationLists>
   <NoOfAuthor>10019</NoOfAuthor>

@@ -15,10 +15,10 @@ import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 
 public class XmlCompiledParserTest {
-	private static final String TEST_DATA = "src/test/data/xmlTestDataCompiled.xml";
-	
-	@Test
-	public void testCompiledXmlParser() throws Exception {
+    private static final String TEST_DATA = "src/test/data/xmlTestDataCompiled.xml";
+
+    @Test
+    public void testCompiledXmlParser() throws Exception {
         XmlDataParser parser = new XmlDataParser();
         parser.parseCompiledFile(TEST_DATA, "XmlTestDataCompiled");
         
@@ -34,11 +34,17 @@ public class XmlCompiledParserTest {
         assertEquals(firstJournal.title, "THIS IS A TITLE");
         assertEquals(firstJournal.author, "Yejin Choi");
         assertEquals(firstJournal.affiliation, "Joint Inference for Event Timeline Construction");
+        assertEquals("ddddq123", firstJournal.id);
+        assertEquals("At your house", firstJournal.venue);
+        assertEquals(2000, firstJournal.yearOfPublication);
         
         assertEquals(secondJournal.title, "Syntactic Transfer Using a Bilingual Lexicon" );
         assertEquals(secondJournal.author, "Adam Pauls Durrett" );
         assertEquals(secondJournal.affiliation, "Computer Science University of California," );
         assertEquals(secondJournal.abstractText, "i love abstract text" );
+        assertEquals("12ddddsdadasdasd", secondJournal.id);
+        assertEquals("Far away", secondJournal.venue);
+        assertEquals(2001, secondJournal.yearOfPublication);
         
         List<SerializedCitation> expectedCitations_one = ImmutableList.<SerializedCitation>builder()
                 .add(new SerializedCitation.Builder()
@@ -46,12 +52,14 @@ public class XmlCompiledParserTest {
                         .withYear("2007")
                         .withAuthor("Cool")
                         .withBooktitle("booktitle")
+                        .withJournalId("12f3")
                         .build())
                 .add(new SerializedCitation.Builder()
                         .withTitle("(continued) Session 3-PM-2C: NLP Applications Session Chair: Chikara")
                         .withYear("2012")
                         .withAuthor("Saturday")
                         .withBooktitle("booktitle2")
+                        .withJournalId("124s")
                         .build()
                 ).build();
         List<SerializedCitation> expectedCitations_two = ImmutableList.<SerializedCitation>builder()
@@ -67,10 +75,11 @@ public class XmlCompiledParserTest {
                         .withAuthor("Wikimedia Foundation")
                         .withBooktitle("booktitle3")
                         .withTitle("a very cool title")
+                        .withJournalId("1ddd23")
                         .build()
                 ).build();
         assertTrue(expectedCitations_one.equals(firstCitationList));
         assertTrue(expectedCitations_two.equals(secondCitationList));
-	}
-	
+    }
+
 }
