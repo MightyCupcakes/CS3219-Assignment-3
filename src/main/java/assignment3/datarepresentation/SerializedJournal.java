@@ -29,6 +29,7 @@ public class SerializedJournal {
                                String venue,
                                int numOfInCitations,
                                int yearOfPublication,
+                               List<String> outCitationsId,
                                List<SerializedCitation> citedArticles) {
         this.id = id;
         this.title = title;
@@ -39,6 +40,7 @@ public class SerializedJournal {
         this.conference = conference;
         this.venue = venue;
         this.numOfInCitations = numOfInCitations;
+        this.outCitationsId = outCitationsId;
         this.citations = new ArrayList<>();
 
         citedArticles.forEach(citations::add);
@@ -93,8 +95,11 @@ public class SerializedJournal {
         }
 
         public Builder withAuthor(String author) {
+            if(this.author.length() > 0) {
+                this.author.append(",");
+            }
+
             this.author.append(author);
-            this.author.append(",");
 
             return this;
         }
@@ -160,10 +165,6 @@ public class SerializedJournal {
         }
 
         public SerializedJournal build() {
-            if (author.length() > 0) {
-                author.deleteCharAt(author.length() - 1);
-            }
-
             return new SerializedJournal(id,
                     title,
                     author.toString(),
@@ -173,6 +174,7 @@ public class SerializedJournal {
                     venue,
                     numInCitations,
                     yearOfPublication,
+                    citationsId,
                     citations
             );
         }

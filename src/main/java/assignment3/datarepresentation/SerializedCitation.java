@@ -35,11 +35,11 @@ public class SerializedCitation {
     }
 
     private void createAuthorsString() {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("");
 
         authorsList.forEach( author -> {
+            if (builder.length() > 0) builder.append(",");
             builder.append(author);
-            builder.append(",");
         });
 
         this.authors = builder.toString();
