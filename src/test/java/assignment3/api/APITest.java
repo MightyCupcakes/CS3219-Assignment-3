@@ -67,7 +67,7 @@ public class APITest {
                 .select(ConferenceData.CITATION.year, new SchemaCount(ConferenceData.CITATION.title))
                 .from("D12")
                 .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(2000)
-                        .and(ConferenceData.CITATION.year.LessThanOrEqualsTo(2015)))
+                        .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(2015)))
                 .groupBy(ConferenceData.CITATION.year)
                 .build();
 

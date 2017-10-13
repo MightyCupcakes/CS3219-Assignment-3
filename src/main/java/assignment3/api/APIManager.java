@@ -1,12 +1,8 @@
 package assignment3.api;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
-
-import com.google.common.collect.ImmutableMap;
 
 import assignment3.logic.Logic;
 import assignment3.logic.LogicManager;
@@ -128,7 +124,7 @@ public class APIManager implements API{
                 .select(ConferenceData.CITATION.year, new SchemaCount(ConferenceData.CITATION.title))
                 .from("D12")
                 .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(2000)
-                        .and(ConferenceData.CITATION.year.LessThanOrEqualsTo(2015)))
+                        .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(2015)))
                 .groupBy(ConferenceData.CITATION.year)
                 .build();
 
@@ -170,7 +166,7 @@ public class APIManager implements API{
                 .select(ConferenceData.CITATION.year, new SchemaCountUnique(ConferenceData.CITATION.title))
                 .from("J14")
                 .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(2010)
-                    .and(ConferenceData.CITATION.year.LessThanOrEqualsTo(2015)))
+                    .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(2015)))
                 .groupBy(ConferenceData.CITATION.year)
                 .build();
 
@@ -178,7 +174,7 @@ public class APIManager implements API{
                 .select(ConferenceData.CITATION.year, new SchemaCountUnique(ConferenceData.CITATION.title))
                 .from("W14")
                 .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(2010)
-                        .and(ConferenceData.CITATION.year.LessThanOrEqualsTo(2015)))
+                        .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(2015)))
                 .groupBy(ConferenceData.CITATION.year)
                 .build();
 
@@ -191,7 +187,7 @@ public class APIManager implements API{
                 .from("Q14")
                 .where(ConferenceData.CITATION.booktitle.like("NAACL")
                     .and(ConferenceData.CITATION.year.greaterThanOrEqualsTo(2010)
-                            .and(ConferenceData.CITATION.year.LessThanOrEqualsTo(2015))))
+                            .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(2015))))
                 .groupBy(ConferenceData.CITATION.booktitle)
                 .build();
 
@@ -200,7 +196,7 @@ public class APIManager implements API{
                 .from("D14")
                 .where(ConferenceData.CITATION.booktitle.like("NAACL")
                         .and(ConferenceData.CITATION.year.greaterThanOrEqualsTo(2010)
-                                .and(ConferenceData.CITATION.year.LessThanOrEqualsTo(2015))))
+                                .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(2015))))
                 .groupBy(ConferenceData.CITATION.booktitle)
                 .build();
 
