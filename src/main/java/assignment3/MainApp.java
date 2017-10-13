@@ -10,6 +10,8 @@ public class MainApp {
 
         if (args.length > 0 && args[0].equalsIgnoreCase("parse")) {
             api.parseConferenceData(args[1]);
+        } else if (args.length > 0 && args[0].equalsIgnoreCase("parseA4")) {
+            api.parseConferenceJsonData(args[1]);
         } else {
             api.runQueries();
         }

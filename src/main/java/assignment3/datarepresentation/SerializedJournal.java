@@ -12,9 +12,13 @@ public class SerializedJournal {
     public final String affiliation;
     public final String abstractText;
     public final String conference;
+    public final String venue;
     public final int yearOfPublication;
+    public final int numOfInCitations;
 
-    public final List<SerializedCitation> citations;
+    public List<SerializedCitation> citations;
+
+    public List<String> outCitationsId;
 
     protected SerializedJournal (String id,
                                String title,
@@ -22,6 +26,8 @@ public class SerializedJournal {
                                String affiliation,
                                String abstractText,
                                String conference,
+                               String venue,
+                               int numOfInCitations,
                                int yearOfPublication,
                                List<SerializedCitation> citedArticles) {
         this.id = id;
@@ -31,6 +37,8 @@ public class SerializedJournal {
         this.abstractText = abstractText;
         this.yearOfPublication = yearOfPublication;
         this.conference = conference;
+        this.venue = venue;
+        this.numOfInCitations = numOfInCitations;
         this.citations = new ArrayList<>();
 
         citedArticles.forEach(citations::add);
@@ -52,16 +60,31 @@ public class SerializedJournal {
                 && this.yearOfPublication == ((SerializedJournal) other).yearOfPublication);
     }
 
+    public void citeJournal(SerializedJournal journal) {
+        SerializedCitation.Builder builder = new SerializedCitation.Builder();
+
+        builder.withAuthor(journal.author);
+        builder.withTitle(journal.title);
+        builder.withYear(journal.yearOfPublication);
+
+        citations.add(builder.build());
+    }
+
     public static class Builder {
         private String title = "";
-        private String author = "";
         private String affiliation;
         private String abstractText;
         private String conference = "";
-        private int yearOfPublication;
+        private String venue;
         private String id;
 
+        public int numInCitations;
+        private int yearOfPublication;
+
+        private StringBuilder author = new StringBuilder("");
+
         private List<SerializedCitation> citations = Collections.emptyList();
+        private List<String> citationsId = new ArrayList<>();
 
         public Builder withTitle(String title) {
             this.title = title;
@@ -70,7 +93,8 @@ public class SerializedJournal {
         }
 
         public Builder withAuthor(String author) {
-            this.author = author;
+            this.author.append(author);
+            this.author.append(",");
 
             return this;
         }
@@ -105,6 +129,18 @@ public class SerializedJournal {
             return this;
         }
 
+        public Builder withCitationId(String id) {
+            this.citationsId.add(id);
+
+            return this;
+        }
+
+        public Builder withInCitation(String id) {
+            numInCitations++;
+
+            return this;
+        }
+
         public Builder withConference(String conference) {
             this.conference = conference;
 
@@ -117,8 +153,28 @@ public class SerializedJournal {
             return this;
         }
 
+        public Builder withVenue(String venue) {
+            this.venue = venue;
+
+            return this;
+        }
+
         public SerializedJournal build() {
-            return new SerializedJournal(id, title, author, affiliation, abstractText, conference, yearOfPublication, citations);
+            if (author.length() > 0) {
+                author.deleteCharAt(author.length() - 1);
+            }
+
+            return new SerializedJournal(id,
+                    title,
+                    author.toString(),
+                    affiliation,
+                    abstractText,
+                    conference,
+                    venue,
+                    numInCitations,
+                    yearOfPublication,
+                    citations
+            );
         }
     }
 }

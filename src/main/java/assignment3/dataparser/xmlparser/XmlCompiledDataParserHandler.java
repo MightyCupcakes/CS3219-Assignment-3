@@ -74,8 +74,6 @@ public class XmlCompiledDataParserHandler extends DefaultHandler{
 
     }
 
-
-
 	@Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
     	if (qName.equalsIgnoreCase(this.conferenceName)) {
@@ -103,6 +101,7 @@ public class XmlCompiledDataParserHandler extends DefaultHandler{
 	    	SerializedJournal journal = journalElementParser.getJournal();
 	    	journalMap.put(key, journal);
 	    	counterId++;
+            journalElementParser.setNewJournal();
 		}
     }
     private void addCitationToJournal(int key, boolean isEndElement) {

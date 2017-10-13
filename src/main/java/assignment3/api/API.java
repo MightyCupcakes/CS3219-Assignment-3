@@ -8,6 +8,8 @@ public interface API {
      */
     void parseConferenceData(String folder);
 
+    void parseConferenceJsonData(String file);
+
     /**
      * All queries within this method will be executed.
      */

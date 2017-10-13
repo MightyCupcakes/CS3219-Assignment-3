@@ -15,6 +15,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 
 import assignment3.dataparser.DataParser;
+import assignment3.dataparser.exceptions.StopParserException;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 
@@ -24,13 +25,14 @@ public class XmlDataParser implements DataParser {
     private HashMap<Integer, SerializedJournal> journalMap;
     private HashMap<Integer, List<SerializedCitation>> citationMap;
 
-    public void parseFile(String filename) throws FileNotFoundException, SAXException {
+    @Override
+    public void parseData(String filename) throws StopParserException {
         requireNonNull(filename);
 
         File file = new File(filename);
 
         if (!file.exists() || !file.isFile()) {
-            throw new FileNotFoundException("File not found : " + file.getAbsolutePath());
+            throw new StopParserException("File not found : " + file.getAbsolutePath());
         }
 
         Logger.getLogger(this.getClass().toString()).info("Parsing: " + filename);
@@ -42,6 +44,8 @@ public class XmlDataParser implements DataParser {
             saxParserFactory.newSAXParser().parse(file, handler);
         } catch (ParserConfigurationException | IOException e) {
             e.printStackTrace();
+        } catch (SAXException saxe) {
+            throw new StopParserException(saxe.getMessage());
         }
 
         journal = handler.getJournal();
@@ -68,6 +72,7 @@ public class XmlDataParser implements DataParser {
         citationMap = handler.getCitationMap();
     }
 
+    @Override
     public SerializedJournal getJournal() {
         return journal;
     }

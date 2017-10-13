@@ -53,4 +53,8 @@ public class JournalElementParser implements ElementParser {
     public SerializedJournal getJournal() {
         return builder.build();
     }
+
+    public void setNewJournal() {
+        builder = new SerializedJournal.Builder();
+    }
 }

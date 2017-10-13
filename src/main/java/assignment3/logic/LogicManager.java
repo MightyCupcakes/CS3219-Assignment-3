@@ -1,6 +1,10 @@
 package assignment3.logic;
 
+import static java.util.Objects.isNull;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,6 +14,10 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import assignment3.dataparser.DataParser;
+import assignment3.dataparser.exceptions.StopParserException;
+import assignment3.dataparser.jsonparser.JsonDataParser;
+import assignment3.dataparser.jsonparser.JsonIdDataParser;
 import assignment3.dataparser.xmlparser.XmlDataParser;
 import assignment3.dataparser.xmlparser.XmlDataParserHandler;
 import assignment3.datarepresentation.SerializedCitation;
@@ -28,6 +36,16 @@ public class LogicManager implements Logic{
 		parser = new XmlDataParser();
 		model = new ModelManager();
 		QueryBuilder.setLogicTo(this);
+	}
+
+	@Override
+	public void parseAndSaveRawJSONData(String file) throws Exception {
+		JsonIdDataParser idDataParser = new JsonIdDataParser();
+
+		convertJsonToJournal(idDataParser, file);
+		idDataParser.linkCitationsIdToJournal();
+
+		model.saveJournalData(idDataParser.getJournals(), "A4");
 	}
 
 	@Override
@@ -74,13 +92,36 @@ public class LogicManager implements Logic{
 
 		for(String conference : conferenceLists) {
 		    try {
-                parser.parseFile(conference);
+                parser.parseData(conference);
                 journalList.add(parser.getJournal());
-            } catch (XmlDataParserHandler.MySAXTerminatorException e) {
+            } catch (StopParserException e) {
                 Logger.getLogger(this.getClass().toString())
                         .warning("File has no journal, skipping file: " + conference);
             }
 		}
 		return journalList;
+	}
+
+	private List<SerializedJournal> convertJsonToJournal(JsonIdDataParser idDataParser, String fileName) throws Exception {
+		File file = new File(fileName);
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		List<SerializedJournal> journals = new ArrayList<>();
+
+		for (int i = 0; i < 200000; i ++) {
+			DataParser parser = new JsonDataParser();
+			String line = reader.readLine();
+
+			if (isNull(line)) {
+				break;
+			}
+
+			parser.parseData(line);
+
+			SerializedJournal journal = parser.getJournal();
+			idDataParser.addJournal(journal);
+			journals.add(journal);
+		}
+
+		return journals;
 	}
 }

@@ -35,6 +35,15 @@ public class APIManager implements API{
     }
 
     @Override
+    public void parseConferenceJsonData(String file) {
+        try {
+            logic.parseAndSaveRawJSONData(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void runQueries() {
         BufferedWriter writer;
 

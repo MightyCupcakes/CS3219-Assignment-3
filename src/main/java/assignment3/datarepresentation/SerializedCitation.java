@@ -65,6 +65,7 @@ public class SerializedCitation {
         private int year = Integer.MIN_VALUE;
         private String title;
         private String booktitle;
+        private String journalID;
 
         public Builder() {
             authors = new ArrayList<>();
@@ -72,6 +73,12 @@ public class SerializedCitation {
 
         public Builder withYear(String year) {
             this.year = Integer.parseInt(year);
+
+            return this;
+        }
+
+        public Builder withYear(int year) {
+            this.year = year;
 
             return this;
         }

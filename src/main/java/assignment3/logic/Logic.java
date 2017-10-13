@@ -7,6 +7,7 @@ import assignment3.datarepresentation.SerializedJournalCitation;
 
 public interface Logic {
     void parseAndSaveRawData(String folder) throws Exception;
+    void parseAndSaveRawJSONData(String file) throws Exception;
 
     /**
      * Gets the data in the form of {@code SerializedJournalCitation}

@@ -20,7 +20,7 @@ public class XmlParserTest {
     @Test
     public void testXmlParser() throws Exception {
         XmlDataParser parser = new XmlDataParser();
-        parser.parseFile(TEST_DATA);
+        parser.parseData(TEST_DATA);
 
         SerializedJournal journal = parser.getJournal();
 
