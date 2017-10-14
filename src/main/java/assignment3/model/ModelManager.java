@@ -70,11 +70,6 @@ public class ModelManager implements Model {
 	}
 
     private void writeToXmlFile(List<SerializedJournal> journalList, String conferenceName) throws Exception {
-        int totalNoOfAuthor =  0;
-        int totalNoOfCitation = 0;
-        int noOfJournal = 0;
-        int lowestYear = 9999;
-        int highestYear = 0;
         HashSet<SerializedJournal> journalSet = new HashSet<>();
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder xmlBuilder = builderFactory.newDocumentBuilder();
@@ -86,19 +81,12 @@ public class ModelManager implements Model {
         Element mainElement = doc.createElement("main");
         Element citationslists = doc.createElement("citationLists");
     
-        Element authorElement = doc.createElement("NoOfAuthor");
-        Element noOfcitationElement = doc.createElement("noOfCitation");
-        Element yearRangeElement = doc.createElement("yearRange");
-        Element noOfJournalElement = doc.createElement("noOfJournal");
+
         rootElement.appendChild(mainElement);
         rootElement.appendChild(citationslists);
-        rootElement.appendChild(authorElement);
-        rootElement.appendChild(noOfcitationElement);
-        rootElement.appendChild(yearRangeElement);
-        rootElement.appendChild(noOfJournalElement);
+
 
         
-        noOfJournal+= journalList.size();
         int id = 1;
         for (SerializedJournal journal : journalList) {
             if (!journalSet.contains(journal)) {
@@ -119,7 +107,6 @@ public class ModelManager implements Model {
                 mainElement.appendChild(journalElement);
                 journalSet.add(journal);
             }
-            totalNoOfCitation+= journal.citations.size();
             for (SerializedCitation citation : journal.citations) {
                 Element citationElement = doc.createElement("citation");
 
@@ -137,16 +124,9 @@ public class ModelManager implements Model {
                 }
 
                 if (citation.year != 0) {
-                    if (citation.year < lowestYear) {
-                        lowestYear = citation.year;
-                    }
-                    if (citation.year > highestYear) {
-                        highestYear = citation.year;
-                    }
                     appendChildToElement("date", Integer.toString(citation.year), citationElement, doc);
                 }
 
-                totalNoOfAuthor+= citation.authorsList.size();
                 for(String citation_author : citation.authorsList) {
                     appendChildToElement("author", citation_author, authorsElement, doc);
                 }
@@ -155,11 +135,7 @@ public class ModelManager implements Model {
             id++;
         }
 
-        noOfcitationElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfCitation)));
-        authorElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfAuthor)));
-        noOfJournalElement.appendChild(doc.createTextNode(Integer.toString(noOfJournal)));
-        String yearRange = lowestYear + " to " + highestYear;
-        yearRangeElement.appendChild(doc.createTextNode(yearRange));
+
         String outputLocation = SAVED_LOCATION + conferenceName + XML_FORMAT;
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         DOMSource source = new DOMSource(doc);
