@@ -13,12 +13,13 @@ import java.util.stream.Collectors;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import assignment3.api.APIQueryBuilder;
 import assignment3.api.Query;
-import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
-import assignment3.schema.aggregate.SchemaAggregate;
+import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
+import assignment3.schema.aggregate.SchemaAggregate;
 
 public class AggregrateQuery implements Query {
     private Set<SchemaAggregate> aggregateColumnsToShow;
@@ -28,6 +29,9 @@ public class AggregrateQuery implements Query {
     private List<SchemaComparable> groupByColumns;
     private Logic logic;
     private boolean isJoinTable;
+    private int limitRows;
+    private SchemaBase orderByColumn;
+    private APIQueryBuilder.OrderByRule orderByRule;
 
     protected List<SerializedJournalCitation> journals;
 
@@ -45,6 +49,8 @@ public class AggregrateQuery implements Query {
         this.tablesToRead = tablesToRead;
         this.groupByColumns = Collections.unmodifiableList(groupByColumns);
         this.isJoinTable = false;
+        this.limitRows = -1;
+        this.orderByRule = APIQueryBuilder.OrderByRule.ASC;
 
         this.groupedRows = HashMultimap.create();
     }
@@ -69,6 +75,15 @@ public class AggregrateQuery implements Query {
         this.logic = logic;
     }
 
+    void setLimitRows(int limit) {
+        this.limitRows = limit;
+    }
+
+    void setOrderByColumn(SchemaBase column, APIQueryBuilder.OrderByRule rule) {
+        this.orderByColumn = column;
+        this.orderByRule = rule;
+    }
+
     public void setQueryToRetrieveCitations() {
         this.isJoinTable = true;
     }
@@ -79,7 +94,21 @@ public class AggregrateQuery implements Query {
 
     public String executeAndGetResult(List<SerializedJournalCitation> journalCitations) {
 
-        JsonGenerator json = new JsonGenerator();
+        JsonGenerator json;
+
+        if (isNull(orderByColumn)) {
+            if (limitRows == -1) {
+                json = new JsonGenerator();
+            } else {
+                json = new JsonGenerator(limitRows);
+            }
+        } else {
+            if (limitRows == -1) {
+                json = new JsonSorter(orderByColumn, orderByRule);
+            } else {
+                json = new JsonSorter(orderByColumn, orderByRule, limitRows);
+            }
+        }
 
         if (groupByColumns.isEmpty()) {
             // No group by means all one big group (we assume the query is valid at this stage
@@ -179,6 +208,10 @@ public class AggregrateQuery implements Query {
                 && this.normalColumnsToShow.equals(((AggregrateQuery) other).normalColumnsToShow)
                 && this.tablesToRead.equals(((AggregrateQuery) other).tablesToRead)
                 && this.groupByColumns.equals(((AggregrateQuery) other).groupByColumns)
-                && this.predicate.equals(((AggregrateQuery) other).predicate));
+                && this.predicate.equals(((AggregrateQuery) other).predicate)
+                && ( (this.orderByColumn == null && ((AggregrateQuery) other).orderByColumn == null)
+                || this.orderByColumn.equals(((AggregrateQuery) other).orderByColumn) )
+                && this.orderByRule.equals( ((AggregrateQuery) other).orderByRule )
+                && this.limitRows == ((AggregrateQuery) other).limitRows);
     }
 }

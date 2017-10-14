@@ -1,8 +1,14 @@
 package assignment3.logic;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.xml.validation.Schema;
 
 import assignment3.api.APIQueryBuilder;
 import assignment3.api.Query;
@@ -19,6 +25,9 @@ public class QueryBuilder implements APIQueryBuilder {
     private List<String> fromTables;
     private SchemaPredicate whereClause;
     private List<SchemaComparable> groupByClause;
+    private SchemaBase orderByColumn;
+    private OrderByRule orderByRule;
+    private int limitRows;
 
     private static Logic logic;
 
@@ -35,10 +44,13 @@ public class QueryBuilder implements APIQueryBuilder {
         fromTables = new ArrayList<>();
         whereClause = SchemaPredicate.ALWAYS_TRUE;
         groupByClause = new ArrayList<>();
+        limitRows = -1;
     }
 
     @Override
-    public APIQueryBuilder select(SchemaBase... columns) {
+    public APIQueryBuilder select(@Nonnull SchemaBase... columns) {
+        requireNonNull(columns);
+
         Arrays.stream(columns).forEach(selectColumns::add);
         return this;
     }
@@ -50,14 +62,34 @@ public class QueryBuilder implements APIQueryBuilder {
     }
 
     @Override
-    public APIQueryBuilder where(SchemaPredicate predicate) {
+    public APIQueryBuilder where(@Nonnull SchemaPredicate predicate) {
+        requireNonNull(predicate);
+
         whereClause = predicate.copy();
         return this;
     }
 
     @Override
-    public APIQueryBuilder groupBy(SchemaComparable... columns) {
+    public APIQueryBuilder groupBy(@Nonnull SchemaComparable... columns) {
+        requireNonNull(columns);
+
         Arrays.stream(columns).forEach(groupByClause::add);
+        return this;
+    }
+
+    @Override
+    public APIQueryBuilder orderBy(@Nonnull SchemaBase column, @Nonnull OrderByRule rule) {
+        requireNonNull(column);
+        requireNonNull(rule);
+
+        this.orderByColumn = column;
+        this.orderByRule = rule;
+        return this;
+    }
+
+    @Override
+    public APIQueryBuilder limit(int numberOfRows) {
+        this.limitRows = numberOfRows;
         return this;
     }
 
@@ -78,6 +110,14 @@ public class QueryBuilder implements APIQueryBuilder {
             }
         }
 
+        if (limitRows != -1 && limitRows <= 0) {
+            throw new QueryException("Limit clause can only accept positive non-zero number of rows");
+        }
+
+        if (!isNull(orderByColumn) && !selectColumns.contains(orderByColumn)) {
+            throw new QueryException("Only columns selected can be specified in the order by clause");
+        }
+
         if (selectColumns.stream().anyMatch(schemaBase -> schemaBase instanceof CitationAttribute) ||
                 selectColumns.stream().anyMatch(schemaBase -> schemaBase.isJoinTable())) {
 
@@ -96,8 +136,11 @@ public class QueryBuilder implements APIQueryBuilder {
 
             AggregrateQuery query = new AggregrateQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
 
-            query.setDataSource(logic);
+            if (limitRows != -1) query.setLimitRows(limitRows);
+            if (!isNull(orderByColumn)) query.setOrderByColumn(orderByColumn, orderByRule);
+
             query.setQueryToRetrieveCitations();
+            query.setDataSource(logic);
 
             return query;
 
@@ -112,6 +155,9 @@ public class QueryBuilder implements APIQueryBuilder {
 
             NormalQuery query = new NormalQuery(normalSelectColumns, whereClause, fromTables);
             query.setDataSource(logic);
+
+            if (limitRows != -1) query.setLimitRows(limitRows);
+            if (!isNull(orderByColumn)) query.setOrderByColumn(orderByColumn, orderByRule);
 
             return query;
 
@@ -133,6 +179,9 @@ public class QueryBuilder implements APIQueryBuilder {
 
             AggregrateQuery query = new AggregrateQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
             query.setDataSource(logic);
+
+            if (limitRows != -1) query.setLimitRows(limitRows);
+            if (!isNull(orderByColumn)) query.setOrderByColumn(orderByColumn, orderByRule);
 
             return query;
         }
