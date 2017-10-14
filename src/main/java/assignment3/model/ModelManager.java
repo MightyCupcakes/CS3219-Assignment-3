@@ -69,6 +69,7 @@ public class ModelManager implements Model {
 		citationMap.put(conferenceName, data.citationsMap);
 	}
 
+
     private void writeToXmlFile(List<SerializedJournal> journalList, String conferenceName) throws Exception {
         HashSet<SerializedJournal> journalSet = new HashSet<>();
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -160,6 +161,11 @@ public class ModelManager implements Model {
 	@Override
 	public Map<String, Map<Integer, List<SerializedCitation>>> getCitationMap() {
 		return citationMap;
+	}
+	@Override
+	public void writeResultIntoCsvFile(String filename, List<List<String>> resultLists) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
