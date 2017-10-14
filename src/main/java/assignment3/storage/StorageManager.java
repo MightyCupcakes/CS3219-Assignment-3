@@ -2,10 +2,20 @@ package assignment3.storage;
 
 import static java.util.Objects.isNull;
 
+import java.io.File;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+
 import assignment3.dataparser.xmlparser.XmlDataParser;
 
 public class StorageManager implements Storage {
 	private final static String DEFAULT_STORAGE = "Dataset/";
+	private final String SAVED_LOCATION = "Dataset/";
 
 	private final String XML_FORMAT = ".xml";
 	private XmlDataParser parser = new XmlDataParser();
@@ -34,6 +44,15 @@ public class StorageManager implements Storage {
 		RetrievedFileData data = new RetrievedFileData(parser.getJournalMap(), parser.getCitationMap());
 
         return data;
+	}
+
+	@Override
+	public void saveParsedXmlData(Document doc, String conferenceName) throws Exception {
+		String outputLocation = SAVED_LOCATION + conferenceName + XML_FORMAT;
+		Transformer transformer = TransformerFactory.newInstance().newTransformer();
+		DOMSource source = new DOMSource(doc);
+		StreamResult result = new StreamResult(new File(outputLocation));
+		transformer.transform(source,  result);
 	}
 
 	private String getStorageLocation() {

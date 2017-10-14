@@ -2,7 +2,6 @@ package assignment3.model;
 
 import static assignment3.datarepresentation.SerializedJournal.DEFAULT_JOURNAL_ID;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,10 +9,6 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,8 +23,6 @@ import assignment3.storage.StorageManager;
 
 public class ModelManager implements Model {
 
-    private final String SAVED_LOCATION = "Dataset/";
-    private final String XML_FORMAT = ".xml";
     private final Storage storage;
     private final Map<String, Map<Integer, SerializedJournal>> journalMap;
     private final Map<String, Map<Integer, List<SerializedCitation>>> citationMap;
@@ -41,9 +34,8 @@ public class ModelManager implements Model {
     }
     @Override
     public void saveJournalData(List<SerializedJournal> journalList, String conferenceName) throws Exception{
-        writeToXmlFile(journalList, conferenceName);
+        transformIntoXmlFormat(journalList, conferenceName);
     }
-
 
 	@Override
 	public Map<Integer, SerializedJournal> getJournal(String conferenceName) throws Exception {
@@ -69,7 +61,7 @@ public class ModelManager implements Model {
 		citationMap.put(conferenceName, data.citationsMap);
 	}
 
-    private void writeToXmlFile(List<SerializedJournal> journalList, String conferenceName) throws Exception {
+    private void transformIntoXmlFormat(List<SerializedJournal> journalList, String conferenceName) throws Exception {
         int totalNoOfAuthor =  0;
         int totalNoOfCitation = 0;
         int noOfJournal = 0;
@@ -160,14 +152,10 @@ public class ModelManager implements Model {
         noOfJournalElement.appendChild(doc.createTextNode(Integer.toString(noOfJournal)));
         String yearRange = lowestYear + " to " + highestYear;
         yearRangeElement.appendChild(doc.createTextNode(yearRange));
-        String outputLocation = SAVED_LOCATION + conferenceName + XML_FORMAT;
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File(outputLocation));
-        transformer.transform(source,  result);
 
-
+        storage.saveParsedXmlData(doc, conferenceName);
     }
+
     private static void appendChildToElement(String elementName, String elementValue,
                                              Element element, Document doc) {
         if (!Strings.isNullOrEmpty(elementValue)) {
