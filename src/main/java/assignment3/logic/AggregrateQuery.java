@@ -192,7 +192,8 @@ public class AggregrateQuery implements Query {
 
             } catch (Exception e) {
                 Logger.getLogger(this.getClass().toString())
-                        .warning("Exception thrown while trying to get data from LogicLayer: " + e.getMessage());
+                        .warning("Exception thrown while trying to get data from LogicLayer");
+                e.printStackTrace();
                 return EMPTY_JSON;
             }
         }

@@ -74,6 +74,9 @@ public class LogicManager implements Logic{
 		
 		journalMap.forEach( (id, journal) -> {
 			List<SerializedCitation> citationList = citationMap.get(id);
+
+			if (isNull(citationList)) return;
+
 			for (SerializedCitation citation : citationList) {
 				journalCitationLists.add(new SerializedJournalCitation(journal, citation));
 			}
