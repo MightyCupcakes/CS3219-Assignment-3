@@ -3,8 +3,10 @@ package assignment3.model;
 import static assignment3.datarepresentation.SerializedJournal.DEFAULT_JOURNAL_ID;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +32,9 @@ public class ModelManager implements Model {
 
     private final String SAVED_LOCATION = "Dataset/";
     private final String XML_FORMAT = ".xml";
+    private final String CSV_FORMAT = ".csv";
+    private final String CSV_SEPERATOR = ",";
+    private final String CSV_NEWLINE = "\n";
     private final Storage storage;
     private final Map<String, Map<Integer, SerializedJournal>> journalMap;
     private final Map<String, Map<Integer, List<SerializedCitation>>> citationMap;
@@ -164,8 +169,22 @@ public class ModelManager implements Model {
 	}
 	@Override
 	public void writeResultIntoCsvFile(String filename, List<List<String>> resultLists) throws Exception {
-		// TODO Auto-generated method stub
-		
+		File csvFile = new File(SAVED_LOCATION + filename + CSV_FORMAT);
+		PrintWriter writer = new PrintWriter(csvFile);	
+		StringBuilder builder = new StringBuilder();
+		for (List<String> valueList : resultLists) {
+			Iterator<String> valueIterator = valueList.iterator();
+			while (valueIterator.hasNext()) {
+				builder.append(valueIterator.next());
+				if (valueIterator.hasNext()) {
+					builder.append(CSV_SEPERATOR);
+				}
+			}
+			builder.append(CSV_NEWLINE);
+		}
+		builder.append(CSV_NEWLINE);
+		writer.write(builder.toString());
+		writer.close();
 	}
 
 }
