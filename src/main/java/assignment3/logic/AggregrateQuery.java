@@ -5,13 +5,14 @@ import static java.util.Objects.isNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 
 import assignment3.api.APIQueryBuilder;
 import assignment3.api.Query;
@@ -35,7 +36,7 @@ public class AggregrateQuery implements Query {
 
     protected List<SerializedJournalCitation> journals;
 
-    private Multimap<List<Object>, SerializedJournalCitation> groupedRows;
+    private Multimap<Set<Object>, SerializedJournalCitation> groupedRows;
 
     public AggregrateQuery(List<SchemaAggregate> aggregatecolumnsToShow,
                            List<SchemaComparable> normalColumnsToShow,
@@ -52,7 +53,7 @@ public class AggregrateQuery implements Query {
         this.limitRows = -1;
         this.orderByRule = APIQueryBuilder.OrderByRule.ASC;
 
-        this.groupedRows = HashMultimap.create();
+        this.groupedRows = MultimapBuilder.ListMultimapBuilder.hashKeys().arrayListValues().build();
     }
 
     private List<SerializedJournalCitation> filterOutRows(List<SerializedJournalCitation> data) {
@@ -64,7 +65,7 @@ public class AggregrateQuery implements Query {
     private void groupRows(List<SerializedJournalCitation> data) {
 
         for (SerializedJournalCitation row : data) {
-            List<Object> group = new ArrayList<>();
+            Set<Object> group = new LinkedHashSet<>(groupByColumns.size());
 
             groupByColumns.forEach( column -> group.add(column.getValue(row)));
             groupedRows.put(group, row);
@@ -130,10 +131,11 @@ public class AggregrateQuery implements Query {
         } else {
             groupRows(journalCitations);
 
-            for (List<Object> key : groupedRows.keySet()) {
+            for (Set<Object> key : groupedRows.keySet()) {
                 JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
 
                 Iterable<SerializedJournalCitation> rows = groupedRows.get(key);
+                List<Object> keyValues = new ArrayList<>(key);
 
                 // Print out the groups to the json as columns
                 // Like if it is group by names, print out the name first (if they are in normal columns to show)
@@ -144,7 +146,7 @@ public class AggregrateQuery implements Query {
                         continue;
                     }
 
-                    rowJson.generateJson(groupByColumns.get(i).getNameOfAttribute(), key.get(i));
+                    rowJson.generateJson(groupByColumns.get(i).getNameOfAttribute(), keyValues.get(i));
                 }
 
                 // For each row in the group, pass the value to the aggregate function

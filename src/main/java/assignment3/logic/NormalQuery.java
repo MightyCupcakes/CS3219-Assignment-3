@@ -74,7 +74,21 @@ public class NormalQuery implements Query {
 
         journals = filterOutRows(journals);
 
-        JsonGenerator json = new JsonGenerator();
+        JsonGenerator json;
+
+        if (isNull(orderByColumn)) {
+            if (limitRows == -1) {
+                json = new JsonGenerator();
+            } else {
+                json = new JsonGenerator(limitRows);
+            }
+        } else {
+            if (limitRows == -1) {
+                json = new JsonSorter(orderByColumn, orderByRule);
+            } else {
+                json = new JsonSorter(orderByColumn, orderByRule, limitRows);
+            }
+        }
 
         for (SerializedJournalCitation journal : journals) {
             JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();

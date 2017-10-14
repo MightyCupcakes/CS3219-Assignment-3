@@ -13,7 +13,7 @@ import assignment3.schema.aggregate.SchemaMax;
 import assignment3.schema.aggregate.SchemaMin;
 import assignment3.schema.aggregate.SchemaSum;
 
-public class APIManager implements API{
+public class APIManager implements API {
 
     private Logic logic;
 
