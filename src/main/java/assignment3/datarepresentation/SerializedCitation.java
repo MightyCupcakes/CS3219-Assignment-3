@@ -15,17 +15,19 @@ public class SerializedCitation {
     public final int year;
     public final String booktitle;
     public final String journalId;
+    public final String citationId;
     public String authors;
     public final int numOfAuthors;
 
     public List<String> authorsList;
 
     private SerializedCitation(String title, int year, List<String> listOfAuthors,
-    		String booktitle, String id) {
+    		String booktitle, String id, String citationId) {
 
         this.title = title;
         this.year = year;
         this.journalId = id;
+        this.citationId = citationId;
         this.authorsList = new ArrayList<>();
         this.booktitle = isEmpty(booktitle) ? EMPTY_BOOK_TITLE : booktitle;
 
@@ -73,6 +75,7 @@ public class SerializedCitation {
         private String id = DEFAULT_JOURNAL_ID;
         private String booktitle;
         private String journalID;
+        private String citationId;
 
         public Builder() {
             authors = new ArrayList<>();
@@ -113,9 +116,13 @@ public class SerializedCitation {
 
             return this;
         }
+        public Builder withCitationId(String id) {
+        	this.citationId = id;
+        	return this;
+        }
 
         public SerializedCitation build() {
-            return new SerializedCitation(this.title, this.year, this.authors, this.booktitle, this.id);
+            return new SerializedCitation(this.title, this.year, this.authors, this.booktitle, this.id, this.citationId);
         }
 
     }

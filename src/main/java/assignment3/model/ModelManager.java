@@ -100,6 +100,7 @@ public class ModelManager implements Model {
             	journalElement.setAttribute("id" , Integer.toString(id));
 
             	appendChildToElement("title", journal.title, journalElement, doc);
+            	appendChildToElement("journalId", Integer.toString(id), journalElement, doc);
                 appendChildToElement("author", journal.author, journalElement, doc);
                 appendChildToElement("affiliation", journal.affiliation, journalElement, doc);
                 appendChildToElement("abstractText", journal.abstractText, journalElement, doc);
@@ -123,7 +124,7 @@ public class ModelManager implements Model {
                 if (!citation.authorsList.isEmpty()) {
                     citationElement.appendChild(authorsElement);
                 }
-
+                appendChildToElement("citationId", Integer.toString(id), citationElement, doc);
                 appendChildToElement("title", citation.title, citationElement, doc);
                 appendChildToElement("booktitle", citation.booktitle, citationElement, doc);
 
