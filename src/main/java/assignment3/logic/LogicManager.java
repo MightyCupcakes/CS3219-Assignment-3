@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.model.Model;
 import assignment3.model.ModelManager;
+import assignment3.schema.SchemaBase;
 
 
 public class LogicManager implements Logic{
@@ -71,52 +73,59 @@ public class LogicManager implements Logic{
 
 	@Override
 	public List<SerializedJournalCitation> getDataFromTableWithNoCitations(String tableName) throws Exception {
-		Map<Integer, SerializedJournal> journalMap = model.getJournal(tableName);
-		List<SerializedJournalCitation> journalCitationList = new ArrayList<>();
-		for (SerializedJournal journal : journalMap.values()) {
-			if (Strings.isNullOrEmpty(journal.author)) {
-				journalCitationList.add(new SerializedJournalCitation(journal, null));
-			}
-			List<String> authorList = Arrays.asList(journal.author.split(","));
-			for (String author : authorList) {
-				SerializedJournal duplicateJournal = createDuplicateJournalCitation(journal, author);
-				journalCitationList.add(new SerializedJournalCitation(duplicateJournal, null));
-			}
-		}
-		return journalCitationList;
-	}
+        Map<Integer, SerializedJournal> journalMap = model.getJournal(tableName);
 
-	private SerializedJournal createDuplicateJournalCitation(SerializedJournal journal, String author) {
-		SerializedJournal.Builder builder = new SerializedJournal.Builder();
-
-		builder.withTitle(journal.title)
-		.withAuthor(author)
-		.withAffiliation(journal.affiliation)
-		.withAbstract(journal.abstractText)
-		.withId(journal.id)
-		.withVenue(journal.venue)
-		.withYear(journal.yearOfPublication)
-		.withInCitationTotal(journal.numOfInCitations);
-		
-		return builder.build();
+        return journalMap.values().stream().map(journal -> {
+            return new SerializedJournalCitation(journal, null);
+        }).collect(Collectors.toList());
 	}
 
 	@Override
+    @SuppressWarnings("unchecked")
     public List<SerializedJournalCitation> getDataFromTableWithNoCitations(String tableName,
-        Collection<Function<Object, Collection<Object>>> splittingFunctions) throws Exception {
+        Collection<SchemaBase> schemas) throws Exception {
 
-        return getDataFromTableWithNoCitations(tableName);
+        Map<Integer, SerializedJournal> journalMap = model.getJournal(tableName);
+        List<SerializedJournalCitation> journalCitationList = new ArrayList<>();
+
+        for (SerializedJournal journal : journalMap.values()) {
+
+            for (SchemaBase schema : schemas) {
+                Collection<String> attributes = (Collection<String>) schema.getSplittingFunction().apply(journal);
+
+                for (String attribute : attributes) {
+                    SerializedJournal duplicateJournal = (SerializedJournal) schema.getDuplicateGenerator().apply(journal, attribute);
+                    journalCitationList.add(new SerializedJournalCitation(duplicateJournal, null));
+                }
+            }
+        }
+        return journalCitationList;
     }
 
     @Override
-    public List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName,
-        Collection<Function<Object, Collection<Object>>> splittingFunctions) throws Exception {
+    public List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName) throws Exception {
 
-        return getDataFromTableWithCitations(tableName);
+        Map<Integer, SerializedJournal> journalMap = model.getJournal(tableName);
+        Map<Integer, List<SerializedCitation>> citationMap = model.getCitations(tableName);
+        List<SerializedJournalCitation> journalCitationLists = new ArrayList<>();
+
+        journalMap.forEach( (id, journal) -> {
+            List<SerializedCitation> citationList = citationMap.get(id);
+
+            if (isNull(citationList)) return;
+
+            for (SerializedCitation citation : citationList) {
+                journalCitationLists.add(new SerializedJournalCitation(journal, citation));
+            }
+        });
+        return journalCitationLists;
     }
 
 	@Override
-	public List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName) throws Exception {
+    @SuppressWarnings("unchecked")
+	public List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName,
+        Collection<SchemaBase> schemas) throws Exception {
+
 		Map<Integer, SerializedJournal> journalMap = model.getJournal(tableName);
 		Map<Integer, List<SerializedCitation>> citationMap = model.getCitations(tableName);
 		List<SerializedJournalCitation> journalCitationLists = new ArrayList<>();
@@ -126,25 +135,37 @@ public class LogicManager implements Logic{
 			List<SerializedCitation> citationList = citationMap.get(id);
 			
 			if (isNull(citationList)) return;
-			
-			if (Strings.isNullOrEmpty(journal.author)) {
-				for (SerializedCitation citation : citationList) {
-					journalCitationLists.add(new SerializedJournalCitation(journal, citation));
-				}
 
-			} else {
-				List<String> authorList = Arrays.asList(journal.author.split(","));
-				for (String author : authorList) {
-					SerializedJournal duplicateJournal = createDuplicateJournalCitation(journal, author);
-					for (SerializedCitation citation : citationList) {
-						journalCitationLists.add(new SerializedJournalCitation(duplicateJournal, citation));
-					}
-				}
-			}
+            for (SchemaBase schema : schemas) {
+                Collection<String> attributes = (Collection<String>) schema.getSplittingFunction().apply(journal);
 
+                for (String attribute : attributes) {
+                    SerializedJournal duplicateJournal = (SerializedJournal) schema.getDuplicateGenerator().apply(journal, attribute);
+
+                    for (SerializedCitation citation : citationList) {
+                        journalCitationLists.add(new SerializedJournalCitation(duplicateJournal, citation));
+                    }
+                }
+            }
 		});
+
 		return journalCitationLists;
 	}
+
+    private static SerializedJournal createDuplicateJournalCitation(SerializedJournal journal, String author) {
+        SerializedJournal.Builder builder = new SerializedJournal.Builder();
+
+        builder.withTitle(journal.title)
+                .withAuthor(author)
+                .withAffiliation(journal.affiliation)
+                .withAbstract(journal.abstractText)
+                .withId(journal.id)
+                .withVenue(journal.venue)
+                .withYear(journal.yearOfPublication)
+                .withInCitationTotal(journal.numOfInCitations);
+
+        return builder.build();
+    }
 
 	private List<String> getListOfConferences(String folder) throws Exception {
 		return Files.walk(Paths.get(folder))

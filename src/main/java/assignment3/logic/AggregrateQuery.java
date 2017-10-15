@@ -18,6 +18,7 @@ import com.google.common.collect.MultimapBuilder;
 
 import assignment3.api.APIQueryBuilder;
 import assignment3.api.Query;
+import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
@@ -180,7 +181,7 @@ public class AggregrateQuery implements Query {
 
             journals = new ArrayList<>(150);
 
-            List<Function<Object, Collection<Object>>> splitters = new ArrayList<>(1);
+            List<SchemaBase> splitters = new ArrayList<>(1);
 
             if (normalColumnsToShow.stream().anyMatch(schema ->schema.requireSplitRow()) ||
                     groupByColumns.stream().anyMatch(schema -> schema.requireSplitRow())) {
@@ -190,11 +191,11 @@ public class AggregrateQuery implements Query {
                     // going through the select clause if the group by clause is non-empty
                     groupByColumns.stream()
                             .filter(schema -> schema.requireSplitRow())
-                            .forEach(schema -> splitters.add(schema.getSplittingFunction()));
+                            .forEach(splitters::add);
                 } else {
                     normalColumnsToShow.stream()
                             .filter(schema -> schema.requireSplitRow())
-                            .forEach(schema -> splitters.add(schema.getSplittingFunction()));
+                            .forEach(splitters::add);
                 }
             }
 

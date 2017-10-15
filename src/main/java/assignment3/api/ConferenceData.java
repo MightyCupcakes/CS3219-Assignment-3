@@ -22,7 +22,7 @@ public final class ConferenceData {
      * operations will be affected.
      */
     public static final SchemaString AUTHOR = new SchemaString("author",
-            author -> Arrays.asList(author.split(",")) );
+            journal -> Arrays.asList(journal.author.split(",")), SchemaString::createDuplicateJournalCitationAuthor );
     /**
      * Combines all authors in a journal into one entity for faster querying.
      */

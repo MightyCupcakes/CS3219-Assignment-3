@@ -4,7 +4,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import assignment3.datarepresentation.SerializedJournal;
@@ -18,12 +20,15 @@ public abstract class SchemaBase<T> {
 
     protected String nameOfAttribute = "";
     protected boolean splitAttributeIntoRows;
-    protected Function<T, Collection<T>> splittingFunction;
+    protected Function<SerializedJournal, Collection<String>> splittingFunction;
+
+    protected BiFunction<SerializedJournal, String, SerializedJournal> splitter;
 
     public SchemaBase(String nameOfAttribute) {
         this.nameOfAttribute = nameOfAttribute;
         this.splitAttributeIntoRows = false;
-        this.splittingFunction = Collections::singletonList;
+        this.splittingFunction = j -> Collections.emptyList();
+        this.splitter = (j, s) ->  j;
     }
 
     /**
@@ -54,8 +59,12 @@ public abstract class SchemaBase<T> {
         return splitAttributeIntoRows;
     }
 
-    public Function<T, Collection<T>> getSplittingFunction() {
+    public Function<SerializedJournal, Collection<String>> getSplittingFunction() {
         return splittingFunction;
+    }
+
+    public BiFunction<SerializedJournal, String, SerializedJournal> getDuplicateGenerator() {
+        return splitter;
     }
 
     @Override

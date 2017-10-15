@@ -59,13 +59,13 @@ public class NormalQuery implements Query {
     @Override
     public String execute() {
 
-        List<Function<Object, Collection<Object>>> splitters = new ArrayList<>(1);
+        List<SchemaBase> splitters = new ArrayList<>(1);
 
         if (columnsToShow.stream().anyMatch(schema ->schema.requireSplitRow())) {
 
             columnsToShow.stream()
                     .filter(schema -> schema.requireSplitRow())
-                    .forEach(schema -> splitters.add(schema.getSplittingFunction()));
+                    .forEach(splitters::add);
         }
 
         try {
