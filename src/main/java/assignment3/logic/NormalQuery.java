@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import assignment3.api.APIQueryBuilder;
 import assignment3.api.Query;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
+import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 
@@ -19,6 +21,9 @@ public class NormalQuery implements Query {
     private SchemaPredicate predicate;
     private List<String> tablesToRead;
     private Logic logic;
+    private int limitRows;
+    private SchemaBase orderByColumn;
+    private APIQueryBuilder.OrderByRule orderByRule;
 
     protected List<SerializedJournalCitation> journals;
 
@@ -26,6 +31,8 @@ public class NormalQuery implements Query {
         this.columnsToShow = Collections.unmodifiableList(columnsToShow);
         this.predicate = predicate;
         this.tablesToRead = tablesToRead;
+        this.limitRows = -1;
+        this.orderByRule = APIQueryBuilder.OrderByRule.ASC;
     }
 
     private List<SerializedJournalCitation> filterOutRows(List<SerializedJournalCitation> data) {
@@ -36,6 +43,15 @@ public class NormalQuery implements Query {
 
     void setDataSource(Logic logic) {
         this.logic = logic;
+    }
+
+    void setLimitRows(int limit) {
+        this.limitRows = limit;
+    }
+
+    void setOrderByColumn(SchemaBase column, APIQueryBuilder.OrderByRule rule) {
+        this.orderByColumn = column;
+        this.orderByRule = rule;
     }
 
     @Override
@@ -58,7 +74,21 @@ public class NormalQuery implements Query {
 
         journals = filterOutRows(journals);
 
-        JsonGenerator json = new JsonGenerator();
+        JsonGenerator json;
+
+        if (isNull(orderByColumn)) {
+            if (limitRows == -1) {
+                json = new JsonGenerator();
+            } else {
+                json = new JsonGenerator(limitRows);
+            }
+        } else {
+            if (limitRows == -1) {
+                json = new JsonSorter(orderByColumn, orderByRule);
+            } else {
+                json = new JsonSorter(orderByColumn, orderByRule, limitRows);
+            }
+        }
 
         for (SerializedJournalCitation journal : journals) {
             JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
@@ -76,6 +106,10 @@ public class NormalQuery implements Query {
                 || (other instanceof NormalQuery
                 && this.columnsToShow.equals(((NormalQuery) other).columnsToShow)
                 && this.tablesToRead.equals(((NormalQuery) other).tablesToRead)
-                && this.predicate.equals(((NormalQuery) other).predicate));
+                && this.predicate.equals(((NormalQuery) other).predicate)
+                && ( (this.orderByColumn == null && ((NormalQuery) other).orderByColumn == null)
+                    || this.orderByColumn.equals(((NormalQuery) other).orderByColumn) )
+                && this.orderByRule.equals( ((NormalQuery) other).orderByRule )
+                && this.limitRows == ((NormalQuery) other).limitRows);
     }
 }

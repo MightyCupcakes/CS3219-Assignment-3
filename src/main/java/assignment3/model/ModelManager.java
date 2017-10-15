@@ -4,6 +4,7 @@ import static assignment3.datarepresentation.SerializedJournal.DEFAULT_JOURNAL_I
 
 import java.io.File;
 import java.io.PrintWriter;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ public class ModelManager implements Model {
     private final String CSV_FORMAT = ".csv";
     private final String CSV_SEPERATOR = ",";
     private final String CSV_NEWLINE = "\n";
+
     private final Storage storage;
     private final Map<String, Map<Integer, SerializedJournal>> journalMap;
     private final Map<String, Map<Integer, List<SerializedCitation>>> citationMap;
@@ -46,9 +48,8 @@ public class ModelManager implements Model {
     }
     @Override
     public void saveJournalData(List<SerializedJournal> journalList, String conferenceName) throws Exception{
-        writeToXmlFile(journalList, conferenceName);
+        transformIntoXmlFormat(journalList, conferenceName);
     }
-
 
 	@Override
 	public Map<Integer, SerializedJournal> getJournal(String conferenceName) throws Exception {
@@ -75,7 +76,8 @@ public class ModelManager implements Model {
 	}
 
 
-    private void writeToXmlFile(List<SerializedJournal> journalList, String conferenceName) throws Exception {
+
+    private void transformIntoXmlFormat(List<SerializedJournal> journalList, String conferenceName) throws Exception {
         HashSet<SerializedJournal> journalSet = new HashSet<>();
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder xmlBuilder = builderFactory.newDocumentBuilder();
@@ -149,7 +151,9 @@ public class ModelManager implements Model {
         transformer.transform(source,  result);
 
 
+        storage.saveParsedXmlData(doc, conferenceName);
     }
+
     private static void appendChildToElement(String elementName, String elementValue,
                                              Element element, Document doc) {
         if (!Strings.isNullOrEmpty(elementValue)) {

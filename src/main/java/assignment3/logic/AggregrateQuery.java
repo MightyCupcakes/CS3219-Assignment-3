@@ -5,20 +5,22 @@ import static java.util.Objects.isNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 
+import assignment3.api.APIQueryBuilder;
 import assignment3.api.Query;
-import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
-import assignment3.schema.aggregate.SchemaAggregate;
+import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
+import assignment3.schema.aggregate.SchemaAggregate;
 
 public class AggregrateQuery implements Query {
     private Set<SchemaAggregate> aggregateColumnsToShow;
@@ -28,10 +30,13 @@ public class AggregrateQuery implements Query {
     private List<SchemaComparable> groupByColumns;
     private Logic logic;
     private boolean isJoinTable;
+    private int limitRows;
+    private SchemaBase orderByColumn;
+    private APIQueryBuilder.OrderByRule orderByRule;
 
     protected List<SerializedJournalCitation> journals;
 
-    private Multimap<List<Object>, SerializedJournalCitation> groupedRows;
+    private Multimap<Set<Object>, SerializedJournalCitation> groupedRows;
 
     public AggregrateQuery(List<SchemaAggregate> aggregatecolumnsToShow,
                            List<SchemaComparable> normalColumnsToShow,
@@ -45,8 +50,10 @@ public class AggregrateQuery implements Query {
         this.tablesToRead = tablesToRead;
         this.groupByColumns = Collections.unmodifiableList(groupByColumns);
         this.isJoinTable = false;
+        this.limitRows = -1;
+        this.orderByRule = APIQueryBuilder.OrderByRule.ASC;
 
-        this.groupedRows = HashMultimap.create();
+        this.groupedRows = MultimapBuilder.ListMultimapBuilder.hashKeys().arrayListValues().build();
     }
 
     private List<SerializedJournalCitation> filterOutRows(List<SerializedJournalCitation> data) {
@@ -58,7 +65,7 @@ public class AggregrateQuery implements Query {
     private void groupRows(List<SerializedJournalCitation> data) {
 
         for (SerializedJournalCitation row : data) {
-            List<Object> group = new ArrayList<>();
+            Set<Object> group = new LinkedHashSet<>(groupByColumns.size());
 
             groupByColumns.forEach( column -> group.add(column.getValue(row)));
             groupedRows.put(group, row);
@@ -67,6 +74,15 @@ public class AggregrateQuery implements Query {
 
     void setDataSource(Logic logic) {
         this.logic = logic;
+    }
+
+    void setLimitRows(int limit) {
+        this.limitRows = limit;
+    }
+
+    void setOrderByColumn(SchemaBase column, APIQueryBuilder.OrderByRule rule) {
+        this.orderByColumn = column;
+        this.orderByRule = rule;
     }
 
     public void setQueryToRetrieveCitations() {
@@ -79,7 +95,21 @@ public class AggregrateQuery implements Query {
 
     public String executeAndGetResult(List<SerializedJournalCitation> journalCitations) {
 
-        JsonGenerator json = new JsonGenerator();
+        JsonGenerator json;
+
+        if (isNull(orderByColumn)) {
+            if (limitRows == -1) {
+                json = new JsonGenerator();
+            } else {
+                json = new JsonGenerator(limitRows);
+            }
+        } else {
+            if (limitRows == -1) {
+                json = new JsonSorter(orderByColumn, orderByRule);
+            } else {
+                json = new JsonSorter(orderByColumn, orderByRule, limitRows);
+            }
+        }
 
         if (groupByColumns.isEmpty()) {
             // No group by means all one big group (we assume the query is valid at this stage
@@ -101,10 +131,11 @@ public class AggregrateQuery implements Query {
         } else {
             groupRows(journalCitations);
 
-            for (List<Object> key : groupedRows.keySet()) {
+            for (Set<Object> key : groupedRows.keySet()) {
                 JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
 
                 Iterable<SerializedJournalCitation> rows = groupedRows.get(key);
+                List<Object> keyValues = new ArrayList<>(key);
 
                 // Print out the groups to the json as columns
                 // Like if it is group by names, print out the name first (if they are in normal columns to show)
@@ -115,7 +146,7 @@ public class AggregrateQuery implements Query {
                         continue;
                     }
 
-                    rowJson.generateJson(groupByColumns.get(i).getNameOfAttribute(), key.get(i));
+                    rowJson.generateJson(groupByColumns.get(i).getNameOfAttribute(), keyValues.get(i));
                 }
 
                 // For each row in the group, pass the value to the aggregate function
@@ -161,7 +192,8 @@ public class AggregrateQuery implements Query {
 
             } catch (Exception e) {
                 Logger.getLogger(this.getClass().toString())
-                        .warning("Exception thrown while trying to get data from LogicLayer: " + e.getMessage());
+                        .warning("Exception thrown while trying to get data from LogicLayer");
+                e.printStackTrace();
                 return EMPTY_JSON;
             }
         }
@@ -179,6 +211,10 @@ public class AggregrateQuery implements Query {
                 && this.normalColumnsToShow.equals(((AggregrateQuery) other).normalColumnsToShow)
                 && this.tablesToRead.equals(((AggregrateQuery) other).tablesToRead)
                 && this.groupByColumns.equals(((AggregrateQuery) other).groupByColumns)
-                && this.predicate.equals(((AggregrateQuery) other).predicate));
+                && this.predicate.equals(((AggregrateQuery) other).predicate)
+                && ( (this.orderByColumn == null && ((AggregrateQuery) other).orderByColumn == null)
+                || this.orderByColumn.equals(((AggregrateQuery) other).orderByColumn) )
+                && this.orderByRule.equals( ((AggregrateQuery) other).orderByRule )
+                && this.limitRows == ((AggregrateQuery) other).limitRows);
     }
 }

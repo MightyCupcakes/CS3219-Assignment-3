@@ -41,4 +41,11 @@ public abstract class SchemaBase<T> {
     public boolean isJoinTable() {
         return false;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this
+                || (other instanceof SchemaBase
+                && nameOfAttribute.equals( ((SchemaBase) other).nameOfAttribute));
+    }
 }

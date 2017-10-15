@@ -2,6 +2,9 @@ package assignment3.logic;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -11,18 +14,31 @@ import assignment3.datarepresentation.SerializedCitation;
 
 public class JsonGenerator {
 
-    private JsonArrayBuilder listOfObjects;
+    protected JsonArrayBuilder listOfObjects;
+    protected int numOfRowsToParse = -1;
+    protected int rowsAdded = 0;
 
     public JsonGenerator() {
         listOfObjects = Json.createArrayBuilder();
     }
 
+    public JsonGenerator(int limit) {
+        this();
+        numOfRowsToParse = limit;
+    }
+
     public void addObjectToArray(JsonGeneratorBuilder generator) {
+
+        if (numOfRowsToParse > 0 && rowsAdded == numOfRowsToParse) {
+            return;
+        }
+
+        rowsAdded++;
         listOfObjects.add(generator.builder);
     }
 
     public String getJsonString() {
-        return listOfObjects.build().toString();
+        return getJsonArray().toString();
     }
     public JsonArray getJsonArray() {
     	return listOfObjects.build();
@@ -31,9 +47,11 @@ public class JsonGenerator {
     public static class JsonGeneratorBuilder {
 
         protected JsonObjectBuilder builder;
+        protected Map<String, String> keyValuePair;
 
         public JsonGeneratorBuilder() {
             builder = Json.createObjectBuilder();
+            keyValuePair = new HashMap<>();
         }
 
         private static JsonObjectBuilder generateCitationJson(SerializedCitation citation) {
@@ -51,6 +69,7 @@ public class JsonGenerator {
         }
 
         public void generateJson(String name, Object value) {
+            keyValuePair.put(name, value.toString());
             builder.add(name, value.toString());
         }
 

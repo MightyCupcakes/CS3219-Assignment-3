@@ -13,7 +13,7 @@ import assignment3.schema.aggregate.SchemaMax;
 import assignment3.schema.aggregate.SchemaMin;
 import assignment3.schema.aggregate.SchemaSum;
 
-public class APIManager implements API{
+public class APIManager implements API {
 
     private Logic logic;
 
@@ -41,7 +41,12 @@ public class APIManager implements API{
 
     @Override
     public void runQueries() {
+        Query query = QueryBuilder.createNewBuilder()
+                .select(new SchemaCount(ConferenceData.CITATION.journalId))
+                .from("A4")
+                .build();
 
+        System.out.println(query.execute());
     }
 
     @Deprecated

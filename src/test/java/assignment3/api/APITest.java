@@ -2,129 +2,97 @@ package assignment3.api;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.StringReader;
+import java.lang.reflect.Field;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonReader;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import assignment3.logic.LogicManager;
 import assignment3.logic.QueryBuilder;
+import assignment3.model.ModelManager;
+import assignment3.schema.SchemaInt;
+import assignment3.schema.SchemaString;
 import assignment3.schema.aggregate.SchemaCount;
-import assignment3.schema.aggregate.SchemaCountUnique;
-import assignment3.schema.aggregate.SchemaMax;
-import assignment3.schema.aggregate.SchemaMin;
-import assignment3.schema.aggregate.SchemaSum;
+import assignment3.storage.StorageManager;
 
 public class APITest {
 
+    private static final String FOLDER = "src/test/data/";
+
     private static API api;
+    private static LogicManager logic;
+    private static ModelManager model;
 
     @BeforeClass
-    public static void setUp() {
+    public static void setUp() throws Exception {
         api = new APIManager();
+
+        Field modelField = LogicManager.class.getDeclaredField("model");
+        modelField.setAccessible(true);
+
+        Field logicField = APIManager.class.getDeclaredField("logic");
+        logicField.setAccessible(true);
+
+        Field storageField = ModelManager.class.getDeclaredField("storage");
+        storageField.setAccessible(true);
+
+        logic = (LogicManager) logicField.get(api);
+        model = (ModelManager) modelField.get(logic);
+        storageField.set(model, new StorageManager(FOLDER));
+
     }
 
     @Test
-    public void test_Question1() throws Exception {
+    public void test_API_vanilla() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
-                .select(new SchemaCount(ConferenceData.TITLE))
-                .from("D12", "D13", "D14", "D15", "J14", "W14", "Q14")
+                .select(new SchemaCount(new SchemaString("id")))
+                .from("xmlTestAPI")
                 .build();
+
+        JsonReader jsonReader = Json.createReader(new StringReader(query.execute()));
+        JsonArray object = jsonReader.readArray();
+        jsonReader.close();
+
+        assertEquals("15", object.getJsonObject(0).getString("COUNT(id)"));
     }
 
     @Test
-    public void test_Question2() throws Exception {
+    public void test_API_limit() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
-                .select(new SchemaCount(ConferenceData.CITATION.title))
-                .from("D12", "D13", "D14", "D15", "J14", "W14", "Q14")
+                .select(new SchemaString("id"))
+                .from("xmlTestAPI")
+                .limit(5)
                 .build();
+
+        JsonReader jsonReader = Json.createReader(new StringReader(query.execute()));
+        JsonArray object = jsonReader.readArray();
+        jsonReader.close();
+
+        assertEquals(5, object.size());
     }
 
     @Test
-    public void test_Question3() throws Exception {
+    public void test_API_orderby() throws Exception {
+        SchemaInt year = new SchemaInt("yearOfPublication");
+
         Query query = QueryBuilder.createNewBuilder()
-                .select(new SchemaCountUnique(ConferenceData.CITATION.title))
-                .from("D12", "D13", "D14", "D15", "J14", "W14", "Q14")
-                .build();
-    }
-
-    @Test
-    public void test_Question4() throws Exception {
-        Query query = QueryBuilder.createNewBuilder()
-                .select(new SchemaSum(ConferenceData.CITATION.numOfAuthors))
-                .from("D12", "D13", "D14", "D15", "J14", "W14", "Q14")
-                .build();
-    }
-
-    @Test
-    public void test_Question5() throws Exception {
-        Query query = QueryBuilder.createNewBuilder()
-                .select(new SchemaMin(ConferenceData.CITATION.year), new SchemaMax(ConferenceData.CITATION.year))
-                .from("D12", "D13", "D14", "D15", "J14", "W14", "Q14")
-                .build();
-    }
-
-    @Test
-    public void test_Question6() throws Exception {
-        Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.CITATION.year, new SchemaCount(ConferenceData.CITATION.title))
-                .from("D12")
-                .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(2000)
-                        .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(2015)))
-                .groupBy(ConferenceData.CITATION.year)
+                .select(year, new SchemaCount(new SchemaString("id")))
+                .from("xmlTestAPI")
+                .where(year.greaterThan(0))
+                .groupBy(year)
+                .orderBy(year, APIQueryBuilder.OrderByRule.DESC)
                 .build();
 
-        //assertEquals("", query.execute());
-    }
+        JsonReader jsonReader = Json.createReader(new StringReader(query.execute()));
+        JsonArray object = jsonReader.readArray();
+        jsonReader.close();
 
-    @Test
-    public void test_Question7() throws Exception {
-        Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.CITATION.booktitle, new SchemaCountUnique(ConferenceData.CITATION.title))
-                .from("D13")
-                .where(ConferenceData.CITATION.booktitle.like("EMNLP")
-                        .or(ConferenceData.CITATION.booktitle.like("CoNLL")))
-                .groupBy(ConferenceData.CITATION.booktitle)
-                .build();
-    }
-
-    @Test
-    public void test_Question8() throws Exception {
-        Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.CITATION.year, new SchemaCountUnique(ConferenceData.CITATION.title))
-                .from("D12")
-                .where(ConferenceData.CITATION.authors.like("Yoshua Bengio")
-                        .or(ConferenceData.CITATION.authors.like("Y. Bengio")))
-                .groupBy(ConferenceData.CITATION.year)
-                .build();
-    }
-
-    @Test
-    public void test_Question9() throws Exception {
-        Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.CITATION.year, new SchemaCountUnique(ConferenceData.CITATION.title))
-                .from("J14")
-                .groupBy(ConferenceData.CITATION.year)
-                .build();
-
-        Query query2 = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.CITATION.year, new SchemaCountUnique(ConferenceData.CITATION.title))
-                .from("W14")
-                .groupBy(ConferenceData.CITATION.year)
-                .build();
-    }
-
-    @Test
-    public void test_Question10() throws Exception {
-        Query query = QueryBuilder.createNewBuilder()
-                .select(new SchemaCountUnique(ConferenceData.CITATION.title))
-                .from("Q14")
-                .where(ConferenceData.CITATION.booktitle.like("NAACL"))
-                .groupBy(ConferenceData.CITATION.booktitle)
-                .build();
-
-        Query query2 = QueryBuilder.createNewBuilder()
-                .select(new SchemaCountUnique(ConferenceData.CITATION.title))
-                .from("D14")
-                .where(ConferenceData.CITATION.booktitle.like("NAACL"))
-                .groupBy(ConferenceData.CITATION.booktitle)
-                .build();
+        assertEquals("2015", object.getJsonObject(0).getString("yearOfPublication"));
+        assertEquals("2014", object.getJsonObject(1).getString("yearOfPublication"));
     }
 }
