@@ -52,7 +52,7 @@ public abstract class SchemaComparable<T extends Comparable> extends SchemaBase<
     public SchemaPredicate equalsTo(T value) {
         return new SchemaPredicate(this, o -> {
             T v = this.getValue(o);
-            return (v != null) && v.compareTo(value) == 0;
+            return (v != null) && v.equals(value);
         });
     }
 

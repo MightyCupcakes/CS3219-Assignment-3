@@ -14,7 +14,12 @@ public interface Model {
      * @param conferenceName
      */
     void saveJournalData (List<SerializedJournal> journalList, String conferenceName) throws Exception;
-
+    /**
+     * Write result into a .csv file which D3 will directly load 
+     * The first list contained the column names
+     * subsequent lists will contain the actual data
+     */
+    void  writeResultIntoCsvFile(String filename, List<List<String>> resultLists) throws Exception;
     /**
      * Retrieves the HashMap<Integer, SerializedJournal>  from the given conferenceName with Integer representing the specific document in that conferenceName
      * @param conferenceName

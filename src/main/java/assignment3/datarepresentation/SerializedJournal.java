@@ -85,7 +85,7 @@ public class SerializedJournal {
         private String venue = "";
         private String id = DEFAULT_JOURNAL_ID;
 
-        public int numInCitations;
+        public int numInCitations= 0;
         private int yearOfPublication;
 
         private StringBuilder author = new StringBuilder("");
@@ -122,6 +122,7 @@ public class SerializedJournal {
         }
 
         public Builder withYear(String yearOfPublication) {
+
             this.yearOfPublication = Integer.parseInt(yearOfPublication);
 
             return this;
@@ -149,6 +150,14 @@ public class SerializedJournal {
             numInCitations++;
 
             return this;
+        }
+        public Builder withInCitationTotal(String id) {
+        	this.numInCitations = Integer.parseInt(id);
+        	return this;
+        }
+        public Builder withInCitationTotal(int id) {
+        	this.numInCitations = id;
+        	return this;
         }
 
         public Builder withConference(String conference) {

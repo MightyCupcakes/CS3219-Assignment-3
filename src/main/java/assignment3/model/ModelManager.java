@@ -2,13 +2,20 @@ package assignment3.model;
 
 import static assignment3.datarepresentation.SerializedJournal.DEFAULT_JOURNAL_ID;
 
+import java.io.File;
+
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,6 +29,11 @@ import assignment3.storage.Storage;
 import assignment3.storage.StorageManager;
 
 public class ModelManager implements Model {
+
+    private final String SAVED_LOCATION = "Dataset/";
+    private final String XML_FORMAT = ".xml";
+    private final String CSV_SEPERATOR = ",";
+    private final String CSV_NEWLINE = "\n";
 
     private final Storage storage;
     private final Map<String, Map<Integer, SerializedJournal>> journalMap;
@@ -61,12 +73,9 @@ public class ModelManager implements Model {
 		citationMap.put(conferenceName, data.citationsMap);
 	}
 
+
+
     private void transformIntoXmlFormat(List<SerializedJournal> journalList, String conferenceName) throws Exception {
-        int totalNoOfAuthor =  0;
-        int totalNoOfCitation = 0;
-        int noOfJournal = 0;
-        int lowestYear = 9999;
-        int highestYear = 0;
         HashSet<SerializedJournal> journalSet = new HashSet<>();
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder xmlBuilder = builderFactory.newDocumentBuilder();
@@ -78,19 +87,12 @@ public class ModelManager implements Model {
         Element mainElement = doc.createElement("main");
         Element citationslists = doc.createElement("citationLists");
     
-        Element authorElement = doc.createElement("NoOfAuthor");
-        Element noOfcitationElement = doc.createElement("noOfCitation");
-        Element yearRangeElement = doc.createElement("yearRange");
-        Element noOfJournalElement = doc.createElement("noOfJournal");
+
         rootElement.appendChild(mainElement);
         rootElement.appendChild(citationslists);
-        rootElement.appendChild(authorElement);
-        rootElement.appendChild(noOfcitationElement);
-        rootElement.appendChild(yearRangeElement);
-        rootElement.appendChild(noOfJournalElement);
+
 
         
-        noOfJournal+= journalList.size();
         int id = 1;
         for (SerializedJournal journal : journalList) {
             if (!journalSet.contains(journal)) {
@@ -103,7 +105,9 @@ public class ModelManager implements Model {
                 appendChildToElement("abstractText", journal.abstractText, journalElement, doc);
                 appendChildToElement("venue", journal.venue, journalElement, doc);
                 appendChildToElement("date", Integer.toString(journal.yearOfPublication), journalElement, doc);
-
+                if (journal.numOfInCitations != 0 ) {
+                    appendChildToElement("numOfInCitations", Integer.toString(journal.numOfInCitations), journalElement, doc);
+                }
                 if (!journal.id.equals(DEFAULT_JOURNAL_ID)) {
                     appendChildToElement("generatedId", journal.id, journalElement, doc);
                 }
@@ -111,7 +115,6 @@ public class ModelManager implements Model {
                 mainElement.appendChild(journalElement);
                 journalSet.add(journal);
             }
-            totalNoOfCitation+= journal.citations.size();
             for (SerializedCitation citation : journal.citations) {
                 Element citationElement = doc.createElement("citation");
 
@@ -129,16 +132,9 @@ public class ModelManager implements Model {
                 }
 
                 if (citation.year != 0) {
-                    if (citation.year < lowestYear) {
-                        lowestYear = citation.year;
-                    }
-                    if (citation.year > highestYear) {
-                        highestYear = citation.year;
-                    }
                     appendChildToElement("date", Integer.toString(citation.year), citationElement, doc);
                 }
 
-                totalNoOfAuthor+= citation.authorsList.size();
                 for(String citation_author : citation.authorsList) {
                     appendChildToElement("author", citation_author, authorsElement, doc);
                 }
@@ -147,11 +143,13 @@ public class ModelManager implements Model {
             id++;
         }
 
-        noOfcitationElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfCitation)));
-        authorElement.appendChild(doc.createTextNode(Integer.toString(totalNoOfAuthor)));
-        noOfJournalElement.appendChild(doc.createTextNode(Integer.toString(noOfJournal)));
-        String yearRange = lowestYear + " to " + highestYear;
-        yearRangeElement.appendChild(doc.createTextNode(yearRange));
+
+        String outputLocation = SAVED_LOCATION + conferenceName + XML_FORMAT;
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new File(outputLocation));
+        transformer.transform(source,  result);
+
 
         storage.saveParsedXmlData(doc, conferenceName);
     }
@@ -172,6 +170,22 @@ public class ModelManager implements Model {
 	@Override
 	public Map<String, Map<Integer, List<SerializedCitation>>> getCitationMap() {
 		return citationMap;
+	}
+	@Override
+	public void writeResultIntoCsvFile(String filename, List<List<String>> resultLists) throws Exception {
+		StringBuilder builder = new StringBuilder();
+		for (List<String> valueList : resultLists) {
+			Iterator<String> valueIterator = valueList.iterator();
+			while (valueIterator.hasNext()) {
+				builder.append(valueIterator.next());
+				if (valueIterator.hasNext()) {
+					builder.append(CSV_SEPERATOR);
+				}
+			}
+			builder.append(CSV_NEWLINE);
+		}
+		builder.append(CSV_NEWLINE);
+		storage.saveResulToCsvData(builder.toString(), filename);
 	}
 
 }

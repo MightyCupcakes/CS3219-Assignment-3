@@ -57,8 +57,7 @@ public class APITest {
         JsonReader jsonReader = Json.createReader(new StringReader(query.execute()));
         JsonArray object = jsonReader.readArray();
         jsonReader.close();
-
-        assertEquals("15", object.getJsonObject(0).getString("COUNT(id)"));
+        assertEquals("74", object.getJsonObject(0).getString("COUNT(id)"));
     }
 
     @Test
