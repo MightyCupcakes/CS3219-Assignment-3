@@ -5,20 +5,23 @@ import static java.util.Objects.isNull;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 
 import com.google.common.base.Strings;
 
@@ -174,12 +177,13 @@ public class LogicManager implements Logic{
 
 	@Override
 	public void saveResultIntoCsv(String jsonStringData, int taskType) throws Exception {
-		JSONArray jsonArr = new JSONArray(jsonStringData);
+		JsonReader jsonReader = Json.createReader(new StringReader(jsonStringData));
+		JsonArray jsonArr = jsonReader.readArray();
 		List<List<String>> dataList = new ArrayList<>();
 		dataList.add(getColumnHeaderList(taskType));
-		for (int i = 0; i < jsonArr.length(); i++) {
-			JSONObject obj = jsonArr.getJSONObject(i);
-			Iterator<String> keyIterator = obj.keys();
+		for (int i = 0; i < jsonArr.size(); i++) {
+			JsonObject obj = jsonArr.getJsonObject(i);
+			Iterator<String> keyIterator = obj.keySet().iterator();
 			List<String> valueList = new ArrayList<>();
 			while (keyIterator.hasNext()) {
 				String key = keyIterator.next();
@@ -194,10 +198,10 @@ public class LogicManager implements Logic{
 		List<String> headerList = new ArrayList<>();
 		switch(taskType) {
 		case 1:
-			headerList = Arrays.asList("count", "author");
+			headerList = Arrays.asList("author", "count");
 			break;
 		case 2:
-			headerList = Arrays.asList("numOfInCitation", "title");
+			headerList = Arrays.asList("title", "numOfInCitation");
 			break;
 		case 3:
 			headerList = Arrays.asList("yearOfPublication", "count");
@@ -205,7 +209,7 @@ public class LogicManager implements Logic{
 		case 4:
 			break;
 		case 5:
-			headerList = Arrays.asList("count", "author");
+			headerList = Arrays.asList("author", "count");
 			break;
 		default: throw new Exception("Invalid Task Type");
 		}
