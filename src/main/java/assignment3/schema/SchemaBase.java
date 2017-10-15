@@ -17,11 +17,13 @@ import assignment3.datarepresentation.SerializedJournalCitation;
 public abstract class SchemaBase<T> {
 
     protected String nameOfAttribute = "";
-    protected boolean splitAttributeIntoRows = false;
-    protected Function<T, Collection<T>> splittingFunction = Collections::singletonList;
+    protected boolean splitAttributeIntoRows;
+    protected Function<T, Collection<T>> splittingFunction;
 
     public SchemaBase(String nameOfAttribute) {
         this.nameOfAttribute = nameOfAttribute;
+        this.splitAttributeIntoRows = false;
+        this.splittingFunction = Collections::singletonList;
     }
 
     /**
