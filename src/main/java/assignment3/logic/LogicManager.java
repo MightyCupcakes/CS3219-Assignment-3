@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -79,12 +80,15 @@ public class LogicManager implements Logic{
 
 	private SerializedJournal createDuplicateJournalCitation(SerializedJournal journal, String author) {
 		SerializedJournal.Builder builder = new SerializedJournal.Builder();
+
 		builder.withTitle(journal.title)
 		.withAuthor(author)
 		.withAffiliation(journal.affiliation)
 		.withAbstract(journal.abstractText)
-		.withId(journal.id).withVenue(journal.venue)
-		.withYear(journal.yearOfPublication);
+		.withId(journal.id)
+		.withVenue(journal.venue)
+		.withYear(journal.yearOfPublication)
+		.withInCitationTotal(journal.numOfInCitations);
 		
 		return builder.build();
 	}
