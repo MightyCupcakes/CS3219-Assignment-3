@@ -9,17 +9,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import com.google.common.base.Strings;
 
 import assignment3.dataparser.DataParser;
 import assignment3.dataparser.exceptions.StopParserException;
 import assignment3.dataparser.jsonparser.JsonDataParser;
 import assignment3.dataparser.jsonparser.JsonIdDataParser;
 import assignment3.dataparser.xmlparser.XmlDataParser;
-import assignment3.dataparser.xmlparser.XmlDataParserHandler;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
@@ -61,9 +63,30 @@ public class LogicManager implements Logic{
 	@Override
 	public List<SerializedJournalCitation> getDataFromTableWithNoCitations(String tableName) throws Exception {
 		Map<Integer, SerializedJournal> journalMap = model.getJournal(tableName);
-		return journalMap.values().stream().map(journal -> {
-			return new SerializedJournalCitation(journal, null);
-		}).collect(Collectors.toList());
+		List<SerializedJournalCitation> journalCitationList = new ArrayList<>();
+		for (SerializedJournal journal : journalMap.values()) {
+			if (Strings.isNullOrEmpty(journal.author)) {
+				journalCitationList.add(new SerializedJournalCitation(journal, null));
+			}
+			List<String> authorList = Arrays.asList(journal.author.split(","));
+			for (String author : authorList) {
+				SerializedJournal duplicateJournal = createDuplicateJournalCitation(journal, author);
+				journalCitationList.add(new SerializedJournalCitation(duplicateJournal, null));
+			}
+		}
+		return journalCitationList;
+	}
+
+	private SerializedJournal createDuplicateJournalCitation(SerializedJournal journal, String author) {
+		SerializedJournal.Builder builder = new SerializedJournal.Builder();
+		builder.withTitle(journal.title)
+		.withAuthor(author)
+		.withAffiliation(journal.affiliation)
+		.withAbstract(journal.abstractText)
+		.withId(journal.id).withVenue(journal.venue)
+		.withYear(journal.yearOfPublication);
+		
+		return builder.build();
 	}
 
 	@Override
@@ -71,15 +94,28 @@ public class LogicManager implements Logic{
 		Map<Integer, SerializedJournal> journalMap = model.getJournal(tableName);
 		Map<Integer, List<SerializedCitation>> citationMap = model.getCitations(tableName);
 		List<SerializedJournalCitation> journalCitationLists = new ArrayList<>();
+
 		
 		journalMap.forEach( (id, journal) -> {
 			List<SerializedCitation> citationList = citationMap.get(id);
-
+			
 			if (isNull(citationList)) return;
+			
+			if (Strings.isNullOrEmpty(journal.author)) {
+				for (SerializedCitation citation : citationList) {
+					journalCitationLists.add(new SerializedJournalCitation(journal, citation));
+				}
 
-			for (SerializedCitation citation : citationList) {
-				journalCitationLists.add(new SerializedJournalCitation(journal, citation));
+			} else {
+				List<String> authorList = Arrays.asList(journal.author.split(","));
+				for (String author : authorList) {
+					SerializedJournal duplicateJournal = createDuplicateJournalCitation(journal, author);
+					for (SerializedCitation citation : citationList) {
+						journalCitationLists.add(new SerializedJournalCitation(duplicateJournal, citation));
+					}
+				}
 			}
+
 		});
 		return journalCitationLists;
 	}
