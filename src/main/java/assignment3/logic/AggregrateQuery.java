@@ -3,11 +3,13 @@ package assignment3.logic;
 import static java.util.Objects.isNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -16,6 +18,7 @@ import com.google.common.collect.MultimapBuilder;
 
 import assignment3.api.APIQueryBuilder;
 import assignment3.api.Query;
+import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
@@ -178,15 +181,46 @@ public class AggregrateQuery implements Query {
 
             journals = new ArrayList<>(150);
 
+            List<SchemaBase> splitters = new ArrayList<>(1);
+
+            if (normalColumnsToShow.stream().anyMatch(schema ->schema.requireSplitRow()) ||
+                    groupByColumns.stream().anyMatch(schema -> schema.requireSplitRow())) {
+
+                if (!groupByColumns.isEmpty()) {
+                    // Whatever is in group by clause should be in the select clause so no point
+                    // going through the select clause if the group by clause is non-empty
+                    groupByColumns.stream()
+                            .filter(schema -> schema.requireSplitRow())
+                            .forEach(splitters::add);
+                } else {
+                    normalColumnsToShow.stream()
+                            .filter(schema -> schema.requireSplitRow())
+                            .forEach(splitters::add);
+                }
+            }
+
             try {
 
                 if (isQueryRetrivingCitations()) {
+
                     for (String table : tablesToRead) {
-                        journals.addAll(logic.getDataFromTableWithCitations(table));
+
+                        if (splitters.isEmpty()) {
+                            journals.addAll(logic.getDataFromTableWithCitations(table));
+                        } else {
+                            journals.addAll(logic.getDataFromTableWithCitations(table, splitters));
+                        }
+
                     }
                 } else if (!isQueryRetrivingCitations()) {
+
                     for (String table : tablesToRead) {
-                        journals.addAll(logic.getDataFromTableWithNoCitations(table));
+
+                        if (splitters.isEmpty()) {
+                            journals.addAll(logic.getDataFromTableWithNoCitations(table));
+                        } else {
+                            journals.addAll(logic.getDataFromTableWithNoCitations(table, splitters));
+                        }
                     }
                 }
 

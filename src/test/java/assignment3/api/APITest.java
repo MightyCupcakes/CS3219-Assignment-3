@@ -16,7 +16,6 @@ import assignment3.logic.LogicManager;
 import assignment3.logic.QueryBuilder;
 import assignment3.model.ModelManager;
 import assignment3.schema.SchemaInt;
-import assignment3.schema.SchemaString;
 import assignment3.schema.aggregate.SchemaCount;
 import assignment3.storage.StorageManager;
 
@@ -50,20 +49,54 @@ public class APITest {
     @Test
     public void test_API_vanilla() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
-                .select(new SchemaCount(new SchemaString("id")))
+                .select(new SchemaCount(ConferenceData.AUTHORS))
                 .from("xmlTestAPI")
                 .build();
 
         JsonReader jsonReader = Json.createReader(new StringReader(query.execute()));
         JsonArray object = jsonReader.readArray();
         jsonReader.close();
-        assertEquals("74", object.getJsonObject(0).getString("COUNT(id)"));
+
+        assertEquals("15", object.getJsonObject(0).getString("COUNT(author)"));
+    }
+
+    @Test
+    public void test_API_splitAuthors() throws Exception {
+        Query query = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.AUTHOR, ConferenceData.ID)
+                .from("xmlTestAPI")
+                .build();
+
+        JsonReader jsonReader = Json.createReader(new StringReader(query.execute()));
+        JsonArray object = jsonReader.readArray();
+        jsonReader.close();
+
+        assertEquals(75, object.size());
+    }
+
+    @Test
+    public void test_API_splitAuthorsCount() throws Exception {
+        SchemaCount count = new SchemaCount(ConferenceData.ID);
+
+        Query query = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.AUTHOR, count)
+                .from("xmlTestAPI")
+                .groupBy(ConferenceData.AUTHOR)
+                .orderBy(count, APIQueryBuilder.OrderByRule.DESC)
+                .build();
+
+        JsonReader jsonReader = Json.createReader(new StringReader(query.execute()));
+        JsonArray object = jsonReader.readArray();
+        jsonReader.close();
+
+        assertEquals("T A Coleman", object.getJsonObject(0).getString("author"));
+        assertEquals("3", object.getJsonObject(0).getString(count.getNameOfAttribute()));
     }
 
     @Test
     public void test_API_limit() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
-                .select(new SchemaString("id"))
+                .select(ConferenceData.ID)
                 .from("xmlTestAPI")
                 .limit(5)
                 .build();
@@ -80,7 +113,7 @@ public class APITest {
         SchemaInt year = new SchemaInt("yearOfPublication");
 
         Query query = QueryBuilder.createNewBuilder()
-                .select(year, new SchemaCount(new SchemaString("id")))
+                .select(year, new SchemaCount(ConferenceData.ID))
                 .from("xmlTestAPI")
                 .where(year.greaterThan(0))
                 .groupBy(year)
