@@ -105,7 +105,9 @@ public class ModelManager implements Model {
                 appendChildToElement("abstractText", journal.abstractText, journalElement, doc);
                 appendChildToElement("venue", journal.venue, journalElement, doc);
                 appendChildToElement("date", Integer.toString(journal.yearOfPublication), journalElement, doc);
-
+                if (journal.numOfInCitations != 0 ) {
+                    appendChildToElement("numOfInCitations", Integer.toString(journal.numOfInCitations), journalElement, doc);
+                }
                 if (!journal.id.equals(DEFAULT_JOURNAL_ID)) {
                     appendChildToElement("generatedId", journal.id, journalElement, doc);
                 }
