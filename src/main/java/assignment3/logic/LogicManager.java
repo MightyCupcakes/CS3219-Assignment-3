@@ -11,15 +11,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.json.Json;
 import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
@@ -99,6 +100,20 @@ public class LogicManager implements Logic{
 		
 		return builder.build();
 	}
+
+	@Override
+    public List<SerializedJournalCitation> getDataFromTableWithNoCitations(String tableName,
+        Collection<Function<Object, Collection<Object>>> splittingFunctions) throws Exception {
+
+        return getDataFromTableWithNoCitations(tableName);
+    }
+
+    @Override
+    public List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName,
+        Collection<Function<Object, Collection<Object>>> splittingFunctions) throws Exception {
+
+        return getDataFromTableWithCitations(tableName);
+    }
 
 	@Override
 	public List<SerializedJournalCitation> getDataFromTableWithCitations(String tableName) throws Exception {

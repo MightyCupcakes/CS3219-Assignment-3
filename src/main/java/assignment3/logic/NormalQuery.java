@@ -3,8 +3,10 @@ package assignment3.logic;
 import static java.util.Objects.isNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -56,13 +58,28 @@ public class NormalQuery implements Query {
 
     @Override
     public String execute() {
+
+        List<Function<Object, Collection<Object>>> splitters = new ArrayList<>(1);
+
+        if (columnsToShow.stream().anyMatch(schema ->schema.requireSplitRow())) {
+
+            columnsToShow.stream()
+                    .filter(schema -> schema.requireSplitRow())
+                    .forEach(schema -> splitters.add(schema.getSplittingFunction()));
+        }
+
         try {
 
             if (!isNull(logic)) {
                 journals = new ArrayList<>(150);
 
                 for (String table : tablesToRead) {
-                    journals.addAll(logic.getDataFromTableWithNoCitations(table));
+
+                    if (splitters.isEmpty()) {
+                        journals.addAll(logic.getDataFromTableWithNoCitations(table));
+                    } else {
+                        journals.addAll(logic.getDataFromTableWithNoCitations(table, splitters));
+                    }
                 }
             }
 
