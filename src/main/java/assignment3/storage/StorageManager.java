@@ -3,6 +3,7 @@ package assignment3.storage;
 import static java.util.Objects.isNull;
 
 import java.io.File;
+import java.io.PrintWriter;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -18,6 +19,8 @@ public class StorageManager implements Storage {
 	private final String SAVED_LOCATION = "Dataset/";
 
 	private final String XML_FORMAT = ".xml";
+    private final String CSV_FORMAT = ".csv";
+
 	private XmlDataParser parser = new XmlDataParser();
 	private String location;
 
@@ -58,4 +61,13 @@ public class StorageManager implements Storage {
 	private String getStorageLocation() {
         return isNull(location) ? DEFAULT_STORAGE : location;
     }
+
+	@Override
+	public void saveResulToCsvData(String data, String fileName) throws Exception {
+		File csvFile = new File(SAVED_LOCATION + fileName + CSV_FORMAT);
+		PrintWriter writer = new PrintWriter(csvFile);	
+		writer.write(data);
+		writer.close();
+		
+	}
 }

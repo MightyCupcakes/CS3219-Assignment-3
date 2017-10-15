@@ -3,7 +3,6 @@ package assignment3.model;
 import static assignment3.datarepresentation.SerializedJournal.DEFAULT_JOURNAL_ID;
 
 import java.io.File;
-import java.io.PrintWriter;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,7 +32,6 @@ public class ModelManager implements Model {
 
     private final String SAVED_LOCATION = "Dataset/";
     private final String XML_FORMAT = ".xml";
-    private final String CSV_FORMAT = ".csv";
     private final String CSV_SEPERATOR = ",";
     private final String CSV_NEWLINE = "\n";
 
@@ -173,8 +171,6 @@ public class ModelManager implements Model {
 	}
 	@Override
 	public void writeResultIntoCsvFile(String filename, List<List<String>> resultLists) throws Exception {
-		File csvFile = new File(SAVED_LOCATION + filename + CSV_FORMAT);
-		PrintWriter writer = new PrintWriter(csvFile);	
 		StringBuilder builder = new StringBuilder();
 		for (List<String> valueList : resultLists) {
 			Iterator<String> valueIterator = valueList.iterator();
@@ -187,8 +183,7 @@ public class ModelManager implements Model {
 			builder.append(CSV_NEWLINE);
 		}
 		builder.append(CSV_NEWLINE);
-		writer.write(builder.toString());
-		writer.close();
+		storage.saveResulToCsvData(builder.toString(), filename);
 	}
 
 }
