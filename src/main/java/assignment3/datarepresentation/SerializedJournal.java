@@ -122,6 +122,7 @@ public class SerializedJournal {
         }
 
         public Builder withYear(String yearOfPublication) {
+
             this.yearOfPublication = Integer.parseInt(yearOfPublication);
 
             return this;
@@ -149,6 +150,10 @@ public class SerializedJournal {
             numInCitations++;
 
             return this;
+        }
+        public Builder withInCitationTotal(String id) {
+        	this.numInCitations = Integer.parseInt(id);
+        	return this;
         }
 
         public Builder withConference(String conference) {
