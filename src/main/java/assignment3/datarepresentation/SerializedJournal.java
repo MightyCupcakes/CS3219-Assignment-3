@@ -179,7 +179,6 @@ public class SerializedJournal {
         }
 
         public SerializedJournal build() {
-        	System.out.println(numInCitations);
             return new SerializedJournal(id,
                     title,
                     author.toString(),

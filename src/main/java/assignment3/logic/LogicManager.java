@@ -11,10 +11,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.google.common.base.Strings;
 
@@ -166,5 +170,46 @@ public class LogicManager implements Logic{
 		}
 
 		return journals;
+	}
+
+	@Override
+	public void saveResultIntoCsv(String jsonStringData, int taskType) throws Exception {
+		JSONArray jsonArr = new JSONArray(jsonStringData);
+		List<List<String>> dataList = new ArrayList<>();
+		dataList.add(getColumnHeaderList(taskType));
+		for (int i = 0; i < jsonArr.length(); i++) {
+			JSONObject obj = jsonArr.getJSONObject(i);
+			Iterator<String> keyIterator = obj.keys();
+			List<String> valueList = new ArrayList<>();
+			while (keyIterator.hasNext()) {
+				String key = keyIterator.next();
+				valueList.add(obj.getString(key));
+			}
+			dataList.add(valueList);
+		}
+		model.writeResultIntoCsvFile(Integer.toString(taskType), dataList);
+	}
+	
+	private List<String> getColumnHeaderList(int taskType) throws Exception {
+		List<String> headerList = new ArrayList<>();
+		switch(taskType) {
+		case 1:
+			headerList = Arrays.asList("count", "author");
+			break;
+		case 2:
+			headerList = Arrays.asList("numOfInCitation", "title");
+			break;
+		case 3:
+			headerList = Arrays.asList("yearOfPublication", "count");
+			break;
+		case 4:
+			break;
+		case 5:
+			headerList = Arrays.asList("count", "author");
+			break;
+		default: throw new Exception("Invalid Task Type");
+		}
+		return headerList;
+
 	}
 }

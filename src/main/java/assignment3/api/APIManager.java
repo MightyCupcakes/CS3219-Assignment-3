@@ -41,12 +41,22 @@ public class APIManager implements API {
 
     @Override
     public void runQueries() {
-        Query query = QueryBuilder.createNewBuilder()
-                .select(new SchemaCount(ConferenceData.CITATION.journalId))
-                .from("A4")
-                .build();
-
-        System.out.println(query.execute());
+    	try {
+			assignment4Queries();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    
+    private void assignment4Queries() throws Exception {
+    	String taskOne = queryForTaskOne();
+    	logic.saveResultIntoCsv(taskOne, 1);
+    	String taskTwo = queryForTaskTwo();
+    	logic.saveResultIntoCsv(taskTwo, 2);
+    	String taskThree = queryForTaskThree();
+    	logic.saveResultIntoCsv(taskThree, 3);
+    	String taskFive = queryForTaskFive();
+    	logic.saveResultIntoCsv(taskFive, 4);
     }
 
     @Deprecated
@@ -73,6 +83,55 @@ public class APIManager implements API {
             e.printStackTrace();
             return;
         }
+    }
+    private String queryForTaskOne() {
+        Query query = QueryBuilder.createNewBuilder()
+                .select( ConferenceData.AUTHOR, new SchemaCount(ConferenceData.ID))
+                .from("A4")
+                .where(ConferenceData.VENUE.equalsTo("ArXiv"))
+                .groupBy(ConferenceData.AUTHOR)
+                .orderBy(new SchemaCount(ConferenceData.ID), APIQueryBuilder.OrderByRule.DESC)
+                .limit(10)
+                .build();
+        return query.execute();
+    }
+    
+    private String queryForTaskTwo() {
+        Query query = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.TITLE,ConferenceData.NUM_OF_IN_CITATIONS)
+                .from("A4")
+                .where(ConferenceData.VENUE.equalsTo("ArXiv"))
+                .orderBy(ConferenceData.NUM_OF_IN_CITATIONS, APIQueryBuilder.OrderByRule.DESC)
+                .limit(10)
+                .build();
+        return query.execute();
+    }
+    
+    private String queryForTaskThree() {
+        Query query = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.YEAR_OF_PUBLICATION, new SchemaCountUnique(ConferenceData.ID))
+                .from("A4")
+                .where(ConferenceData.VENUE.like("ICSE"))
+                .groupBy(ConferenceData.YEAR_OF_PUBLICATION)
+                .orderBy(new SchemaCountUnique(ConferenceData.ID), APIQueryBuilder.OrderByRule.DESC)
+                .build();
+        return query.execute();
+    }
+    
+    private String queryForTaskFour() {
+    	return null;
+    }
+    
+    //get the top 5 author who published a journal across the years
+    private String queryForTaskFive() {
+        Query query = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.AUTHOR, new SchemaCount(ConferenceData.ID))
+                .from("A4")
+                .groupBy(ConferenceData.AUTHOR)
+                .orderBy(new SchemaCount(ConferenceData.ID), APIQueryBuilder.OrderByRule.DESC)
+                .limit(5)
+                .build();
+        return query.execute();
     }
 
     private void executeQueryForQuestion(BufferedWriter writer, Supplier<String> function, int questionNo) throws Exception {
