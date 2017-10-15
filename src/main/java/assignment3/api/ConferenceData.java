@@ -26,7 +26,7 @@ public final class ConferenceData {
     /**
      * Combines all authors in a journal into one entity for faster querying.
      */
-    public static final SchemaString AUTHORS = new SchemaString("id");
+    public static final SchemaString AUTHORS = new SchemaString("author");
 
     public static final SchemaInt NUM_OF_IN_CITATIONS = new SchemaInt("numOfInCitations");
 
