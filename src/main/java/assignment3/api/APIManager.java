@@ -2,8 +2,21 @@ package assignment3.api;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.StringReader;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Supplier;
 
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
+
+import assignment3.logic.JsonGenerator;
 import assignment3.logic.Logic;
 import assignment3.logic.LogicManager;
 import assignment3.logic.QueryBuilder;
@@ -43,23 +56,22 @@ public class APIManager implements API {
     public void runQueries() {
     	try {
 			assignment4Queries();
-            //assignment3Queries();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
     }
     
-    private void assignment4Queries() throws Exception {
-//    	String taskOne = queryForTaskOne();
-//    	logic.saveResultIntoCsv(taskOne, 1);
-//    	String taskTwo = queryForTaskTwo();
-//    	logic.saveResultIntoCsv(taskTwo, 2);
-//    	String taskThree = queryForTaskThree();
-//    	logic.saveResultIntoCsv(taskThree, 3);
+    private void assignment4Queries() throws Exception { 
+    	String taskOne = queryForTaskOne();
+    	logic.saveResultIntoCsv(taskOne, 1);
+    	String taskTwo = queryForTaskTwo();
+    	logic.saveResultIntoCsv(taskTwo, 2);
+    	String taskThree = queryForTaskThree();
+    	logic.saveResultIntoCsv(taskThree, 3);
     	String taskFour = queryForTaskFour();
-//    	logic.saveResultIntoCsv(taskFour, 4);
-//    	String taskFive = queryForTaskFive();
-//    	logic.saveResultIntoCsv(taskFive, 5);
+    	logic.saveResultIntoCsv(taskFour, 4);
+    	String taskFive = queryForTaskFive();
+    	logic.saveResultIntoCsv(taskFive, 5);
     }
 
     @Deprecated
@@ -67,7 +79,7 @@ public class APIManager implements API {
         BufferedWriter writer;
 
         try {
-             writer = new BufferedWriter(new FileWriter("results2.txt"));
+             writer = new BufferedWriter(new FileWriter("results.txt"));
 
             executeQueryForQuestion(writer, this::queryForQuestion1, 1);
             executeQueryForQuestion(writer, this::queryForQuestion2, 2);
@@ -105,7 +117,7 @@ public class APIManager implements API {
                 .from("A4")
                 .where(ConferenceData.VENUE.equalsTo("ArXiv"))
                 .orderBy(ConferenceData.NUM_OF_IN_CITATIONS, APIQueryBuilder.OrderByRule.DESC)
-                .limit(10)
+                .limit(5)
                 .build();
         return query.execute();
     }
@@ -122,21 +134,63 @@ public class APIManager implements API {
     }
     
     private String queryForTaskFour() {
-        Query query = QueryBuilder.createNewBuilder()
+    	JsonReader jsonReader;
+    	JsonArray jsonTuples;
+    	JsonObjectBuilder objectBuilder;
+        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+        
+
+    	Query query = QueryBuilder.createNewBuilder()
                 .select(ConferenceData.ID)
                 .from("A4")
                 .where(ConferenceData.TITLE.equalsTo("Low-density parity check codes over GF(q)"))
                 .build();
-        System.out.println(query.execute());
+
         
         Query query2 = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.CITATION.citationId)
+                .select(ConferenceData.ID,ConferenceData.TITLE, 
+                		ConferenceData.AUTHORS, ConferenceData.CITATION.journalId, ConferenceData.CITATION.title
+                		,ConferenceData.CITATION.authors)
                 .from("A4")
-                .where(ConferenceData.CITATION.journalId.like("36adf8c327b95bdffe2778bf022e0234d433454a"))
+                .where(ConferenceData.CITATION.journalId.equalsTo("36adf8c327b95bdffe2778bf022e0234d433454a"))
                 .build();
-       // System.out.println(query.execute());
-       // System.out.println(query2.execute());
-        return "";
+        Set<String> citatingJournalIdSet = new HashSet<>();
+        jsonReader = Json.createReader(new StringReader(query2.execute()));
+        jsonTuples = jsonReader.readArray();
+        
+        for (int i=0; i<jsonTuples.size(); i++) {
+        	JsonObject jsonTuple = jsonTuples.getJsonObject(i);
+        	objectBuilder = addNewJsonObject(arrayBuilder, jsonTuple);
+        	arrayBuilder.add(objectBuilder);
+        	citatingJournalIdSet.add(jsonTuple.getString("id"));
+        }
+        
+        Query query3 = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.ID,ConferenceData.TITLE, 
+                		ConferenceData.AUTHORS, ConferenceData.CITATION.journalId, ConferenceData.CITATION.title
+                		,ConferenceData.CITATION.authors)
+                .from("A4")
+                .where(ConferenceData.CITATION.journalId.in(citatingJournalIdSet))
+                .build();
+        
+        jsonReader = Json.createReader(new StringReader(query3.execute()));
+        jsonTuples = jsonReader.readArray();
+        for (int i=0; i<jsonTuples.size(); i++) {
+        	JsonObject jsonTuple = jsonTuples.getJsonObject(i);
+        	objectBuilder = addNewJsonObject(arrayBuilder, jsonTuple);
+        	arrayBuilder.add(objectBuilder);
+        }        
+        
+        return arrayBuilder.build().toString();
+    }
+    private JsonObjectBuilder addNewJsonObject(JsonArrayBuilder builder, JsonObject jsonTuple) {
+    	JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    	for (Entry<String, JsonValue> entry : jsonTuple.entrySet()) {
+    		String value = entry.getValue().toString();
+
+    		objectBuilder.add(entry.getKey(), value);
+    	}
+    	return objectBuilder;
     }
     
     //get the top 5 author who published a journal across the years
@@ -288,4 +342,5 @@ public class APIManager implements API {
 
         return "Q14 \n" + query.execute() + "\n D14 \n" + query2.execute();
     }
+
 }

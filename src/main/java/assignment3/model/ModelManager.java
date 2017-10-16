@@ -127,7 +127,7 @@ public class ModelManager implements Model {
                 }
              
                 appendChildToElement("citationId", Integer.toString(id), citationElement, doc);
-                appendChildToElement("title", citation.title, citationElement, doc);
+                appendChildToElement("title", citation.citationtitle, citationElement, doc);
                 appendChildToElement("booktitle", citation.booktitle, citationElement, doc);
 
                 if (!citation.journalId.equals(DEFAULT_JOURNAL_ID)) {

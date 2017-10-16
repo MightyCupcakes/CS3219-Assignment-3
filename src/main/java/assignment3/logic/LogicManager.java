@@ -230,6 +230,7 @@ public class LogicManager implements Logic{
             headerList = Arrays.asList("yearOfPublication", "count");
             break;
         case 4:
+        	headerList = Arrays.asList("journalId", "journalTitle", "journalAuthors", "citedJournalId", "citedJournalTitle", "citedJournalAuthors");
             break;
         case 5:
             headerList = Arrays.asList("author", "count");
