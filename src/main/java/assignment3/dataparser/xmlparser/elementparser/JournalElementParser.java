@@ -23,6 +23,7 @@ public class JournalElementParser implements ElementParser {
         elementHandler.put("affiliation", (b, s) -> b.withAffiliation(s));
         elementHandler.put("abstract", (b, s) -> b.withAbstract(s));
         elementHandler.put("generatedid", (b, s) -> b.withId(s));
+        elementHandler.put("journalid", (b,s) -> b.withJournalId(s));
         elementHandler.put("numofincitations", (b, s) -> b.withInCitationTotal(s));
         elementHandler.put("venue", (b, s) -> b.withVenue(s));
         elementHandler.put("date", (b, s) -> b.withYear(s));

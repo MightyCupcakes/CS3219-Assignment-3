@@ -55,8 +55,10 @@ public class APIManager implements API {
     	logic.saveResultIntoCsv(taskTwo, 2);
     	String taskThree = queryForTaskThree();
     	logic.saveResultIntoCsv(taskThree, 3);
+    	String taskFour = queryForTaskFour();
+    	logic.saveResultIntoCsv(taskFour, 4);
     	String taskFive = queryForTaskFive();
-    	logic.saveResultIntoCsv(taskFive, 4);
+    	logic.saveResultIntoCsv(taskFive, 5);
     }
 
     @Deprecated
@@ -119,7 +121,21 @@ public class APIManager implements API {
     }
     
     private String queryForTaskFour() {
-    	return null;
+        Query query = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.ID)
+                .from("A4")
+                .where(ConferenceData.TITLE.equalsTo("Low-density parity check codes over GF(q)"))
+                .build();
+        System.out.println(query.execute());
+        
+        Query query2 = QueryBuilder.createNewBuilder()
+                .select(ConferenceData.CITATION.citationId)
+                .from("A4")
+                .where(ConferenceData.CITATION.title.like("36adf8c327b95bdffe2778bf022e0234d433454a"))
+                .build();
+       // System.out.println(query.execute());
+       // System.out.println(query2.execute());
+        return query.execute();
     }
     
     //get the top 5 author who published a journal across the years

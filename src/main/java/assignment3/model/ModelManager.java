@@ -94,6 +94,7 @@ public class ModelManager implements Model {
 
         
         int id = 1;
+        Map<String, String> titleToIdMap = new HashMap<>();
         for (SerializedJournal journal : journalList) {
             if (!journalSet.contains(journal)) {
             	Element journalElement = doc.createElement("journal");
@@ -101,6 +102,7 @@ public class ModelManager implements Model {
 
             	appendChildToElement("title", journal.title, journalElement, doc);
                 appendChildToElement("author", journal.author, journalElement, doc);
+                appendChildToElement("journalId", Integer.toString(id), journalElement, doc);
                 appendChildToElement("affiliation", journal.affiliation, journalElement, doc);
                 appendChildToElement("abstractText", journal.abstractText, journalElement, doc);
                 appendChildToElement("venue", journal.venue, journalElement, doc);
@@ -123,7 +125,8 @@ public class ModelManager implements Model {
                 if (!citation.authorsList.isEmpty()) {
                     citationElement.appendChild(authorsElement);
                 }
-
+             
+                appendChildToElement("citationId", Integer.toString(id), citationElement, doc);
                 appendChildToElement("title", citation.title, citationElement, doc);
                 appendChildToElement("booktitle", citation.booktitle, citationElement, doc);
 
