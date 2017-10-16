@@ -16,6 +16,11 @@ public class CitationAttribute<T extends Comparable> extends SchemaComparable<T>
     }
 
     @Override
+    public boolean isJoinTable() {
+        return true;
+    }
+
+    @Override
     public T getValue(SerializedJournalCitation serializedJournalCitation) {
         assert !nameOfAttribute.equals("");
 

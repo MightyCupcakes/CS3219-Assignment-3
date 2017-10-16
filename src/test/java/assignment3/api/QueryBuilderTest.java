@@ -92,15 +92,13 @@ public class QueryBuilderTest {
                 .from("")
                 .build();
 
-        Query expectedQuery = new AggregrateQuery(
-                Collections.emptyList(),
+        Query expectedQuery = new NormalQuery(
                 ImmutableList.of(citationTitle),
                 SchemaPredicate.ALWAYS_TRUE,
-                ImmutableList.of(""),
-                Collections.emptyList()
+                ImmutableList.of("")
         );
 
         assertTrue(expectedQuery.equals(query));
-        assertTrue(((AggregrateQuery) query).isQueryRetrivingCitations());
+        assertTrue(((NormalQuery) query).isQueryRetrivingCitations());
     }
 }

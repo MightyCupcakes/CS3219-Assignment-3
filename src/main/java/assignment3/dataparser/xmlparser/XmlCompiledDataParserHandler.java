@@ -1,5 +1,7 @@
 package assignment3.dataparser.xmlparser;
 
+import static java.util.Objects.isNull;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,16 +54,19 @@ public class XmlCompiledDataParserHandler extends DefaultHandler{
             return;
     	}
     		
-    	String attrValue = attributes.getValue("id"); 	
-    	if (qName.equalsIgnoreCase("journal") && !attrValue.equalsIgnoreCase(Integer.toString(counterId))) {
+    	String attrValue = attributes.getValue("id");
+
+    	if (qName.equalsIgnoreCase("journal") && !Integer.toString(counterId).equalsIgnoreCase(attrValue)) {
 			addNewJournal(counterId, false);
+			counterId = Integer.parseInt(attrValue);
 			currentElementParser.openElement(qName);
 			return;
     	}
     	
-    	if (qName.equalsIgnoreCase("citation") && !attrValue.equalsIgnoreCase(Integer.toString(counterId))) {
+    	if (qName.equalsIgnoreCase("citation") && !Integer.toString(counterId).equalsIgnoreCase(attrValue)) {
 			addCitationToJournal(counterId, false);
             currentElementParser = new CitationElementParser();
+            counterId = Integer.parseInt(attrValue);
 			currentElementParser.openElement(qName);
 			return;
     	}
@@ -70,7 +75,6 @@ public class XmlCompiledDataParserHandler extends DefaultHandler{
         if (currentElementParser != null) {
             currentElementParser.openElement(qName);
         }
-
 
     }
 
@@ -100,7 +104,6 @@ public class XmlCompiledDataParserHandler extends DefaultHandler{
 	    	journalElementParser = JournalElementParser.class.cast(currentElementParser);
 	    	SerializedJournal journal = journalElementParser.getJournal();
 	    	journalMap.put(key, journal);
-	    	counterId++;
             journalElementParser.setNewJournal();
 		}
     }
@@ -108,6 +111,5 @@ public class XmlCompiledDataParserHandler extends DefaultHandler{
     	CitationElementParser citationElementParser = CitationElementParser.class.cast(currentElementParser);
 		List<SerializedCitation> citationList = citationElementParser.getCitations();
 		citationMap.put(key, citationList);
-		counterId++;
 	}
 }

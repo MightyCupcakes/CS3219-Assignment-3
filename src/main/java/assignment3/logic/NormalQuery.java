@@ -18,42 +18,19 @@ import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 
-public class NormalQuery implements Query {
+public class NormalQuery extends QueryBase {
     private List<SchemaComparable> columnsToShow;
     private SchemaPredicate predicate;
     private List<String> tablesToRead;
-    private Logic logic;
-    private int limitRows;
-    private SchemaBase orderByColumn;
-    private APIQueryBuilder.OrderByRule orderByRule;
 
     protected List<SerializedJournalCitation> journals;
 
     public NormalQuery(List<SchemaComparable> columnsToShow, SchemaPredicate predicate, List<String> tablesToRead) {
+        super();
+
         this.columnsToShow = Collections.unmodifiableList(columnsToShow);
         this.predicate = predicate;
         this.tablesToRead = tablesToRead;
-        this.limitRows = -1;
-        this.orderByRule = APIQueryBuilder.OrderByRule.ASC;
-    }
-
-    private List<SerializedJournalCitation> filterOutRows(List<SerializedJournalCitation> data) {
-        return data.stream()
-                .filter(serializedJournalCitation -> predicate.test(serializedJournalCitation))
-                .collect(Collectors.toList());
-    }
-
-    void setDataSource(Logic logic) {
-        this.logic = logic;
-    }
-
-    void setLimitRows(int limit) {
-        this.limitRows = limit;
-    }
-
-    void setOrderByColumn(SchemaBase column, APIQueryBuilder.OrderByRule rule) {
-        this.orderByColumn = column;
-        this.orderByRule = rule;
     }
 
     @Override
@@ -68,44 +45,19 @@ public class NormalQuery implements Query {
                     .forEach(splitters::add);
         }
 
-        try {
-
-            if (!isNull(logic)) {
-                journals = new ArrayList<>(150);
-
-                for (String table : tablesToRead) {
-
-                    if (splitters.isEmpty()) {
-                        journals.addAll(logic.getDataFromTableWithNoCitations(table));
-                    } else {
-                        journals.addAll(logic.getDataFromTableWithNoCitations(table, splitters));
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            Logger.getLogger(this.getClass().toString())
-                    .warning("Exception thrown while trying to get data from LogicLayer: " + e.getMessage());
-            return EMPTY_JSON;
-        }
-
-        journals = filterOutRows(journals);
-
-        JsonGenerator json;
-
-        if (isNull(orderByColumn)) {
-            if (limitRows == -1) {
-                json = new JsonGenerator();
-            } else {
-                json = new JsonGenerator(limitRows);
-            }
-        } else {
-            if (limitRows == -1) {
-                json = new JsonSorter(orderByColumn, orderByRule);
-            } else {
-                json = new JsonSorter(orderByColumn, orderByRule, limitRows);
+        if (!isNull(logic)) {
+            try {
+                journals = getDataFromLogicLayer(splitters, tablesToRead);
+            } catch (Exception e) {
+                Logger.getLogger(this.getClass().toString())
+                        .warning("Exception thrown while trying to get data from LogicLayer: " + e.getMessage());
+                return EMPTY_JSON;
             }
         }
+
+        journals = filterOutRows(journals, predicate);
+
+        JsonGenerator json = getJsonGenerator();
 
         for (SerializedJournalCitation journal : journals) {
             JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
