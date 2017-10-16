@@ -118,33 +118,32 @@ public class QueryBuilder implements APIQueryBuilder {
             throw new QueryException("Only columns selected can be specified in the order by clause");
         }
 
-        if (selectColumns.stream().anyMatch(schemaBase -> schemaBase instanceof CitationAttribute) ||
-                selectColumns.stream().anyMatch(schemaBase -> schemaBase.isJoinTable())) {
+//        if (isQueryANormalQuery() && isQueryAJoinTableQuery()) {
+//
+//            List<SchemaComparable> normalColumns = new ArrayList<>();
+//            List<SchemaAggregate> aggregateColumns = new ArrayList<>();
+//
+//            selectColumns.stream()
+//                    .filter(schemaBase -> schemaBase instanceof SchemaComparable)
+//                    .map(schemaBase -> (SchemaComparable) schemaBase)
+//                    .forEach(normalColumns::add);
+//
+//            selectColumns.stream()
+//                    .filter(schemaBase -> schemaBase instanceof SchemaAggregate)
+//                    .map(schemaBase -> (SchemaAggregate) schemaBase)
+//                    .forEach(aggregateColumns::add);
+//
+//            AggregrateQuery query = new AggregrateQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
+//
+//            if (limitRows != -1) query.setLimitRows(limitRows);
+//            if (!isNull(orderByColumn)) query.setOrderByColumn(orderByColumn, orderByRule);
+//
+//            query.setQueryToRetrieveCitations();
+//            query.setDataSource(logic);
+//
+//            return query;
 
-            List<SchemaComparable> normalColumns = new ArrayList<>();
-            List<SchemaAggregate> aggregateColumns = new ArrayList<>();
-
-            selectColumns.stream()
-                    .filter(schemaBase -> schemaBase instanceof SchemaComparable)
-                    .map(schemaBase -> (SchemaComparable) schemaBase)
-                    .forEach(normalColumns::add);
-
-            selectColumns.stream()
-                    .filter(schemaBase -> schemaBase instanceof SchemaAggregate)
-                    .map(schemaBase -> (SchemaAggregate) schemaBase)
-                    .forEach(aggregateColumns::add);
-
-            AggregrateQuery query = new AggregrateQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
-
-            if (limitRows != -1) query.setLimitRows(limitRows);
-            if (!isNull(orderByColumn)) query.setOrderByColumn(orderByColumn, orderByRule);
-
-            query.setQueryToRetrieveCitations();
-            query.setDataSource(logic);
-
-            return query;
-
-        } else if (selectColumns.stream().allMatch(schemaBase -> schemaBase instanceof SchemaComparable)) {
+         if (isQueryANormalQuery()) {
             // If all columns selected are normal comparable columns (like author, title) etc,
             // then it is a normal query.
             List<SchemaComparable> normalSelectColumns = new ArrayList<>();
@@ -156,6 +155,7 @@ public class QueryBuilder implements APIQueryBuilder {
             NormalQuery query = new NormalQuery(normalSelectColumns, whereClause, fromTables);
             query.setDataSource(logic);
 
+            if (isQueryAJoinTableQuery()) query.setQueryToRetrieveCitations();
             if (limitRows != -1) query.setLimitRows(limitRows);
             if (!isNull(orderByColumn)) query.setOrderByColumn(orderByColumn, orderByRule);
 
@@ -180,11 +180,21 @@ public class QueryBuilder implements APIQueryBuilder {
             AggregrateQuery query = new AggregrateQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
             query.setDataSource(logic);
 
+            if (isQueryAJoinTableQuery()) query.setQueryToRetrieveCitations();
             if (limitRows != -1) query.setLimitRows(limitRows);
             if (!isNull(orderByColumn)) query.setOrderByColumn(orderByColumn, orderByRule);
 
             return query;
         }
+
     }
 
+    private boolean isQueryAJoinTableQuery() {
+        return selectColumns.stream().anyMatch(schemaBase -> schemaBase.isJoinTable());
+    }
+
+    private boolean isQueryANormalQuery() {
+        return selectColumns.stream().allMatch(schemaBase -> schemaBase instanceof SchemaComparable)
+                && groupByClause.isEmpty();
+    }
 }

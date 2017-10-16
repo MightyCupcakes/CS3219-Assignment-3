@@ -1,10 +1,12 @@
 package assignment3.logic;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -68,9 +70,12 @@ public class JsonGenerator {
             return nestedBuilder;
         }
 
-        public void generateJson(String name, Object value) {
-            keyValuePair.put(name, value.toString());
-            builder.add(name, value.toString());
+        public void generateJson(String name, @Nullable Object value) {
+
+            String stringValue = isNull(value) ? "NULL" : value.toString();
+
+            keyValuePair.put(name, stringValue);
+            builder.add(name, stringValue);
         }
 
         public void generateJson(String name, Iterable<SerializedCitation> value) {

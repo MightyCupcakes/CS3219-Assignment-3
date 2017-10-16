@@ -26,7 +26,6 @@ public class CitationElementParser implements ElementParser {
         elementHandler.put("date", (b, s) -> b.withYear(s));
         elementHandler.put("booktitle", (b, s) -> b.withBooktitle(s));
         elementHandler.put("citedjournalid", (b, s) -> b.withJournalId(s));
-        elementHandler.put("citationid",(b, s) -> b.withCitationId(s));
     }
 
     public CitationElementParser() {

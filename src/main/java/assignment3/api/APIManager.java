@@ -43,22 +43,23 @@ public class APIManager implements API {
     public void runQueries() {
     	try {
 			assignment4Queries();
+            //assignment3Queries();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
     }
     
     private void assignment4Queries() throws Exception {
-    	String taskOne = queryForTaskOne();
-    	logic.saveResultIntoCsv(taskOne, 1);
-    	String taskTwo = queryForTaskTwo();
-    	logic.saveResultIntoCsv(taskTwo, 2);
-    	String taskThree = queryForTaskThree();
-    	logic.saveResultIntoCsv(taskThree, 3);
+//    	String taskOne = queryForTaskOne();
+//    	logic.saveResultIntoCsv(taskOne, 1);
+//    	String taskTwo = queryForTaskTwo();
+//    	logic.saveResultIntoCsv(taskTwo, 2);
+//    	String taskThree = queryForTaskThree();
+//    	logic.saveResultIntoCsv(taskThree, 3);
     	String taskFour = queryForTaskFour();
-    	logic.saveResultIntoCsv(taskFour, 4);
-    	String taskFive = queryForTaskFive();
-    	logic.saveResultIntoCsv(taskFive, 5);
+//    	logic.saveResultIntoCsv(taskFour, 4);
+//    	String taskFive = queryForTaskFive();
+//    	logic.saveResultIntoCsv(taskFive, 5);
     }
 
     @Deprecated
@@ -66,7 +67,7 @@ public class APIManager implements API {
         BufferedWriter writer;
 
         try {
-             writer = new BufferedWriter(new FileWriter("results.txt"));
+             writer = new BufferedWriter(new FileWriter("results2.txt"));
 
             executeQueryForQuestion(writer, this::queryForQuestion1, 1);
             executeQueryForQuestion(writer, this::queryForQuestion2, 2);
@@ -131,11 +132,11 @@ public class APIManager implements API {
         Query query2 = QueryBuilder.createNewBuilder()
                 .select(ConferenceData.CITATION.citationId)
                 .from("A4")
-                .where(ConferenceData.CITATION.title.like("36adf8c327b95bdffe2778bf022e0234d433454a"))
+                .where(ConferenceData.CITATION.journalId.like("36adf8c327b95bdffe2778bf022e0234d433454a"))
                 .build();
        // System.out.println(query.execute());
        // System.out.println(query2.execute());
-        return query.execute();
+        return "";
     }
     
     //get the top 5 author who published a journal across the years

@@ -25,17 +25,12 @@ import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 import assignment3.schema.aggregate.SchemaAggregate;
 
-public class AggregrateQuery implements Query {
+public class AggregrateQuery extends QueryBase {
     private Set<SchemaAggregate> aggregateColumnsToShow;
     private Set<SchemaComparable> normalColumnsToShow;
     private SchemaPredicate predicate;
     private List<String> tablesToRead;
     private List<SchemaComparable> groupByColumns;
-    private Logic logic;
-    private boolean isJoinTable;
-    private int limitRows;
-    private SchemaBase orderByColumn;
-    private APIQueryBuilder.OrderByRule orderByRule;
 
     protected List<SerializedJournalCitation> journals;
 
@@ -47,22 +42,15 @@ public class AggregrateQuery implements Query {
                            List<String> tablesToRead,
                            List<SchemaComparable> groupByColumns) {
 
+        super();
+
         this.aggregateColumnsToShow = new HashSet<>(aggregatecolumnsToShow);
         this.normalColumnsToShow = new HashSet<>(normalColumnsToShow);
         this.predicate = predicate;
         this.tablesToRead = tablesToRead;
         this.groupByColumns = Collections.unmodifiableList(groupByColumns);
-        this.isJoinTable = false;
-        this.limitRows = -1;
-        this.orderByRule = APIQueryBuilder.OrderByRule.ASC;
 
         this.groupedRows = MultimapBuilder.ListMultimapBuilder.hashKeys().arrayListValues().build();
-    }
-
-    private List<SerializedJournalCitation> filterOutRows(List<SerializedJournalCitation> data) {
-        return data.stream()
-                .filter(serializedJournalCitation -> predicate.test(serializedJournalCitation))
-                .collect(Collectors.toList());
     }
 
     private void groupRows(List<SerializedJournalCitation> data) {
@@ -75,44 +63,9 @@ public class AggregrateQuery implements Query {
         }
     }
 
-    void setDataSource(Logic logic) {
-        this.logic = logic;
-    }
-
-    void setLimitRows(int limit) {
-        this.limitRows = limit;
-    }
-
-    void setOrderByColumn(SchemaBase column, APIQueryBuilder.OrderByRule rule) {
-        this.orderByColumn = column;
-        this.orderByRule = rule;
-    }
-
-    public void setQueryToRetrieveCitations() {
-        this.isJoinTable = true;
-    }
-
-    public boolean isQueryRetrivingCitations() {
-        return this.isJoinTable;
-    }
-
     public String executeAndGetResult(List<SerializedJournalCitation> journalCitations) {
 
-        JsonGenerator json;
-
-        if (isNull(orderByColumn)) {
-            if (limitRows == -1) {
-                json = new JsonGenerator();
-            } else {
-                json = new JsonGenerator(limitRows);
-            }
-        } else {
-            if (limitRows == -1) {
-                json = new JsonSorter(orderByColumn, orderByRule);
-            } else {
-                json = new JsonSorter(orderByColumn, orderByRule, limitRows);
-            }
-        }
+        JsonGenerator json = getJsonGenerator();
 
         if (groupByColumns.isEmpty()) {
             // No group by means all one big group (we assume the query is valid at this stage
@@ -120,8 +73,11 @@ public class AggregrateQuery implements Query {
             JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
 
             journalCitations.forEach(
-                    journal -> aggregateColumnsToShow
-                            .forEach(schemaAggregate -> schemaAggregate.accumulate(journal))
+                    journal -> {
+                        aggregateColumnsToShow
+                                .forEach(schemaAggregate -> schemaAggregate.accumulate(journal));
+
+                    }
             );
 
             aggregateColumnsToShow.forEach(schemaAggregate ->
@@ -200,30 +156,7 @@ public class AggregrateQuery implements Query {
             }
 
             try {
-
-                if (isQueryRetrivingCitations()) {
-
-                    for (String table : tablesToRead) {
-
-                        if (splitters.isEmpty()) {
-                            journals.addAll(logic.getDataFromTableWithCitations(table));
-                        } else {
-                            journals.addAll(logic.getDataFromTableWithCitations(table, splitters));
-                        }
-
-                    }
-                } else if (!isQueryRetrivingCitations()) {
-
-                    for (String table : tablesToRead) {
-
-                        if (splitters.isEmpty()) {
-                            journals.addAll(logic.getDataFromTableWithNoCitations(table));
-                        } else {
-                            journals.addAll(logic.getDataFromTableWithNoCitations(table, splitters));
-                        }
-                    }
-                }
-
+                journals = getDataFromLogicLayer(splitters, tablesToRead);
             } catch (Exception e) {
                 Logger.getLogger(this.getClass().toString())
                         .warning("Exception thrown while trying to get data from LogicLayer");
@@ -232,7 +165,7 @@ public class AggregrateQuery implements Query {
             }
         }
 
-        journals = filterOutRows(journals);
+        journals = filterOutRows(journals, predicate);
 
         return executeAndGetResult(journals);
     }
