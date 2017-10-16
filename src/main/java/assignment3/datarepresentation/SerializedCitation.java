@@ -11,7 +11,7 @@ public class SerializedCitation {
 
 	private static final String EMPTY_BOOK_TITLE = "";
 
-	public final String title;
+	public final String citationtitle;
     public final int year;
     public final String booktitle;
     public final String journalId;
@@ -23,7 +23,7 @@ public class SerializedCitation {
     private SerializedCitation(String title, int year, List<String> listOfAuthors,
     		String booktitle, String id) {
 
-        this.title = title;
+        this.citationtitle = title;
         this.year = year;
         this.journalId = id;
         this.authorsList = new ArrayList<>();
@@ -54,7 +54,7 @@ public class SerializedCitation {
     public boolean equals(Object other) {
         return other == this
                 || (other instanceof SerializedCitation
-                && this.title.equals(((SerializedCitation) other).title)
+                && this.citationtitle.equals(((SerializedCitation) other).citationtitle)
                 && this.year == ((SerializedCitation) other).year
                 && this.authorsList.equals(((SerializedCitation) other).authorsList)
                 && this.journalId.equals(((SerializedCitation) other).journalId)
@@ -63,7 +63,7 @@ public class SerializedCitation {
 
     @Override
     public int hashCode() {
-        return Objects.hash(authors, title, year);
+        return Objects.hash(authors, citationtitle, year);
     }
 
     public static class Builder {

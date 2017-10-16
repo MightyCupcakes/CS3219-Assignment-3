@@ -61,7 +61,7 @@ public class JsonGenerator {
             citation.authorsList.forEach(moreNested::add);
 
             nestedBuilder.add("authors", moreNested);
-            nestedBuilder.add("title", citation.title);
+            nestedBuilder.add("title", citation.citationtitle);
             nestedBuilder.add("year",  citation.year);
             nestedBuilder.add("booktitle", citation.booktitle);
 
