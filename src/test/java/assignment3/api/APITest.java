@@ -71,13 +71,13 @@ public class APITest {
         JsonArray object = jsonReader.readArray();
         jsonReader.close();
 
-      //  assertEquals(74, object.size());
+        assertEquals(75, object.size());
     }
 
     @Test
     public void test_API_getCitations() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.CITATION.title)
+                .select(ConferenceData.AUTHORS, ConferenceData.CITATION.title)
                 .from("xmlTestAPI")
                 .build();
 
@@ -85,7 +85,7 @@ public class APITest {
         JsonArray object = jsonReader.readArray();
         jsonReader.close();
 
-        assertEquals(5, object.size());
+        assertEquals(17, object.size());
     }
 
     @Test
@@ -100,9 +100,9 @@ public class APITest {
         JsonArray object = jsonReader.readArray();
         jsonReader.close();
 
-        //assertEquals(3, object.size());
-//        assertEquals("Low-density parity check codes over GF(q)",
-//                object.getJsonObject(0).getString(ConferenceData.CITATION.title.getNameOfAttribute()));
+        assertEquals(3, object.size());
+        assertEquals("Low-density parity check codes over GF(q)",
+                object.getJsonObject(0).getString(ConferenceData.CITATION.title.getNameOfAttribute()));
     }
 
     @Test

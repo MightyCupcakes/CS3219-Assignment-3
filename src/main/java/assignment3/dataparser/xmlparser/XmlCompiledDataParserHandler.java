@@ -1,7 +1,5 @@
 package assignment3.dataparser.xmlparser;
 
-import static java.util.Objects.isNull;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,38 +39,41 @@ public class XmlCompiledDataParserHandler extends DefaultHandler{
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
-    	if (qName.equalsIgnoreCase("main")) {
-    		currentElementParser = new JournalElementParser();
-    		return;
-    	}
-    	
-    	if (qName.equalsIgnoreCase("citationlists")) {
-        	this.counterId = 1;
+
+        String attrValue = attributes.getValue("id");
+
+        if (qName.equalsIgnoreCase("main")) {
+            // Creates a new journal parser to parse the journals following this tag
+            currentElementParser = new JournalElementParser();
+
+        } else if (qName.equalsIgnoreCase("journal")) {
+            // Starting tag of a new journal, update counter id to its ID
+            counterId = Integer.parseInt(attrValue);
+            currentElementParser.openElement(qName);
+
+        } else if (qName.equalsIgnoreCase("citationlists")) {
+            // End of journal parsing, reset counter id to 0 (so that the first citation
+            // will automatically update the counter id to the journal id it is linked to
+            this.counterId = 0;
+
             journalElementParser = (JournalElementParser) currentElementParser;
             currentElementParser = new CitationElementParser();
             currentElementParser.openElement(qName);
-            return;
-    	}
-    		
-    	String attrValue = attributes.getValue("id");
 
-    	if (qName.equalsIgnoreCase("journal") && !Integer.toString(counterId).equalsIgnoreCase(attrValue)) {
-			addNewJournal(counterId, false);
-			counterId = Integer.parseInt(attrValue);
-			currentElementParser.openElement(qName);
-			return;
-    	}
-    	
-    	if (qName.equalsIgnoreCase("citation") && !Integer.toString(counterId).equalsIgnoreCase(attrValue)) {
-			addCitationToJournal(counterId, false);
+        } else if (qName.equalsIgnoreCase("citation") && !Integer.toString(counterId).equals(attrValue)) {
+
+            if (counterId > 0) {
+                // Only link citations if the counter id is non-zero (because we set it to 0 just now)
+                // and if it is 0, no citations has been parsed yet.
+                addCitationToJournal(counterId, false);
+            }
+
             currentElementParser = new CitationElementParser();
+            // Update counter id to the linked journal id.
             counterId = Integer.parseInt(attrValue);
-			currentElementParser.openElement(qName);
-			return;
-    	}
- 
-    	
-        if (currentElementParser != null) {
+            currentElementParser.openElement(qName);
+
+        } else if (currentElementParser != null) {
             currentElementParser.openElement(qName);
         }
 
@@ -80,10 +81,15 @@ public class XmlCompiledDataParserHandler extends DefaultHandler{
 
 	@Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-    	if (qName.equalsIgnoreCase(this.conferenceName)) {
+        if (qName.equalsIgnoreCase("citationlists")) {
             assert currentElementParser instanceof CitationElementParser;
-            addNewJournal(counterId, true);
-            addCitationToJournal(counterId, true);        
+            // Links the last citation to its journal
+            addCitationToJournal(counterId, true);
+
+        } else if (qName.equalsIgnoreCase("journal")) {
+            addNewJournal(counterId);
+            currentElementParser.closeElement(qName);
+
         } else if (currentElementParser != null) {
             currentElementParser.closeElement(qName);
         }
@@ -96,16 +102,12 @@ public class XmlCompiledDataParserHandler extends DefaultHandler{
         }
     }
     
-    private void addNewJournal(int key, boolean isEndElement) {
-		if (isEndElement == true) {
-			SerializedJournal journal = journalElementParser.getJournal();
-			journalMap.put(key, journal);
-		} else {
-	    	journalElementParser = JournalElementParser.class.cast(currentElementParser);
-	    	SerializedJournal journal = journalElementParser.getJournal();
-	    	journalMap.put(key, journal);
-            journalElementParser.setNewJournal();
-		}
+    private void addNewJournal(int key) {
+        journalElementParser = JournalElementParser.class.cast(currentElementParser);
+        SerializedJournal journal = journalElementParser.getJournal();
+        journalMap.put(key, journal);
+        journalElementParser.setNewJournal();
+
     }
     private void addCitationToJournal(int key, boolean isEndElement) {
     	CitationElementParser citationElementParser = CitationElementParser.class.cast(currentElementParser);
