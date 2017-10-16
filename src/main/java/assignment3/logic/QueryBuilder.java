@@ -118,31 +118,6 @@ public class QueryBuilder implements APIQueryBuilder {
             throw new QueryException("Only columns selected can be specified in the order by clause");
         }
 
-//        if (isQueryANormalQuery() && isQueryAJoinTableQuery()) {
-//
-//            List<SchemaComparable> normalColumns = new ArrayList<>();
-//            List<SchemaAggregate> aggregateColumns = new ArrayList<>();
-//
-//            selectColumns.stream()
-//                    .filter(schemaBase -> schemaBase instanceof SchemaComparable)
-//                    .map(schemaBase -> (SchemaComparable) schemaBase)
-//                    .forEach(normalColumns::add);
-//
-//            selectColumns.stream()
-//                    .filter(schemaBase -> schemaBase instanceof SchemaAggregate)
-//                    .map(schemaBase -> (SchemaAggregate) schemaBase)
-//                    .forEach(aggregateColumns::add);
-//
-//            AggregrateQuery query = new AggregrateQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
-//
-//            if (limitRows != -1) query.setLimitRows(limitRows);
-//            if (!isNull(orderByColumn)) query.setOrderByColumn(orderByColumn, orderByRule);
-//
-//            query.setQueryToRetrieveCitations();
-//            query.setDataSource(logic);
-//
-//            return query;
-
          if (isQueryANormalQuery()) {
             // If all columns selected are normal comparable columns (like author, title) etc,
             // then it is a normal query.
