@@ -15,19 +15,17 @@ public class SerializedCitation {
     public final int year;
     public final String booktitle;
     public final String journalId;
-    public final String citationId;
     public String authors;
     public final int numOfAuthors;
 
     public List<String> authorsList;
 
     private SerializedCitation(String title, int year, List<String> listOfAuthors,
-    		String booktitle, String id, String citationId) {
+    		String booktitle, String id) {
 
         this.title = title;
         this.year = year;
         this.journalId = id;
-        this.citationId = citationId;
         this.authorsList = new ArrayList<>();
         this.booktitle = isEmpty(booktitle) ? EMPTY_BOOK_TITLE : booktitle;
 
@@ -122,7 +120,7 @@ public class SerializedCitation {
         }
 
         public SerializedCitation build() {
-            return new SerializedCitation(this.title, this.year, this.authors, this.booktitle, this.id, this.citationId);
+            return new SerializedCitation(this.title, this.year, this.authors, this.booktitle, this.id);
         }
 
     }

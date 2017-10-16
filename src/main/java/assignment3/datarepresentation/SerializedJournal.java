@@ -10,7 +10,6 @@ public class SerializedJournal {
     public static final String DEFAULT_JOURNAL_ID = String.valueOf(Integer.MIN_VALUE);
 
     public final String id;
-    public final String journalId;
     public final String title;
     public final String author;
     public final String affiliation;
@@ -25,7 +24,6 @@ public class SerializedJournal {
     public List<String> outCitationsId;
 
     protected SerializedJournal (String id,
-    						   String journalId,
                                String title,
                                String author,
                                String affiliation,
@@ -37,7 +35,6 @@ public class SerializedJournal {
                                List<String> outCitationsId,
                                List<SerializedCitation> citedArticles) {
         this.id = id;
-        this.journalId = journalId;
         this.title = title;
         this.author = author;
         this.affiliation = affiliation;
@@ -175,10 +172,7 @@ public class SerializedJournal {
             return this;
         }
         
-        public Builder withJournalId(String id) {
-        	this.journalId = id;
-        	return this;
-        }
+
 
         public Builder withVenue(String venue) {
             this.venue = venue;
@@ -188,7 +182,6 @@ public class SerializedJournal {
 
         public SerializedJournal build() {
             return new SerializedJournal(id,
-            		journalId,
                     title,
                     author.toString(),
                     affiliation,
