@@ -128,7 +128,7 @@ public class APIManager implements API {
                 .from("A4")
                 .where(ConferenceData.VENUE.like("ICSE"))
                 .groupBy(ConferenceData.YEAR_OF_PUBLICATION)
-                .orderBy(new SchemaCountUnique(ConferenceData.ID), APIQueryBuilder.OrderByRule.DESC)
+                .orderBy(ConferenceData.YEAR_OF_PUBLICATION, APIQueryBuilder.OrderByRule.ASC)
                 .build();
         return query.execute();
     }
@@ -193,14 +193,15 @@ public class APIManager implements API {
     	return objectBuilder;
     }
     
-    //get the top 5 author who published a journal across the years
+    //get the number of publication in ArXiv for the past 6 year
     private String queryForTaskFive() {
         Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.AUTHOR, new SchemaCount(ConferenceData.ID))
+                .select(ConferenceData.YEAR_OF_PUBLICATION, new SchemaCount(ConferenceData.ID))
                 .from("A4")
-                .groupBy(ConferenceData.AUTHOR)
-                .orderBy(new SchemaCount(ConferenceData.ID), APIQueryBuilder.OrderByRule.DESC)
-                .limit(5)
+                .where(ConferenceData.VENUE.equalsTo("ArXiv"))
+                .groupBy(ConferenceData.YEAR_OF_PUBLICATION)
+                .orderBy(ConferenceData.YEAR_OF_PUBLICATION, APIQueryBuilder.OrderByRule.DESC)
+                .limit(6)
                 .build();
         return query.execute();
     }

@@ -233,7 +233,7 @@ public class LogicManager implements Logic{
         	headerList = Arrays.asList("journalId", "journalTitle", "journalAuthors", "citedJournalId", "citedJournalTitle", "citedJournalAuthors");
             break;
         case 5:
-            headerList = Arrays.asList("author", "count");
+            headerList = Arrays.asList("year", "count");
             break;
         default: throw new Exception("Invalid Task Type");
         }
