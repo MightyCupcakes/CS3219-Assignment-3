@@ -97,14 +97,22 @@ d3.csv("3.csv", function(error, data) {
 		.attr("class", "y axis")
 		.call(yAxis);
 	// Add Title
-	svg.append("text")
-        .attr("x", (width / 2))             
-        .attr("y", 0 - (margin.top / 2))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .style("text-decoration", "underline")  
-        .text("Total publications vs Year for Venue = 'ICSE'");
+  svg.append("text")
+    .attr("class", "title")
+    .attr("x", x(data[0].yearOfPublication))
+    .attr("y", -15)
+    .text("Total publications vs Year for Venue = 'ICSE'");
+  //add y axis text
+  svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(-35," + (height/2) + ")rotate(-90)")
+    .text("Number of papers publihesd");
+  //add x axis text
 
+  svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(-35," + (width/2) + ")")
+    .text("Year");
 	// focus and mouseover
   	var focus = svg.append("g")
      	 .attr("class", "focus")
