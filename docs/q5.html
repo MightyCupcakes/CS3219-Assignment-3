@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+ <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet" data-semver="3.0.1" data-require="normalize@*" />
+
+<style>
+#chart {                                                         
+  height: 360px;                                                  
+  position: relative;                                             
+  width: 360px;                                                   
+}   
+
+.tooltip { 
+  background: #eee;                                             
+  box-shadow: 0 0 5px #999999;                                    
+  color: #333;                                                    
+  display: none;                                                  
+  font-size: 12px;                                                
+  left: 130px;                                                    
+  padding: 10px;                                                  
+  position: absolute;                                             
+  text-align: center;                                             
+  top: 95px;                                                      
+  width: 80px;                                                    
+  z-index: 10;                                                    
+}                                                                
+
+rect {
+  stroke-width: 2;
+}
+</style>
+<body>
+  <script src="//d3js.org/d3.v3.min.js"></script>
+  <script>
+
+  var width = 1060,
+  height = 800,
+  radius = Math.min(width, height) / 2;
+  var legendRectSize = 18;
+  var legendSpacing = 4;
+  var color = d3.scale.ordinal()
+  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c"]);
+
+  var arc = d3.svg.arc()
+  .outerRadius(radius)
+  .innerRadius(radius - 120);
+
+  var pie = d3.layout.pie()
+  .sort(null)
+  .value(function(d) { return d.count; });
+
+  var tooltip = d3.select('#chart')
+  .append('div')
+  .attr('class', 'tooltip');
+
+  tooltip.append('div')
+  .attr('class', 'year');
+  tooltip.append('div')
+  .attr('class', 'count');
+  tooltip.append('div')
+  .attr('class', 'percent');
+
+
+  var svg = d3.select("body").append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .append("g")
+  .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+  d3.csv("5.csv", function(error, data) {
+    data.forEach(function(d) { d.count=+d.count;});
+
+
+    var path = svg.selectAll("path")
+    .data(pie(data))
+    .enter();
+
+
+    path.append('path')
+    .attr("d", arc)
+    .attr('fill', function(d, i) { return color(d.data.year);});
+
+
+    path.append("text")
+    .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+    .attr("dy", ".35em")
+    .text(function(d) { return d.data.year; });
+
+    path.on('mouseover', function(d) {
+      var total = d3.sum(data.map(function(d) { 
+        return d.count;
+      }));
+      var percent = Math.round(1000 * d.data.count / total) / 10;
+      tooltip.select('year').text(d.data.year);
+      tooltip.select('count').text(d.data.count);
+      tooltip.select('percent').text(percent + '%');
+      tooltip.style('display', 'block');        
+    });
+    path.on('mouseout', function() {
+      tooltip.style('display', 'none');
+    });
+
+
+  });
+
+
+</script>
+</body>
