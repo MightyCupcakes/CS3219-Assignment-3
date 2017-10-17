@@ -80,6 +80,11 @@ d3.csv("1.csv", type, function(error, data) {
       .attr("class", "y axis")
       .call(yAxis);
 
+  svg.append("text")
+      .attr("text-anchor", "middle")
+      .attr("transform", "translate(-25," + (height/2) + ")rotate(-90)")
+      .text("Number of papers published");
+
   var bars = svg.selectAll(".bar")
       .data(data)
     .enter().append("rect")
