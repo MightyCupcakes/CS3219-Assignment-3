@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style> /* set the CSS */
+ 
+body { font: 12px Arial;}
+ 
+path { 
+  stroke: steelblue;
+  stroke-width: 2;
+  fill: none;
+}
+ 
+.axis path,
+.axis line {
+	fill: none;
+	stroke: grey;
+	stroke-width: 1;
+	shape-rendering: crispEdges;
+}
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+</style>
+<body>
+ 
+<!-- load the d3.js library -->	
+<script src="//d3js.org/d3.v3.min.js"></script>
+ 
+<script>
+ 
+// Set the dimensions of the canvas / graph
+var	margin = {top: 30, right: 20, bottom: 30, left: 50},
+	width = 600 - margin.left - margin.right,
+	height = 270 - margin.top - margin.bottom;
+ 
+// Parse the date / time
+var	parseDate = d3.time.format("%Y").parse;
+
+// for mouseover
+var bisectDate = d3.bisector(function(d) { return d.yearOfPublication; }).left;
+// Set the ranges
+var	x = d3.time.scale().range([0, width]);
+var	y = d3.scale.linear().range([height, 0]);
+ 
+// Define the axes
+var xAxis = d3.svg.axis()
+              .scale(x)
+              .orient("bottom")
+              .tickFormat(d3.time.format("%Y"));
+ 
+var	yAxis = d3.svg.axis().scale(y)
+	.orient("left").ticks(10);
+ 
+// Define the line
+var	valueline = d3.svg.line()
+	.x(function(d) { return x(d.yearOfPublication); })
+	.y(function(d) { return y(d.count); });
+    
+// Adds the svg canvas
+var	svg = d3.select("body")
+	.append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+	.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+ 
+// Get the data
+d3.csv("3.csv", function(error, data) {
+	data.forEach(function(d) {
+		d.yearOfPublication = parseDate(d.yearOfPublication);
+		d.count = +d.count;
+	});
+ 
+	// Scale the range of the data
+	x.domain(d3.extent(data, function(d) { return d.yearOfPublication; }));
+	y.domain([0, d3.max(data, function(d) { return d.count; })]);
+ 
+	// Add the valueline path.
+	svg.append("path")	
+		.attr("class", "line")
+		.attr("d", valueline(data));
+ 
+	// Add the X Axis
+	svg.append("g")		
+		.attr("class", "x axis")
+		.attr("transform", "translate(0," + height + ")")
+		.call(xAxis);
+ 
+	// Add the Y Axis
+	svg.append("g")		
+		.attr("class", "y axis")
+		.call(yAxis);
+	// Add Title
+	svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("Total publications vs Year for Venue = 'ICSE'");
+
+	// focus and mouseover
+  	var focus = svg.append("g")
+     	 .attr("class", "focus")
+      	.style("display", "none");
+
+  	focus.append("circle")
+     	 .attr("r", 4.5);
+
+  	focus.append("text")
+     	 .attr("x", 9)
+     	 .attr("dy", ".35em");
+
+  	svg.append("rect")
+      	.attr("class", "overlay")
+      	.attr("width", width)
+      	.attr("height", height)
+      	.on("mouseover", function() { focus.style("display", null); })
+      	.on("mouseout", function() { focus.style("display", "none"); })
+      	.on("mousemove", mousemove);
+
+  	function mousemove() {
+    	var x0 = x.invert(d3.mouse(this)[0]),
+      	  i = bisectDate(data, x0, 1),
+      	  d0 = data[i - 1],
+      	  d1 = data[i],
+       	  d = x0 - d0.yearOfPublication > d1.yearOfPublication - x0 ? d1 : d0;
+    	focus.attr("transform", "translate(" + x(d.yearOfPublication) + "," + y(d.count) + ")");
+    	focus.select("text").text( (" " + d.count));
+  }		
+ 
+});
+ 
+</script>
+</body>
