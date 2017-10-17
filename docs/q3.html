@@ -36,8 +36,8 @@ path {
  
 // Set the dimensions of the canvas / graph
 var	margin = {top: 30, right: 20, bottom: 30, left: 50},
-	width = 600 - margin.left - margin.right,
-	height = 270 - margin.top - margin.bottom;
+	width = 1000 - margin.left - margin.right,
+	height = 500 - margin.top - margin.bottom;
  
 // Parse the date / time
 var	parseDate = d3.time.format("%Y").parse;
@@ -106,12 +106,12 @@ d3.csv("3.csv", function(error, data) {
   svg.append("text")
     .attr("text-anchor", "middle")
     .attr("transform", "translate(-35," + (height/2) + ")rotate(-90)")
-    .text("Number of papers publihesd");
+    .text("Number of papers published");
   //add x axis text
-
   svg.append("text")
+    .attr("class", "x label")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(-35," + (width/2) + ")")
+    .attr("transform", "translate(" + (width/2) + "," + (height -10 ) + ")")
     .text("Year");
 	// focus and mouseover
   	var focus = svg.append("g")
