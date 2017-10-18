@@ -2,8 +2,6 @@ package assignment3.api;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Collections;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -18,7 +16,6 @@ import assignment3.schema.SchemaPredicate;
 import assignment3.schema.SchemaString;
 import assignment3.schema.aggregate.SchemaCount;
 import assignment3.schema.citations.CitationAttribute;
-import assignment3.schema.citations.SchemaCitation;
 
 
 public class QueryBuilderTest {
@@ -85,7 +82,7 @@ public class QueryBuilderTest {
 
     @Test
     public void testCitationQueryBuilder() throws Exception {
-        CitationAttribute citationTitle = SchemaCitation.INSTANCE.title;
+        CitationAttribute citationTitle = ConferenceData.CITATION.title;
 
         Query query = QueryBuilder.createNewBuilder()
                 .select(citationTitle)

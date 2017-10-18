@@ -8,14 +8,13 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import assignment3.api.ConferenceData;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.aggregate.SchemaAggregate;
-import assignment3.schema.aggregate.SchemaCountUnique;
 import assignment3.schema.aggregate.SchemaSum;
 import assignment3.schema.citations.CitationAttribute;
-import assignment3.schema.citations.SchemaCitation;
 
 public class SchemaSumTest {
 
@@ -30,7 +29,7 @@ public class SchemaSumTest {
 
     @Test
     public void test_schemaSum() {
-        CitationAttribute author = SchemaCitation.INSTANCE.numOfAuthors;
+        CitationAttribute author = ConferenceData.CITATION.numOfAuthors;
         SchemaAggregate sumCitationAuthors = new SchemaSum(author);
 
         for(SerializedJournalCitation serializedJournalCitation: journals) {

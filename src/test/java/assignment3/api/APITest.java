@@ -77,7 +77,7 @@ public class APITest {
     @Test
     public void test_API_getCitations() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.AUTHORS, ConferenceData.CITATION.title)
+                .select(ConferenceData.AUTHORS, ConferenceData.ID, ConferenceData.CITATION.title)
                 .from("xmlTestAPI")
                 .build();
 
@@ -86,6 +86,25 @@ public class APITest {
         jsonReader.close();
 
         assertEquals(17, object.size());
+        assertEquals("0030c7052fdba87fa2629976aad5c7380f97c82d",
+                object.getJsonObject(1).getString(ConferenceData.ID.getNameOfAttribute()).trim());
+        assertEquals("The Arithmetic of Elliptic Curvesâ€”an Update",
+                object.getJsonObject(1).getString(ConferenceData.CITATION.title.getNameOfAttribute()).trim());
+
+        assertEquals("00227b167f2bd46369e50fd2e75c9a08dc82d830",
+                object.getJsonObject(13).getString(ConferenceData.ID.getNameOfAttribute()).trim());
+        assertEquals("Low-density parity check codes over GF(q)",
+                object.getJsonObject(13).getString(ConferenceData.CITATION.title.getNameOfAttribute()).trim());
+
+        assertEquals("00227b167f2bd46369e50fd2e75c9a08dc82d830",
+                object.getJsonObject(14).getString(ConferenceData.ID.getNameOfAttribute()).trim());
+        assertEquals("Understanding of emotional experience in autism: insights from the personal accounts of high-functioning children with autism.",
+                object.getJsonObject(14).getString(ConferenceData.CITATION.title.getNameOfAttribute()).trim());
+
+        assertEquals("00227b167f2bd46369e50fd2e75c9a08dc82d830",
+                object.getJsonObject(15).getString(ConferenceData.ID.getNameOfAttribute()).trim());
+        assertEquals("How Unique and Traceable Are Usernames?",
+                object.getJsonObject(15).getString(ConferenceData.CITATION.title.getNameOfAttribute()).trim());
     }
 
     @Test

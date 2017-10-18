@@ -8,11 +8,11 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import assignment3.api.ConferenceData;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.citations.CitationAttribute;
-import assignment3.schema.citations.SchemaCitation;
 
 public class SchemaCitationTest {
 
@@ -27,8 +27,8 @@ public class SchemaCitationTest {
 
     @Test
     public void testSchemaCitation() {
-        CitationAttribute citationsTitle = SchemaCitation.INSTANCE.title;
-        CitationAttribute citationsYear = SchemaCitation.INSTANCE.year;
+        CitationAttribute citationsTitle = ConferenceData.CITATION.title;
+        CitationAttribute citationsYear = ConferenceData.CITATION.year;
 
         assertEquals("B 1", citationsTitle.getValue(journals.get(0)));
         assertEquals("c 1", citationsTitle.getValue(journals.get(1)));

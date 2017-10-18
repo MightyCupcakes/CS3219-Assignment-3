@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import assignment3.schema.SchemaInt;
 import assignment3.schema.SchemaString;
-import assignment3.schema.citations.SchemaCitation;
+import assignment3.schema.citations.CitationAttribute;
 
 public final class ConferenceData {
 
@@ -32,5 +32,13 @@ public final class ConferenceData {
 
     public static final SchemaInt NUM_OF_IN_CITATIONS = new SchemaInt("numOfInCitations");
 
-    public static final SchemaCitation CITATION = SchemaCitation.INSTANCE;
+    public static final class CITATION {
+        public static final CitationAttribute<String> title = new CitationAttribute<String>("citationtitle");
+        public static final CitationAttribute<Integer> year = new CitationAttribute<Integer>("year");
+        public static final CitationAttribute<String> authors = new CitationAttribute<String>("authors");
+        public static final CitationAttribute<String> booktitle = new CitationAttribute<String>("booktitle");
+        public static final CitationAttribute<String> journalId = new CitationAttribute<String>("journalId");
+        public static final CitationAttribute<String> citationId = new CitationAttribute<String>("citationId");
+        public static final CitationAttribute<Integer> numOfAuthors = new CitationAttribute<>("numOfAuthors");
+    }
 }

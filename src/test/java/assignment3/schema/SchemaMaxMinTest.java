@@ -8,15 +8,14 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import assignment3.api.ConferenceData;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.aggregate.SchemaAggregate;
 import assignment3.schema.aggregate.SchemaMax;
 import assignment3.schema.aggregate.SchemaMin;
-import assignment3.schema.aggregate.SchemaSum;
 import assignment3.schema.citations.CitationAttribute;
-import assignment3.schema.citations.SchemaCitation;
 
 public class SchemaMaxMinTest {
     private List<SerializedJournalCitation> journals;
@@ -30,7 +29,7 @@ public class SchemaMaxMinTest {
 
     @Test
     public void test_SchemaMax() {
-        CitationAttribute year = SchemaCitation.INSTANCE.year;
+        CitationAttribute year = ConferenceData.CITATION.year;
         SchemaAggregate citationYear = new SchemaMax(year);
 
         for(SerializedJournalCitation serializedJournalCitation: journals) {
@@ -42,7 +41,7 @@ public class SchemaMaxMinTest {
 
     @Test
     public void test_SchemaMin() {
-        CitationAttribute year = SchemaCitation.INSTANCE.year;
+        CitationAttribute year = ConferenceData.CITATION.year;
         SchemaAggregate citationYear = new SchemaMin(year);
 
         for(SerializedJournalCitation serializedJournalCitation: journals) {

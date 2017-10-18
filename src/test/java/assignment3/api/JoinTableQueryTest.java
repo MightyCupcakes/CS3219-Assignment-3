@@ -21,7 +21,6 @@ import assignment3.schema.aggregate.SchemaAggregate;
 import assignment3.schema.aggregate.SchemaCount;
 import assignment3.schema.aggregate.SchemaCountUnique;
 import assignment3.schema.citations.CitationAttribute;
-import assignment3.schema.citations.SchemaCitation;
 
 public class JoinTableQueryTest {
 
@@ -37,7 +36,7 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery() {
-        CitationAttribute title = SchemaCitation.INSTANCE.title;
+        CitationAttribute title = ConferenceData.CITATION.title;
         SchemaAggregate citationsCount = new SchemaCount(title);
 
         AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
@@ -66,8 +65,8 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery_GroupBy() {
-        CitationAttribute title = SchemaCitation.INSTANCE.title;
-        CitationAttribute year = SchemaCitation.INSTANCE.year;
+        CitationAttribute title = ConferenceData.CITATION.title;
+        CitationAttribute year = ConferenceData.CITATION.year;
         SchemaAggregate citationsCount = new SchemaCount(title);
 
         AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
@@ -103,7 +102,7 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery_CountUnique() {
-        CitationAttribute title = SchemaCitation.INSTANCE.title;
+        CitationAttribute title = ConferenceData.CITATION.title;
         SchemaAggregate uniqueCitationsCount = new SchemaCountUnique(title);
 
         AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
@@ -120,8 +119,8 @@ public class JoinTableQueryTest {
 
     @Test
     public void test_JoinTableQuery_CountAuthor() {
-        CitationAttribute title = SchemaCitation.INSTANCE.title;
-        CitationAttribute author = SchemaCitation.INSTANCE.authors;
+        CitationAttribute title = ConferenceData.CITATION.title;
+        CitationAttribute author = ConferenceData.CITATION.authors;
         SchemaAggregate uniqueCitationsCount = new SchemaCountUnique(title);
 
         AggregateQueryTest.TestAggregrateQuery query = new AggregateQueryTest.TestAggregrateQuery(
