@@ -13,6 +13,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
 import assignment3.datarepresentation.SerializedCitation;
+import assignment3.schema.SchemaBase;
 
 public class JsonGenerator {
 
@@ -70,12 +71,20 @@ public class JsonGenerator {
             return nestedBuilder;
         }
 
-        public void generateJson(String name, @Nullable Object value) {
+        public void generateJson(SchemaBase column, @Nullable Object value) {
 
             String stringValue = isNull(value) ? "NULL" : value.toString();
 
-            keyValuePair.put(name, stringValue);
-            builder.add(name, stringValue);
+            keyValuePair.put(column.originalNameOfAttribute, stringValue);
+            builder.add(column.getNameOfAttribute(), stringValue);
+        }
+
+        public void generateJson(String column, @Nullable Object value) {
+
+            String stringValue = isNull(value) ? "NULL" : value.toString();
+
+            keyValuePair.put(column, stringValue);
+            builder.add(column, stringValue);
         }
 
         public void generateJson(String name, Iterable<SerializedCitation> value) {

@@ -18,7 +18,7 @@ public class SchemaMin extends SchemaAggregate {
 
     @Override
     public String getNameOfAttribute() {
-        return "MIN(" + this.nameOfAttribute + ")";
+        return (!hasBeenRenamed) ? "MIN(" + this.nameOfAttribute + ")" : nameOfAttribute;
     }
 
     @Override

@@ -29,12 +29,16 @@ public class SchemaTest {
         SchemaString author = new SchemaString("author");
         SchemaString title = new SchemaString("title");
         SchemaInt year = new SchemaInt("yearOfPublication");
+        year.as("year");
 
         assertEquals("a", author.getValue(journals.get(0)));
         assertEquals("A title", title.getValue(journals.get(0)));
         assertEquals(new Integer(2012), year.getValue(journals.get(0)));
         assertEquals("C title", title.getValue(journals.get(2)));
         assertEquals(new Integer(2011), year.getValue(journals.get(2)));
+
+        assertEquals("year", year.getNameOfAttribute());
+        assertEquals("yearOfPublication", year.originalNameOfAttribute);
     }
 
     @Test

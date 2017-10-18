@@ -3,16 +3,10 @@ package assignment3.logic;
 import static java.util.Objects.isNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-import assignment3.api.APIQueryBuilder;
-import assignment3.api.Query;
-import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
@@ -62,11 +56,16 @@ public class NormalQuery extends QueryBase {
         for (SerializedJournalCitation journal : journals) {
             JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
 
-            columnsToShow.forEach(schema -> rowJson.generateJson(schema.getNameOfAttribute(), schema.getValue(journal)));
+            columnsToShow.forEach(schema -> rowJson.generateJson(schema, schema.getValue(journal)));
             json.addObjectToArray(rowJson);
         }
 
         return json.getJsonString();
+    }
+
+    @Override
+    public List<SchemaBase> getColumnsSelected() {
+        return Collections.unmodifiableList(columnsToShow);
     }
 
     @Override

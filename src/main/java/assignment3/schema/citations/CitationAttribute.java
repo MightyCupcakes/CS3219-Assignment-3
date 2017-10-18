@@ -22,19 +22,19 @@ public class CitationAttribute<T extends Comparable> extends SchemaComparable<T>
 
     @Override
     public T getValue(SerializedJournalCitation serializedJournalCitation) {
-        assert !nameOfAttribute.equals("");
+        assert !originalNameOfAttribute.equals("");
 
         if (isNull(serializedJournalCitation.citation)) {
             return null;
         }
 
         try {
-            Field field = SerializedCitation.class.getDeclaredField(nameOfAttribute);
+            Field field = SerializedCitation.class.getDeclaredField(originalNameOfAttribute);
             return (T) field.get(serializedJournalCitation.citation);
         } catch (NoSuchFieldException | IllegalAccessException e) {
 
             Logger.getLogger(this.getClass().toString())
-                    .warning("Attribute [" + nameOfAttribute + "] not found in serializedCitation!");
+                    .warning("Attribute [" + originalNameOfAttribute + "] not found in serializedCitation!");
             return null;
         }
     }

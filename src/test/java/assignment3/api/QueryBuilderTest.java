@@ -12,6 +12,7 @@ import assignment3.api.exceptions.QueryException;
 import assignment3.logic.AggregrateQuery;
 import assignment3.logic.NormalQuery;
 import assignment3.logic.QueryBuilder;
+import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaPredicate;
 import assignment3.schema.SchemaString;
 import assignment3.schema.aggregate.SchemaCount;
@@ -78,6 +79,13 @@ public class QueryBuilderTest {
                 .from("")
                 .groupBy(author)
                 .build();
+    }
+
+    @Test
+    public void testSchema_AsEmptyString() throws Exception {
+        thrown.expect(AssertionError.class);
+
+        SchemaBase author = new SchemaString("author").as("");
     }
 
     @Test

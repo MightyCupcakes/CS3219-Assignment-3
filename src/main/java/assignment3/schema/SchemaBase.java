@@ -20,13 +20,18 @@ public abstract class SchemaBase<T> {
 
     protected String nameOfAttribute = "";
     protected boolean splitAttributeIntoRows;
+    protected boolean hasBeenRenamed;
     protected Function<SerializedJournal, Collection<String>> splittingFunction;
+
+    public final String originalNameOfAttribute;
 
     protected BiFunction<SerializedJournal, String, SerializedJournal> splitter;
 
     public SchemaBase(String nameOfAttribute) {
         this.nameOfAttribute = nameOfAttribute;
+        this.originalNameOfAttribute = nameOfAttribute;
         this.splitAttributeIntoRows = false;
+        this.hasBeenRenamed = false;
         this.splittingFunction = j -> Collections.emptyList();
         this.splitter = (j, s) ->  j;
     }
@@ -35,18 +40,28 @@ public abstract class SchemaBase<T> {
      * Gets the value of this attribute from the specified SerializedJournal
      */
     public T getValue(SerializedJournalCitation journalCitation) {
-        assert !nameOfAttribute.equals("");
+        assert !originalNameOfAttribute.equals("");
 
         try {
-            Field field = SerializedJournal.class.getDeclaredField(nameOfAttribute);
+            Field field = SerializedJournal.class.getDeclaredField(originalNameOfAttribute);
             return (T) field.get(journalCitation.journal);
         } catch (NoSuchFieldException | IllegalAccessException e) {
 
             Logger.getLogger(this.getClass().toString())
-                    .warning("Attribute [" + nameOfAttribute + "] not found in serializedJournal!");
+                    .warning("Attribute [" + originalNameOfAttribute + "] not found in serializedJournal!");
             return null;
         }
     }
+
+    public SchemaBase as(String variableName) {
+        assert !"".equals(variableName);
+
+        this.hasBeenRenamed = true;
+        this.nameOfAttribute = variableName;
+
+        return this;
+    }
+
     public String getNameOfAttribute() {
         return nameOfAttribute;
     }
@@ -71,6 +86,6 @@ public abstract class SchemaBase<T> {
     public boolean equals(Object other) {
         return other == this
                 || (other instanceof SchemaBase
-                && nameOfAttribute.equals( ((SchemaBase) other).nameOfAttribute));
+                && originalNameOfAttribute.equals( ((SchemaBase) other).originalNameOfAttribute));
     }
 }

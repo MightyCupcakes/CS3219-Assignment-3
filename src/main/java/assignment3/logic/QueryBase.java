@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import assignment3.api.APIQueryBuilder;
@@ -107,4 +108,23 @@ public abstract class QueryBase implements Query {
 
         return journals;
     }
+
+    @Override
+    public void executeAndSaveInCSV() {
+        requireNonNull(logic);
+
+        String json = execute();
+
+        try {
+            logic.saveResultIntoCsv(json);
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().toString()).warning(
+                    "An error occured when saving the data into CSV!"
+            );
+
+            e.printStackTrace();
+        }
+    }
+
+    public abstract List<SchemaBase> getColumnsSelected();
 }

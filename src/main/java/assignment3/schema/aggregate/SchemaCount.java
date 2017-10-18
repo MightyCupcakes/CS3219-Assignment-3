@@ -15,7 +15,7 @@ public class SchemaCount extends SchemaAggregate {
 
     @Override
     public String getNameOfAttribute() {
-        return "COUNT(" + this.nameOfAttribute + ")";
+        return (!hasBeenRenamed) ? "COUNT(" + nameOfAttribute + ")" : nameOfAttribute;
     }
 
     @Override

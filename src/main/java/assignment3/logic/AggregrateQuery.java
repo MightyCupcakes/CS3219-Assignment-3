@@ -81,7 +81,7 @@ public class AggregrateQuery extends QueryBase {
             );
 
             aggregateColumnsToShow.forEach(schemaAggregate ->
-                    rowJson.generateJson(schemaAggregate.getNameOfAttribute(), schemaAggregate.getResult()));
+                    rowJson.generateJson(schemaAggregate, schemaAggregate.getResult()));
 
             json.addObjectToArray(rowJson);
 
@@ -105,7 +105,7 @@ public class AggregrateQuery extends QueryBase {
                         continue;
                     }
 
-                    rowJson.generateJson(groupByColumns.get(i).getNameOfAttribute(), keyValues.get(i));
+                    rowJson.generateJson(groupByColumns.get(i), keyValues.get(i));
                 }
 
                 // For each row in the group, pass the value to the aggregate function
@@ -120,7 +120,7 @@ public class AggregrateQuery extends QueryBase {
                 // Then print out the aggregate for this group by asking the aggregate for the result
                 // Like the number of names for a count aggregate
                 aggregateColumnsToShow.forEach(schemaAggregate ->
-                        rowJson.generateJson(schemaAggregate.getNameOfAttribute(), schemaAggregate.getResult()));
+                        rowJson.generateJson(schemaAggregate, schemaAggregate.getResult()));
 
                 json.addObjectToArray(rowJson);
             }
@@ -128,6 +128,15 @@ public class AggregrateQuery extends QueryBase {
             return json.getJsonString();
         }
 
+    }
+
+    @Override
+    public List<SchemaBase> getColumnsSelected() {
+        List<SchemaBase> list = new ArrayList<>();
+        list.addAll(aggregateColumnsToShow);
+        list.addAll(normalColumnsToShow);
+
+        return Collections.unmodifiableList(list);
     }
 
     @Override

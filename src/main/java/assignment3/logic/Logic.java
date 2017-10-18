@@ -9,7 +9,7 @@ import assignment3.schema.SchemaBase;
 public interface Logic {
     void parseAndSaveRawData(String folder) throws Exception;
     void parseAndSaveRawJSONData(String file) throws Exception;
-    void saveResultIntoCsv(String jsonStringData, int taskType) throws Exception;
+    void saveResultIntoCsv(String jsonStringData) throws Exception;
 
     /**
      * Gets the data in the form of {@code SerializedJournalCitation}

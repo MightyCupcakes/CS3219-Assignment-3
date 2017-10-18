@@ -18,7 +18,7 @@ public class SchemaMax extends SchemaAggregate {
 
     @Override
     public String getNameOfAttribute() {
-        return "MAX(" + this.nameOfAttribute + ")";
+        return (!hasBeenRenamed) ? "MAX(" + this.nameOfAttribute + ")" : nameOfAttribute;
     }
 
     @Override

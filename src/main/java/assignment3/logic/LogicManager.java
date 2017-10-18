@@ -9,6 +9,8 @@ import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -199,11 +201,11 @@ public class LogicManager implements Logic{
     }
 
     @Override
-    public void saveResultIntoCsv(String jsonStringData, int taskType) throws Exception {
+    public void saveResultIntoCsv(String jsonStringData) throws Exception {
         JsonReader jsonReader = Json.createReader(new StringReader(jsonStringData));
         JsonArray jsonArr = jsonReader.readArray();
         List<List<String>> dataList = new ArrayList<>();
-        dataList.add(getColumnHeaderList(taskType));
+        dataList.add(getColumnHeaderList(jsonArr));
         for (int i = 0; i < jsonArr.size(); i++) {
             JsonObject obj = jsonArr.getJsonObject(i);
             Iterator<String> keyIterator = obj.keySet().iterator();
@@ -214,29 +216,39 @@ public class LogicManager implements Logic{
             }
             dataList.add(valueList);
         }
-        model.writeResultIntoCsvFile(Integer.toString(taskType), dataList);
+
+        LocalDateTime datetime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+        model.writeResultIntoCsvFile("query-" + formatter.format(datetime), dataList);
     }
 
-    private List<String> getColumnHeaderList(int taskType) throws Exception {
+    private List<String> getColumnHeaderList(JsonArray json) throws Exception {
         List<String> headerList = new ArrayList<>();
-        switch(taskType) {
-        case 1:
-            headerList = Arrays.asList("author", "count");
-            break;
-        case 2:
-            headerList = Arrays.asList("title", "numOfInCitation");
-            break;
-        case 3:
-            headerList = Arrays.asList("yearOfPublication", "count");
-            break;
-        case 4:
-        	headerList = Arrays.asList("journalId", "journalTitle", "journalAuthors", "citedJournalId", "citedJournalTitle", "citedJournalAuthors");
-            break;
-        case 5:
-            headerList = Arrays.asList("year", "count");
-            break;
-        default: throw new Exception("Invalid Task Type");
+        JsonObject obj = json.getJsonObject(0);
+        Iterator<String> keyIterator = obj.keySet().iterator();
+        while (keyIterator.hasNext()) {
+            String key = keyIterator.next();
+            headerList.add(key);
         }
+
+//        switch(taskType) {
+//        case 1:
+//            headerList = Arrays.asList("author", "count");
+//            break;
+//        case 2:
+//            headerList = Arrays.asList("title", "numOfInCitation");
+//            break;
+//        case 3:
+//            headerList = Arrays.asList("yearOfPublication", "count");
+//            break;
+//        case 4:
+//        	headerList = Arrays.asList("journalId", "journalTitle", "journalAuthors", "citedJournalId", "citedJournalTitle", "citedJournalAuthors");
+//            break;
+//        case 5:
+//            headerList = Arrays.asList("year", "count");
+//            break;
+//        default: throw new Exception("Invalid Task Type");
+//        }
         return headerList;
 
     }

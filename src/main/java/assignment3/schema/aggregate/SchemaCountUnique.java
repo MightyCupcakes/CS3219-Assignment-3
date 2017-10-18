@@ -20,7 +20,7 @@ public class SchemaCountUnique extends SchemaAggregate{
 
     @Override
     public String getNameOfAttribute() {
-        return "COUNT UNIQUE(" + this.nameOfAttribute + ")";
+        return (!hasBeenRenamed) ? "COUNT UNIQUE(" + this.nameOfAttribute + ")" : nameOfAttribute;
     }
 
     @Override

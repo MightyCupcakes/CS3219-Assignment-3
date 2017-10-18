@@ -18,7 +18,7 @@ public class SchemaSum extends SchemaAggregate {
 
     @Override
     public String getNameOfAttribute() {
-        return "SUM(" + this.nameOfAttribute + ")";
+        return (!hasBeenRenamed) ? "SUM(" + this.nameOfAttribute + ")" : nameOfAttribute;
     }
 
     @Override

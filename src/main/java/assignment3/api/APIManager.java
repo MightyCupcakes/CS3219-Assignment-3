@@ -63,15 +63,11 @@ public class APIManager implements API {
     
     private void assignment4Queries() throws Exception { 
     	String taskOne = queryForTaskOne();
-    	logic.saveResultIntoCsv(taskOne, 1);
     	String taskTwo = queryForTaskTwo();
-    	logic.saveResultIntoCsv(taskTwo, 2);
     	String taskThree = queryForTaskThree();
-    	logic.saveResultIntoCsv(taskThree, 3);
     	String taskFour = queryForTaskFour();
-    	logic.saveResultIntoCsv(taskFour, 4);
+    	logic.saveResultIntoCsv(taskFour);
     	String taskFive = queryForTaskFive();
-    	logic.saveResultIntoCsv(taskFive, 5);
     }
 
     @Deprecated
@@ -101,36 +97,39 @@ public class APIManager implements API {
     }
     private String queryForTaskOne() {
         Query query = QueryBuilder.createNewBuilder()
-                .select( ConferenceData.AUTHOR, new SchemaCount(ConferenceData.ID))
+                .select( ConferenceData.AUTHOR.as("author"), new SchemaCount(ConferenceData.ID).as("count"))
                 .from("A4")
                 .where(ConferenceData.VENUE.equalsTo("ArXiv"))
                 .groupBy(ConferenceData.AUTHOR)
                 .orderBy(new SchemaCount(ConferenceData.ID), APIQueryBuilder.OrderByRule.DESC)
                 .limit(10)
                 .build();
-        return query.execute();
+        query.executeAndSaveInCSV();
+        return "";
     }
     
     private String queryForTaskTwo() {
         Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.TITLE,ConferenceData.NUM_OF_IN_CITATIONS)
+                .select(ConferenceData.TITLE,ConferenceData.NUM_OF_IN_CITATIONS.as("numOfInCitation"))
                 .from("A4")
                 .where(ConferenceData.VENUE.equalsTo("ArXiv"))
                 .orderBy(ConferenceData.NUM_OF_IN_CITATIONS, APIQueryBuilder.OrderByRule.DESC)
                 .limit(5)
                 .build();
-        return query.execute();
+        query.executeAndSaveInCSV();
+        return "";
     }
     
     private String queryForTaskThree() {
         Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.YEAR_OF_PUBLICATION, new SchemaCountUnique(ConferenceData.ID))
+                .select(ConferenceData.YEAR_OF_PUBLICATION, new SchemaCountUnique(ConferenceData.ID).as("count"))
                 .from("A4")
                 .where(ConferenceData.VENUE.like("ICSE"))
                 .groupBy(ConferenceData.YEAR_OF_PUBLICATION)
                 .orderBy(ConferenceData.YEAR_OF_PUBLICATION, APIQueryBuilder.OrderByRule.ASC)
                 .build();
-        return query.execute();
+        query.executeAndSaveInCSV();
+        return "";
     }
     
     private String queryForTaskFour() {
@@ -148,9 +147,13 @@ public class APIManager implements API {
 
         
         Query query2 = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.ID,ConferenceData.TITLE, 
-                		ConferenceData.AUTHORS, ConferenceData.CITATION.journalId, ConferenceData.CITATION.title
-                		,ConferenceData.CITATION.authors)
+                .select(ConferenceData.ID.as("journalId"),
+                        ConferenceData.TITLE.as("journalTitle"),
+                		ConferenceData.AUTHORS.as("journalAuthors"),
+                        ConferenceData.CITATION.journalId.as("citedJournalId"),
+                        ConferenceData.CITATION.title.as("citedJournalTitle"),
+                        ConferenceData.CITATION.authors.as("citedJournalAuthors")
+                )
                 .from("A4")
                 .where(ConferenceData.CITATION.journalId.equalsTo("36adf8c327b95bdffe2778bf022e0234d433454a"))
                 .build();
@@ -162,13 +165,17 @@ public class APIManager implements API {
         	JsonObject jsonTuple = jsonTuples.getJsonObject(i);
         	objectBuilder = addNewJsonObject(arrayBuilder, jsonTuple);
         	arrayBuilder.add(objectBuilder);
-        	citatingJournalIdSet.add(jsonTuple.getString("id"));
+        	citatingJournalIdSet.add(jsonTuple.getString("journalId"));
         }
         
         Query query3 = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.ID,ConferenceData.TITLE, 
-                		ConferenceData.AUTHORS, ConferenceData.CITATION.journalId, ConferenceData.CITATION.title
-                		,ConferenceData.CITATION.authors)
+                .select(ConferenceData.ID.as("journalId"),
+                        ConferenceData.TITLE.as("journalTitle"),
+                        ConferenceData.AUTHORS.as("journalAuthors"),
+                        ConferenceData.CITATION.journalId.as("citedJournalId"),
+                        ConferenceData.CITATION.title.as("citedJournalTitle"),
+                        ConferenceData.CITATION.authors.as("citedJournalAuthors")
+                )
                 .from("A4")
                 .where(ConferenceData.CITATION.journalId.in(citatingJournalIdSet))
                 .build();
@@ -196,7 +203,7 @@ public class APIManager implements API {
     //get the number of publication in ArXiv for the past 6 year
     private String queryForTaskFive() {
         Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.YEAR_OF_PUBLICATION, new SchemaCount(ConferenceData.ID))
+                .select(ConferenceData.YEAR_OF_PUBLICATION, new SchemaCount(ConferenceData.ID).as("count"))
                 .from("A4")
                 .where(ConferenceData.VENUE.equalsTo("ArXiv"))
                 .groupBy(ConferenceData.YEAR_OF_PUBLICATION)

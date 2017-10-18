@@ -26,7 +26,7 @@ public class JsonSorter extends JsonGenerator {
             );
 
     public JsonSorter(SchemaBase sortBy, APIQueryBuilder.OrderByRule rule) {
-        this.sortByField = sortBy.getNameOfAttribute();
+        this.sortByField = sortBy.originalNameOfAttribute;
         this.orderByRule = rule;
         this.builderList = new ArrayList<>();
 
