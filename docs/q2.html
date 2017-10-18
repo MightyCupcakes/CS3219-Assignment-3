@@ -29,6 +29,22 @@
   display: none;
 }
 
+.tooltip {                                                   
+  background: #f1f0f1;                                         
+  box-shadow: 0 0 5px #999999;                              
+  color: #333;                                           
+  display: none;                                                
+  font-size: 14px; 
+  font-family: Helvetica;                                                   
+  padding: 10px;                                                 
+  position: absolute;                                            
+  text-align: center;                                       
+  top: 200px;
+  left: 400px;                                               
+  width: 150px;                                                  
+  z-index: 10;                                                   
+} 
+
 </style>
 <body>
 <script src="//d3js.org/d3.v3.min.js"></script>
@@ -59,6 +75,9 @@ var svg = d3.select("body").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+var tooltip = d3.select("body").append('div').attr('class', 'tooltip');
+var tooltipcount = tooltip.append('div').attr('class', 'count');
+
 d3.csv("2.csv", type, function(error, data) {
   x.domain(data.map(function(d) { return d.title; }));
   y.domain([0, d3.max(data, function(d) { return d.numOfInCitation; })]);
@@ -87,12 +106,19 @@ d3.csv("2.csv", type, function(error, data) {
 
   var bars = svg.selectAll(".bar")
       .data(data)
-    .enter().append("rect")
+      .enter().append("rect")
       .attr("class", "bar")
       .attr("x", function(d) { return x(d.title); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.numOfInCitation); })
-      .attr("height", function(d) { console.log(d.numOfInCitation); return height - y(d.numOfInCitation); });
+      .attr("height", function(d) { return height - y(d.numOfInCitation); })
+      .on('mouseover', function(d) {
+        tooltip.style('display', 'block');
+        tooltipcount.text("Papers published: " + d.numOfInCitation);
+       })
+      .on('mouseout', function() {
+         tooltip.style('display', 'none');
+       });
 
 });
 
