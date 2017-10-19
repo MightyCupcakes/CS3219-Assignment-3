@@ -1,0 +1,72 @@
+# Assignment 4: CIR (VIz)
+
+Student Name | Tan Boon Joon | Goh Yi Da Jeremy
+--- | --- | ---
+Matriculation Number | A0139942W | A0135768R
+
+## Introduction
+
+
+## Visualization - Purpose & Method
+
+### Visualization used
+
+Objective | Visualization 
+--- | --- 
+1 | Bar chart
+2 | Bar chart
+3 | Line chart
+4 | Collapsible Tree
+5 | Donut chart 
+
+### Visualization Image
+
+#### Objective 1
+
+**Top 10 authors for venue `ArXiv` based on number of publications accross all available years**<br>
+<img src ="https://github.com/MightyCupcakes/CS3219-Assignment-3/blob/master/docs/images/q1.PNG"><br>
+
+#### Objective 2
+
+**Top 5 paper for venue `ArVix` based on the number of citation across all available year**<br>
+<img src ="https://github.com/MightyCupcakes/CS3219-Assignment-3/blob/master/docs/images/q2.PNG"><br>
+
+#### Objective 3
+
+**Trend of the amount of publications across all available years for venue `ICSE`**l<br>
+<img src ="https://github.com/MightyCupcakes/CS3219-Assignment-3/blob/master/docs/images/q3.PNG"><br>
+
+
+#### Objective 4
+
+**Citation web for the base paper with title `Low-density parity check codes over GF(q)`**
+<img src ="https://github.com/MightyCupcakes/CS3219-Assignment-3/blob/master/docs/images/q4.PNG"><br>
+
+#### Objective 5
+
+** The number of publications published for the last 6 year in `ArVix`**
+<img src ="https://github.com/MightyCupcakes/CS3219-Assignment-3/blob/master/docs/images/q5.PNG"><br>
+
+
+### Steps to create similar visualization
+
+we will be using objective 5 to illustrate the steps to recreate it.
+
+xxxxx
+
+<img src ="https://github.com/MightyCupcakes/CS3219-Assignment-3/blob/master/docs/images/simpleER.PNG"><br>
+
+xxxxxxxx
+
+#### Query Format
+
+SELECT ConferenceData.ATTRIBUTE [, conferenceData.ATTRIBUTE, ...]
+FROM tablename_one [, tablename_two, ...]
+WHERE condition_one [AND condition_two AND condition_three ....]
+GROUP BY ConferenceData.ATTRIBUTE
+ORDER BY ConferenceData.ATTRIBUTE ASC | DESC
+LIMIT N
+
+## Other information
+
+
