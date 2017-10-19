@@ -97,7 +97,7 @@ public class APIManager implements API {
     }
     private String queryForTaskOne() {
         Query query = QueryBuilder.createNewBuilder()
-                .select( ConferenceData.AUTHOR.as("author"), new SchemaCount(ConferenceData.ID).as("count"))
+                .select(ConferenceData.AUTHOR.as("author"), new SchemaCount(ConferenceData.ID).as("count"))
                 .from("A4")
                 .where(ConferenceData.VENUE.equalsTo("ArXiv"))
                 .groupBy(ConferenceData.AUTHOR)

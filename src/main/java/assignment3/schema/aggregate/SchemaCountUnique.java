@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import assignment3.datarepresentation.SerializedJournalCitation;
+import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 
 public class SchemaCountUnique extends SchemaAggregate{
@@ -32,11 +33,17 @@ public class SchemaCountUnique extends SchemaAggregate{
             count ++;
         }
     }
+
     @Override
     public int getResult() {
         int result = count;
         count = 0;
 
         return result;
+    }
+
+    @Override
+    public SchemaBase copy() {
+        return new SchemaCountUnique(column);
     }
 }

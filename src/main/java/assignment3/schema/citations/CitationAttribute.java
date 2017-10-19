@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournalCitation;
+import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 
 public class CitationAttribute<T extends Comparable> extends SchemaComparable<T> {
@@ -37,5 +38,10 @@ public class CitationAttribute<T extends Comparable> extends SchemaComparable<T>
                     .warning("Attribute [" + originalNameOfAttribute + "] not found in serializedCitation!");
             return null;
         }
+    }
+
+    @Override
+    public SchemaBase copy() {
+        return new CitationAttribute<T>(originalNameOfAttribute);
     }
 }

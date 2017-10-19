@@ -1,12 +1,11 @@
 package assignment3.schema;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import assignment3.datarepresentation.SerializedJournal;
@@ -56,10 +55,11 @@ public abstract class SchemaBase<T> {
     public SchemaBase as(String variableName) {
         assert !"".equals(variableName);
 
-        this.hasBeenRenamed = true;
-        this.nameOfAttribute = variableName;
+        SchemaBase schema = this.copy();
+        schema.nameOfAttribute = variableName;
+        schema.hasBeenRenamed = true;
 
-        return this;
+        return schema;
     }
 
     public String getNameOfAttribute() {
@@ -82,10 +82,17 @@ public abstract class SchemaBase<T> {
         return splitter;
     }
 
+    public abstract SchemaBase copy();
+
     @Override
     public boolean equals(Object other) {
         return other == this
                 || (other instanceof SchemaBase
                 && originalNameOfAttribute.equals( ((SchemaBase) other).originalNameOfAttribute));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(originalNameOfAttribute);
     }
 }

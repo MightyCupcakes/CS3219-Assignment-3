@@ -5,6 +5,7 @@ import static java.util.Objects.isNull;
 import java.util.logging.Logger;
 
 import assignment3.datarepresentation.SerializedJournalCitation;
+import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 
 public class SchemaSum extends SchemaAggregate {
@@ -49,5 +50,10 @@ public class SchemaSum extends SchemaAggregate {
         sum = 0;
 
         return result;
+    }
+
+    @Override
+    public SchemaBase copy() {
+        return new SchemaSum(column);
     }
 }

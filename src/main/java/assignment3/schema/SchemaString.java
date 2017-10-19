@@ -36,4 +36,13 @@ public class SchemaString extends SchemaComparable<String> {
 
         return builder.build();
     }
+
+    @Override
+    public SchemaBase copy() {
+        if (!splitAttributeIntoRows) {
+            return new SchemaString(originalNameOfAttribute);
+        }
+
+        return new SchemaString(originalNameOfAttribute, splittingFunction, splitter);
+    }
 }

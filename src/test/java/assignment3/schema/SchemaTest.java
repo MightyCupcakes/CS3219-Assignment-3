@@ -5,11 +5,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import assignment3.api.ConferenceData;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 
@@ -27,9 +30,15 @@ public class SchemaTest {
     @Test
     public void testSchema() {
         SchemaString author = new SchemaString("author");
+        SchemaBase authors = ConferenceData.AUTHOR.as("author");
         SchemaString title = new SchemaString("title");
-        SchemaInt year = new SchemaInt("yearOfPublication");
+        SchemaBase year = ConferenceData.YEAR_OF_PUBLICATION.as("year");
         year.as("year");
+
+        Set<SchemaBase> set = new HashSet<>();
+        set.add(ConferenceData.AUTHOR);
+
+        assertTrue(year instanceof SchemaComparable);
 
         assertEquals("a", author.getValue(journals.get(0)));
         assertEquals("A title", title.getValue(journals.get(0)));
@@ -39,6 +48,9 @@ public class SchemaTest {
 
         assertEquals("year", year.getNameOfAttribute());
         assertEquals("yearOfPublication", year.originalNameOfAttribute);
+        assertTrue(year != ConferenceData.YEAR_OF_PUBLICATION);
+        assertTrue(set.contains(author));
+        assertEquals(ConferenceData.YEAR_OF_PUBLICATION.getNameOfAttribute(), ConferenceData.YEAR_OF_PUBLICATION.originalNameOfAttribute);
     }
 
     @Test

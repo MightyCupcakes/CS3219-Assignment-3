@@ -5,6 +5,7 @@ import static java.util.Objects.isNull;
 import java.util.logging.Logger;
 
 import assignment3.datarepresentation.SerializedJournalCitation;
+import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 
 public class SchemaMax extends SchemaAggregate {
@@ -49,5 +50,10 @@ public class SchemaMax extends SchemaAggregate {
         max = Integer.MIN_VALUE;
 
         return result;
+    }
+
+    @Override
+    public SchemaBase copy() {
+        return new SchemaMax(column);
     }
 }
