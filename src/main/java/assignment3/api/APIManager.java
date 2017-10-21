@@ -62,12 +62,12 @@ public class APIManager implements API {
     }
     
     private void assignment4Queries() throws Exception { 
-    	String taskOne = queryForTaskOne();
+    	//String taskOne = queryForTaskOne();
     	String taskTwo = queryForTaskTwo();
-    	String taskThree = queryForTaskThree();
-    	String taskFour = queryForTaskFour();
-    	logic.saveResultIntoCsv(taskFour);
-    	String taskFive = queryForTaskFive();
+    	//String taskThree = queryForTaskThree();
+    	//String taskFour = queryForTaskFour();
+    	//logic.saveResultIntoCsv(taskFour);
+    	//String taskFive = queryForTaskFive();
     }
 
     @Deprecated
@@ -110,10 +110,11 @@ public class APIManager implements API {
     
     private String queryForTaskTwo() {
         Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.TITLE,ConferenceData.NUM_OF_IN_CITATIONS.as("numOfInCitation"))
+                .select(ConferenceData.CITATION.title.as("title"), new SchemaCount(ConferenceData.ID).as("numOfInCitation"))
                 .from("A4")
-                .where(ConferenceData.VENUE.equalsTo("ArXiv"))
-                .orderBy(ConferenceData.NUM_OF_IN_CITATIONS, APIQueryBuilder.OrderByRule.DESC)
+                .where(ConferenceData.CITATION.citationVenue.equalsTo("ArXiv"))
+                .groupBy(ConferenceData.CITATION.title)
+                .orderBy(new SchemaCount(ConferenceData.ID), APIQueryBuilder.OrderByRule.DESC)
                 .limit(5)
                 .build();
         query.executeAndSaveInCSV();

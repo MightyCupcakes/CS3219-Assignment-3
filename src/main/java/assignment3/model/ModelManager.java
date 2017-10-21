@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -91,8 +92,10 @@ public class ModelManager implements Model {
         rootElement.appendChild(mainElement);
         rootElement.appendChild(citationslists);
 
-
+        Map<String, String> idToVenuMap = journalList.stream()
+        											.collect(Collectors.toMap(j -> j.id,j -> j.venue));
         
+        	
         int id = 1;
         Map<String, String> titleToIdMap = new HashMap<>();
         for (SerializedJournal journal : journalList) {
@@ -125,8 +128,10 @@ public class ModelManager implements Model {
                 if (!citation.authorsList.isEmpty()) {
                     citationElement.appendChild(authorsElement);
                 }
-             
-                appendChildToElement("citationId", Integer.toString(id), citationElement, doc);
+                if (idToVenuMap.containsKey(journal.id)) {
+                    appendChildToElement("venue", idToVenuMap.get(journal.id), citationElement, doc);
+
+                }
                 appendChildToElement("title", citation.citationtitle, citationElement, doc);
                 appendChildToElement("booktitle", citation.booktitle, citationElement, doc);
 
