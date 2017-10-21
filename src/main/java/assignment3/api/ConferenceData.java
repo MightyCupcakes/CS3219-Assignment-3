@@ -12,7 +12,6 @@ public final class ConferenceData {
     public static final SchemaString AFFILIATION = new SchemaString("affiliation");
     public static final SchemaString ABSTRACT_TEXT = new SchemaString("abstractText");
     public static final SchemaString VENUE = new SchemaString("venue");
-    public static final SchemaString JOURNAL_ID = new SchemaString("journalId");
     public static final SchemaInt YEAR_OF_PUBLICATION = new SchemaInt("yearOfPublication");
     public static final SchemaString ID = new SchemaString("id");
     
@@ -38,7 +37,7 @@ public final class ConferenceData {
         public static final CitationAttribute<String> authors = new CitationAttribute<String>("authors");
         public static final CitationAttribute<String> booktitle = new CitationAttribute<String>("booktitle");
         public static final CitationAttribute<String> journalId = new CitationAttribute<String>("journalId");
-        public static final CitationAttribute<String> citationId = new CitationAttribute<String>("citationId");
+        public static final CitationAttribute<String> citationVenue = new CitationAttribute<String>("citationVenue");
         public static final CitationAttribute<Integer> numOfAuthors = new CitationAttribute<>("numOfAuthors");
     }
 }
