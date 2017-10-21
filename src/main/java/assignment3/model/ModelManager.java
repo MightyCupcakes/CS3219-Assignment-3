@@ -92,12 +92,16 @@ public class ModelManager implements Model {
         rootElement.appendChild(mainElement);
         rootElement.appendChild(citationslists);
 
-        Map<String, String> idToVenuMap = journalList.stream()
-        											.collect(Collectors.toMap(j -> j.id,j -> j.venue));
-        
+        Map<String, String> idVenueMap = new HashMap<>();
+        for (SerializedJournal journal : journalList) {
+        	if (idVenueMap.containsKey(journal.id) || journal.id.equals(DEFAULT_JOURNAL_ID)) {
+        		continue;
+        	}
+        	idVenueMap.put(journal.id, journal.venue);
+        	
+        }
         	
         int id = 1;
-        Map<String, String> titleToIdMap = new HashMap<>();
         for (SerializedJournal journal : journalList) {
             if (!journalSet.contains(journal)) {
             	Element journalElement = doc.createElement("journal");
@@ -128,8 +132,8 @@ public class ModelManager implements Model {
                 if (!citation.authorsList.isEmpty()) {
                     citationElement.appendChild(authorsElement);
                 }
-                if (idToVenuMap.containsKey(journal.id)) {
-                    appendChildToElement("venue", idToVenuMap.get(journal.id), citationElement, doc);
+                if (idVenueMap.containsKey(journal.id)) {
+                    appendChildToElement("venue", idVenueMap.get(journal.id), citationElement, doc);
 
                 }
                 appendChildToElement("title", citation.citationtitle, citationElement, doc);
