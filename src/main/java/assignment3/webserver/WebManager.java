@@ -20,4 +20,10 @@ public class WebManager implements WebLogic {
         
     }
 
+    @Override
+    public void parseUserInputIntoQuery(String input) throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
