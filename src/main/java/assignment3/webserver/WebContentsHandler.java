@@ -3,6 +3,7 @@ package assignment3.webserver;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
@@ -11,22 +12,25 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 /**
- * The web server handler to handle requests for d3 visualisation code.
+ * The web server handler to handle requests for CSV files within the d3 visualisation code.
  */
-public class WebServerHandler implements HttpHandler {
+public class WebContentsHandler implements HttpHandler {
 
     private final String root;
 
-    public WebServerHandler(String root) {
+    public WebContentsHandler(String root) {
         this.root = root;
     }
 
     @Override
     public void handle(HttpExchange t) throws IOException {
 
+        // Get the file requested from the request headers
+        URI fileRequested = t.getRequestURI();
+
         // Proof of concept
         // Try sending the contents of a file as a response instead
-        File file = new File(root + "q1.html");
+        File file = new File(root  + fileRequested.getPath());
         String response = Files.asCharSource(file, Charset.forName("UTF-8")).read();
         sendResponse(response, t);
     }
