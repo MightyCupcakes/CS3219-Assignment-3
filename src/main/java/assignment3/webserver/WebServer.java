@@ -1,15 +1,10 @@
 package assignment3.webserver;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
+public interface WebServer {
 
-import com.sun.net.httpserver.HttpServer;
-
-public class WebServer {
-    public void start() throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8001), 0);
-        server.createContext("/test", new WebServerHandler());
-        server.setExecutor(null); // creates a default executor
-        server.start();
-    }
+    /**
+     * Starts the webserver and being listening for request
+     */
+    void start();
+    
 }

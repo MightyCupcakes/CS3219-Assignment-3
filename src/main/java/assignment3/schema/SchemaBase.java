@@ -38,6 +38,7 @@ public abstract class SchemaBase<T> {
     /**
      * Gets the value of this attribute from the specified SerializedJournal
      */
+    @SuppressWarnings("unchecked")
     public T getValue(SerializedJournalCitation journalCitation) {
         assert !originalNameOfAttribute.equals("");
 
