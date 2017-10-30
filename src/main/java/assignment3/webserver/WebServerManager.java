@@ -24,7 +24,8 @@ public class WebServerManager implements WebServer {
     public void start() {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-            server.createContext("/", new WebServerHandler(WEB_ROOT));
+
+            server.createContext("/", new WebPageHandler(WEB_ROOT));
             server.createContext("/csv/", new WebContentsHandler(WEB_ROOT));
 
             server.setExecutor(null); // creates a default executor
