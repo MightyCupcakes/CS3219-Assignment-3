@@ -1,25 +1,19 @@
-$(document).ready (function () {
-
+function sendAjaxRequest(page, data, method, processingFunction) {
     $.ajax({
     
       // The URL for the request
-      url: "main.html",
-   
+      url: page,
+      
       // The data to send (will be converted to a query string)
-      data: {hi:"hi"},
-   
+      data: data,
+      
       // Whether this is a POST or GET request
-      type: "GET",
-   
+      type: method,
+      
       // The type of data we expect back
-      dataType : 'text'
-      })
+      dataType : 'json'
+    })
     // Code to run if the request succeeds (is done);
     // The response is passed to the function
-    .done(function( data ) {
-       if (data != 'false') {
-          $('#viz').attr('src', data);
-       }
-    });
-
-});
+    .done(processingFunction);
+}
