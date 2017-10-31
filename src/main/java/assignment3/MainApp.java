@@ -1,18 +1,14 @@
 package assignment3;
 
-import assignment3.api.API;
-import assignment3.api.APIManager;
+import java.io.IOException;
+
+import assignment3.webserver.WebServer;
+import assignment3.webserver.WebServerManager;
 
 public class MainApp {
 
-    public static void main(String[] args) {
-        API api = new APIManager();
-        if (args.length > 0 && args[0].equalsIgnoreCase("parse")) {
-            api.parseConferenceData(args[1]);
-        } else if (args.length > 0 && args[0].equalsIgnoreCase("parseA4")) {
-            api.parseConferenceJsonData(args[1]);
-        } else {
-            api.runQueries();
-        }
+    public static void main(String[] args) throws IOException {
+        WebServer server = new WebServerManager(8001);
+        server.start();
     }
 }
