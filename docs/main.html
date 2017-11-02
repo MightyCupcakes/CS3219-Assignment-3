@@ -8,6 +8,7 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/jquery-ui.min.css"></style>
 </head>
 <body style="padding-bottom:70px;">
 
@@ -24,8 +25,84 @@
   <div class="container pt-3">
     <h1 class="display-4 text-center">Conference Data Visualization</h1>
 
+    <div class="row">
+      <div class="col-sm-12">
+        <hr><br/>
+        <button class="btn btn-light btn-block" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          Construct a new visualization
+        </button>
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+            <h4>Choose from a list of presets</h4>
+
+            <div class="col-sm-12">
+              <hr>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6 form-group">
+                <label> Type of visualization </label>
+                <select class="form-control" id="premade_type" name="premade_type" placeholder="Chart type">
+                  <option></option>
+                </select>
+              </div>
+
+              <div class="col-sm-6 form-group">
+                <label> Visualization data </label>
+                <select class="form-control" name="item_super" placeholder="Chart type"></select>
+              </div>
+            </div>
+
+            <div class="col-sm-12">
+              <hr>
+            </div>
+
+            <h4>Or construct your own!</h4>
+            <p class="lead"> Let those creative juices flow, or so they say.</p>
+
+            <div class="row">
+              <div class="col-sm-6 form-group">
+                <label> Type of graph</label>
+                <select class="form-control" name="item_super" placeholder="Chart type"></select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="exampleFormControlSelect2">Dataset to query from</label>
+                  <select multiple class="form-control" id="exampleFormControlSelect2">
+                    <option>D12</option>
+                    <option>D13</option>
+                    <option>D14</option>
+                    <option>D15</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12 form-group">
+                <button class="btn btn-primary btn-block">Construct the visualization</button>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p/>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div id="progressbar" style="display:none;"></div>
+      </div>
+    </div>
+
     <div class="row col-sm-12">
-      <iframe id="viz" style="width:100%; height:800px; margin:1%;border: 0;">
+      <iframe id="viz" style="width:100%; height:800px; margin:1%;border:0">
       </iframe>
     </div>
   </div>
@@ -45,6 +122,8 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 
   <script type="text/javascript" src="js/ajaxHandler.js"></script>
   <script type="text/javascript" src="js/MainPageController.js"></script>
