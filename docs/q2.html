@@ -78,9 +78,9 @@ var svg = d3.select("body").append("svg")
 var tooltip = d3.select("body").append('div').attr('class', 'tooltip');
 var tooltipcount = tooltip.append('div').attr('class', 'count');
 
-d3.csv("2.csv", type, function(error, data) {
-  x.domain(data.map(function(d) { return d.title; }));
-  y.domain([0, d3.max(data, function(d) { return d.numOfInCitation; })]);
+d3.csv("5.csv", type, function(error, data) {
+  x.domain(data.map(function(d) { return d.author; }));
+  y.domain([0, d3.max(data, function(d) { return d.count; })]);
 
   svg.append("text")
       .attr("class", "title")
@@ -108,13 +108,13 @@ d3.csv("2.csv", type, function(error, data) {
       .data(data)
       .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return x(d.title); })
+      .attr("x", function(d) { return x(d.author); })
       .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.numOfInCitation); })
-      .attr("height", function(d) { return height - y(d.numOfInCitation); })
+      .attr("y", function(d) { return y(d.count); })
+      .attr("height", function(d) { return height - y(d.count); })
       .on('mouseover', function(d) {
         tooltip.style('display', 'block');
-        tooltipcount.text("Papers published: " + d.numOfInCitation);
+        tooltipcount.text("Papers published: " + d.count);
        })
       .on('mouseout', function() {
          tooltip.style('display', 'none');
@@ -147,7 +147,7 @@ function wrap(text, width) {
 }
 
 function type(d) {
-  d.numOfInCitation = +d.numOfInCitation;
+  d.count = +d.count;
   return d;
 }
 

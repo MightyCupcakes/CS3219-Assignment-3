@@ -18,5 +18,5 @@ public interface Query {
      * the query executed like the following: "query-yyyymmdd-HHmmss.csv"
      *
      */
-    void executeAndSaveInCSV();
+    void executeAndSaveInCSV(String filename);
 }

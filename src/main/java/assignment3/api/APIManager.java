@@ -104,7 +104,7 @@ public class APIManager implements API {
                 .orderBy(new SchemaCount(ConferenceData.ID), APIQueryBuilder.OrderByRule.DESC)
                 .limit(10)
                 .build();
-        query.executeAndSaveInCSV();
+        query.executeAndSaveInCSV("1");
         return "";
     }
     
@@ -117,7 +117,7 @@ public class APIManager implements API {
                 .orderBy(new SchemaCount(ConferenceData.ID), APIQueryBuilder.OrderByRule.DESC)
                 .limit(5)
                 .build();
-        query.executeAndSaveInCSV();
+        query.executeAndSaveInCSV("2");
         return "";
     }
     
@@ -129,7 +129,7 @@ public class APIManager implements API {
                 .groupBy(ConferenceData.YEAR_OF_PUBLICATION)
                 .orderBy(ConferenceData.YEAR_OF_PUBLICATION, APIQueryBuilder.OrderByRule.ASC)
                 .build();
-        query.executeAndSaveInCSV();
+        query.executeAndSaveInCSV("3");
         return "";
     }
     

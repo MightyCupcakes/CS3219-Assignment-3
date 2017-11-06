@@ -105,10 +105,12 @@ $(document).ready (function () {
       var type = $("#premade_type").val();
       if (type == 3) {
         request = {
+          "getVisualisation":"true",
+          "vizType" : 3,
           "n": $("#n").val(),
           "xAttr": $("#xAttr").val(),
-          "yAttr": $("#yAtt").val(),
-          "yvalue": $("#yValue").val(),
+          "yAttr": $("#yAttr").val(),
+          "yValue": $("#yValue").val(),
         };
         alert('sending request to server' + JSON.stringify(request));
         sendAjaxRequest("main.html", request, "GET", function(data) {
