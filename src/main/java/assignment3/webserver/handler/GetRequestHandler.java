@@ -1,7 +1,8 @@
 package assignment3.webserver.handler;
 
-import java.util.Arrays;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
@@ -17,11 +18,15 @@ import assignment3.webserver.exceptions.WebServerException;
  */
 public class GetRequestHandler extends FileRequestHandler {
 
+    public GetRequestHandler(String root) {
+        super(root);
+    }
+
     @Override
     public String handleRequest(HttpExchange httpExchange) throws WebServerException {
         Map<String, String> keyValuePairs = parseQueryString(httpExchange.getRequestURI().getQuery());
 
-        if (!keyValuePairs.containsKey("clientonly")) {
+        if (keyValuePairs.containsKey("getVisualisation")) {
             // Create JSON response
             JsonObjectBuilder builder = Json.createObjectBuilder();
             // TODO: Not hardcode this

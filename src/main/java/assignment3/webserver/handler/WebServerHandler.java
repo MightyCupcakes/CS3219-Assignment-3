@@ -24,9 +24,9 @@ public class WebServerHandler implements HttpHandler {
         RequestHandler handler;
 
         if (isNull(t.getRequestURI().getQuery())) {
-            handler = new FileRequestHandler();
+            handler = new FileRequestHandler(root);
         } else {
-            handler = new GetRequestHandler();
+            handler = new GetRequestHandler(root);
         }
 
         try {

@@ -66,7 +66,8 @@ $(document).ready (function () {
     populateYear();
     populateNnXnY();
     hideAll();
-    sendAjaxRequest("main.html", {data:"hi", data2:"hihi"}, "GET", 
+
+    sendAjaxRequest("main.html", {getVisualisation:"true"}, "GET", 
         function(data) { 
             $('#viz').attr('src', data.src)
      });
