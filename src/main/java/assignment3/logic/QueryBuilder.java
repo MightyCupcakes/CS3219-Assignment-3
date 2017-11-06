@@ -152,7 +152,17 @@ public class QueryBuilder implements APIQueryBuilder {
                     .map(schemaBase -> (SchemaAggregate) schemaBase)
                     .forEach(aggregateColumns::add);
 
-            AggregrateQuery query = new AggregrateQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByClause);
+            List<SchemaComparable> groupByColumns = new ArrayList<>();
+
+            for (SchemaComparable column : groupByClause) {
+                if (normalColumns.contains(column)) {
+                    groupByColumns.add(normalColumns.get(normalColumns.indexOf(column)));
+                } else {
+                    groupByColumns.add(column);
+                }
+            }
+
+            AggregrateQuery query = new AggregrateQuery(aggregateColumns, normalColumns, whereClause, fromTables, groupByColumns);
             query.setDataSource(logic);
 
             if (isQueryAJoinTableQuery()) query.setQueryToRetrieveCitations();
