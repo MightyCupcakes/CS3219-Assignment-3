@@ -60,7 +60,7 @@ public class GetRequestHandler extends FileRequestHandler {
 			
 		} else if (type == 3) {
 			generateTopNXofYData(data);
-			return "q5.html";
+			return "q2.html";
 		} 
 		return "q1.html";
 	}
