@@ -10,11 +10,13 @@ function hideAll() {
   $("#startYear").hide();
   $("#endYear").hide();
   $("#n").hide();
+  $("#xAttr").hide();  
   $("#yAttr").hide();
   $('#yValue').hide();
   $('#startyearLabel').hide();
   $('#endyearLabel').hide();  
   $('#yAttrLabel').hide();
+  $("#xAttrLabel").hide();   
   $('#yValueLabel').hide(); 
   $('#nLabel').hide();
 
@@ -35,7 +37,7 @@ function populateNnXnY() {
   for (i = 1; i < 20; i++) {
     selectN.append($('<option>', { value : i, text: i}));
   }
-  var selectN = $('#x');
+  var selectN = $('#xAttr');
   selectN.append($('<option>', { value : "author", text: "author"}));
   selectN.append($('<option>', { value : "citation", text: "citation"}));
   var selectY = $('#yAttr');
@@ -69,6 +71,7 @@ $(document).ready (function () {
             $('#viz').attr('src', data.src)
      });
 
+    //to be rewritten
     $("#premade_type").on('change', function() {   
       var type = $("#premade_type").val();
       if (type == 1) {
@@ -86,12 +89,30 @@ $(document).ready (function () {
       } else if (type == 3) {
         hideAll();
         $("#n").show();
+        $("#xAttr").show();       
+        $("#xAttrLabel").show();          
         $("#yAttr").show();
         $('#yValue').show();
         $('#yAttrLabel').show();
         $('#yValueLabel').show(); 
         $('#nLabel').show();        
         alert("top n x of y");
+      }
+    });
+    //to be rewritten
+    $('#constructd3').click(function () {
+      var type = $("#premade_type").val();
+      if (type == 3) {
+        request = {
+          "n": $("#n").val(),
+          "xAttr": $("#xAttr").val(),
+          "yAttr": $("#yAtt").val(),
+          "yvalue": $("#yValue").val(),
+        };
+        alert('sending request to server' + JSON.stringify(request));
+        sendAjaxRequest("main.html", request, "GET", function(data) {
+          $('#viz').attr('src', data.src)
+        });
       }
     });
 

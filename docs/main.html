@@ -47,13 +47,15 @@
                 </select>
               </div>
 
-              <div class="col-sm-3 form-group">
+              <div class="col-sm-6 form-group">
                 <label id = "startyearLabel"> Year </label>
                 <select class="form-control" name="startyear" id="startYear" placeholder="Chart type"></select>
                 <label id = "endyearLabel"> Year </label>
                 <select class="form-control" name="endyear" id="endYear" placeholder="Chart type"></select>
                 <label id = "nLabel"> N attr </label>
                 <select class="form-control" name="top n" id ="n" placeholder="Chart type"></select>
+                <label id = "xAttrLabel"> X attr </label>
+                <select class="form-control" name="xAttr" id ="xAttr" placeholder="Chart type"></select>                
                 <label id = "yAttrLabel"> Y attr </label>
                 <select class="form-control" name="yAttr" id="yAttr" placeholder="Chart type"></select>                                                                     
                 <label id = "yValueLabel"> Y value</label>
@@ -91,7 +93,7 @@
 
             <div class="row">
               <div class="col-sm-12 form-group">
-                <button class="btn btn-primary btn-block">Construct the visualization</button>
+                <button class="btn btn-primary btn-block" id ="constructd3" value="">Construct the visualization</button>
               </div>
             </div>
 
