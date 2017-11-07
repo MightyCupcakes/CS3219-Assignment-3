@@ -1,15 +1,13 @@
 package assignment3.webserver;
 
-import java.util.Set;
-
-import assignment3.schema.SchemaBase;
-import assignment3.schema.SchemaComparable;
-import assignment3.schema.SchemaPredicate;
+import java.util.Map;
 
 public interface WebQuery {
 
-	SchemaBase getSchemaAttr(String attribute, String type);
-	SchemaPredicate getSchemaPredi(SchemaComparable  attribute, String valueToCompare, 
-			Set valueSet, String type);
 
+	void generateTopNXofYGraph(Map<String, String> data) ;
+	void generateTrendGraph(Map<String, String> data) ;
+	void generateContemporaryGraph(Map<String, String> data);
+	void generateNewGraph(Map<String, String> data);
+	String retrieveDataForDropDown(String attribute);
 }
