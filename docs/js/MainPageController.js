@@ -67,7 +67,7 @@ $(document).ready (function () {
     populateNnXnY();
     hideAll();
 
-    sendAjaxRequest("main.html", {getVisualisation:"true"}, "GET", 
+    sendAjaxRequest("main.html", {requestType:"getVisualisation"}, "GET", 
         function(data) { 
             $('#viz').attr('src', data.src)
      });
