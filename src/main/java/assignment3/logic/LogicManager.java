@@ -224,7 +224,6 @@ public class LogicManager implements Logic{
 
     private List<String> getColumnHeaderList(JsonArray json) throws Exception {
         List<String> headerList = new ArrayList<>();
-        System.out.println(json.toString());
         JsonObject obj = json.getJsonObject(0);
         Iterator<String> keyIterator = obj.keySet().iterator();
         while (keyIterator.hasNext()) {
