@@ -1,16 +1,9 @@
 package assignment3.webserver.handler;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
+import java.util.Map;
+import java.util.Optional;
+
 
 import com.google.common.collect.ImmutableMap;
 import com.sun.net.httpserver.HttpExchange;
@@ -19,6 +12,8 @@ import com.sun.net.httpserver.HttpExchange;
 import assignment3.webserver.WebQuery;
 import assignment3.webserver.WebQueryManager;
 import assignment3.webserver.exceptions.WebServerException;
+import assignment3.webserver.requestprocessor.RequestProcessor;
+import assignment3.webserver.requestprocessor.RequestProcessorRegistry;
 
 /**
  * Processes a GET request from the user and response with the appropriate HTML file to
@@ -26,46 +21,30 @@ import assignment3.webserver.exceptions.WebServerException;
  */
 public class GetRequestHandler extends FileRequestHandler {
 	WebQuery webQuery = new WebQueryManager();
+
+    private static final RequestProcessorRegistry registry = RequestProcessorRegistry.getInstance();
+
     public GetRequestHandler(String root) {
         super(root);
     }
 
     @Override
     public String handleRequest(HttpExchange httpExchange) throws WebServerException {
-        Map<String, String> keyValuePairs = parseQueryString(httpExchange.getRequestURI().getQuery());;
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-        if (keyValuePairs.containsKey("getVisualisation")) {
-            // Create JSON response
-            // TODO: Not hardcode this
-        	
-            String html = "q1.html";
-            if (keyValuePairs.containsKey("vizType")) {
-            	html = generateNewCsvData(keyValuePairs);
+        Map<String, String> keyValuePairs = parseQueryString(httpExchange.getRequestURI().getQuery());
+
+        if (keyValuePairs.containsKey("requestType")) {
+            if (registry.getRequestProcessor(keyValuePairs.get("requestType")).isPresent()) {
+                Optional<RequestProcessor> processor = registry.getRequestProcessor(keyValuePairs.get("requestType"));
+                return processor.get().handleRequest(keyValuePairs);
+            } else {
+                return super.handleRequest(httpExchange);
             }
-            builder.add("src", html);
-            return builder.build().toString();
-        }  else {
-        	return super.handleRequest(httpExchange);
+        } else {
+            return super.handleRequest(httpExchange);
         }
     }
     
-    /**
-     * 
-     * @param data that contain the request from client side
-     * @return the html string that tell which html should the client load
-     */
-    private String generateNewCsvData(Map<String, String> data)  {
-		int type = Integer.parseInt(data.get("vizType"));
-		if (type == 1) {
-			
-		} else if (type == 2) {
-			
-		} else if (type == 3) {
-			webQuery.generateTopNXofYGraph(data);
-			return "q2.html";
-		} 
-		return "q1.html";
-	}
+
 
 
 

@@ -111,7 +111,7 @@ $(document).ready (function () {
     populatePresetsType();
     showDropDown(1);
 
-    sendAjaxRequest("main.html", {getVisualisation:"true"}, "GET", 
+    sendAjaxRequest("main.html", {requestType:"getVisualisation"}, "GET", 
         function(data) { 
             $('#viz').attr('src', data.src)
      });
