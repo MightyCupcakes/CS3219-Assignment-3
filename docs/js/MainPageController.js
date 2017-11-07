@@ -3,9 +3,29 @@ var yearMax = 2016;
 
 function populatePresetsType() {
     var select = $('#premade_type');
-    select.append($('<option>', { value: 1, text: 'Transition over time' }));
-    select.append($('<option>', { value: 2, text: 'Contemporary comparison' }));
-    select.append($('<option>', { value: 3, text: 'Top N X of Y' }));
+
+    select.append($('<option>', { value: 0, text: "" }));
+
+    sendAjaxRequest("main.html", {requestType:"populateForm", formElement:"premadevisuals"}, "GET", 
+        function(data) {
+            counter = 1;
+
+            data.forEach( function(obj) { select.append($('<option>', { value: counter++, text: obj })); } );
+     });
+}
+
+function populateGraphType() {
+
+    var select = $('#graphType');
+
+    select.append($('<option>', { value: 0, text: "" }));
+
+    sendAjaxRequest("main.html", {requestType:"populateForm", formElement:"typeofgraph"}, "GET", 
+        function(data) {
+            counter = 1;
+
+            data.forEach( function(obj) { select.append($('<option>', { value: counter++, text: obj })); } );
+     });
 }
 
 function parseUserQuery() {
@@ -166,6 +186,7 @@ function populateY(yAttr) {
 $(document).ready (function () {
     //load preset and hide dropdownlist list
     populatePresetsType();
+    populateGraphType();
     showDropDown(1);
 
     sendAjaxRequest("main.html", {requestType:"getVisualisation"}, "GET", 
@@ -233,9 +254,5 @@ $(document).ready (function () {
         $('#yValueYear').hide();
         $('#yValue').show();   
       }
-    });
-
-  $( "#progressbar" ).progressbar({
-      value: false
     });
 });
