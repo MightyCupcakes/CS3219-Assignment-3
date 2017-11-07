@@ -1,6 +1,7 @@
 package assignment3.webserver.handler;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -11,12 +12,16 @@ import com.google.common.collect.ImmutableMap;
 import com.sun.net.httpserver.HttpExchange;
 
 import assignment3.webserver.exceptions.WebServerException;
+import assignment3.webserver.requestprocessor.RequestProcessor;
+import assignment3.webserver.requestprocessor.RequestProcessorRegistry;
 
 /**
  * Processes a GET request from the user and response with the appropriate HTML file to
  * display the visualisation
  */
 public class GetRequestHandler extends FileRequestHandler {
+
+    private static final RequestProcessorRegistry registry = RequestProcessorRegistry.getInstance();
 
     public GetRequestHandler(String root) {
         super(root);
@@ -26,13 +31,13 @@ public class GetRequestHandler extends FileRequestHandler {
     public String handleRequest(HttpExchange httpExchange) throws WebServerException {
         Map<String, String> keyValuePairs = parseQueryString(httpExchange.getRequestURI().getQuery());
 
-        if (keyValuePairs.containsKey("getVisualisation")) {
-            // Create JSON response
-            JsonObjectBuilder builder = Json.createObjectBuilder();
-            // TODO: Not hardcode this
-            builder.add("src", "q1.html");
-
-            return builder.build().toString();
+        if (keyValuePairs.containsKey("requestType")) {
+            if (registry.getRequestProcessor(keyValuePairs.get("requestType")).isPresent()) {
+                Optional<RequestProcessor> processor = registry.getRequestProcessor(keyValuePairs.get("requestType"));
+                return processor.get().handleRequest(keyValuePairs);
+            } else {
+                return super.handleRequest(httpExchange);
+            }
         } else {
             return super.handleRequest(httpExchange);
         }
