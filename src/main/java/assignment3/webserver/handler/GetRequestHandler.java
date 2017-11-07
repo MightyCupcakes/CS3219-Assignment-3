@@ -1,7 +1,9 @@
 package assignment3.webserver.handler;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -24,7 +26,6 @@ import assignment3.webserver.exceptions.WebServerException;
  */
 public class GetRequestHandler extends FileRequestHandler {
 	WebQuery webQuery = new WebQueryManager();
-	Map<String, String> dataMap = new HashMap<>();
     public GetRequestHandler(String root) {
         super(root);
     }
@@ -36,31 +37,14 @@ public class GetRequestHandler extends FileRequestHandler {
         if (keyValuePairs.containsKey("getVisualisation")) {
             // Create JSON response
             // TODO: Not hardcode this
+        	
             String html = "q1.html";
             if (keyValuePairs.containsKey("vizType")) {
             	html = generateNewCsvData(keyValuePairs);
             }
-            builder.add("dataMap", webQuery.retrieveDataForDropDown("author"));
             builder.add("src", html);
             return builder.build().toString();
-        } else if (keyValuePairs.containsKey("populateDropDown")){
-            String attribute = keyValuePairs.get("attribute");
-            if (dataMap.containsKey(attribute)) {
-            	String result = dataMap.get(attribute);
-            	builder.add("datamap", result);
-            	return builder.build().toString();
-            }
-            
-            if (attribute.equals("conference")) {
-            	builder.add("datamap", "A4");
-            } else {
-            	String data = webQuery.retrieveDataForDropDown(attribute);
-            	builder.add("datamap", data);
-            }
-            String result = builder.build().toString();
-            dataMap.put(attribute, result);
-        	return result;
-        } else {
+        }  else {
         	return super.handleRequest(httpExchange);
         }
     }

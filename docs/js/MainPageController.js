@@ -1,3 +1,5 @@
+var yearMin = 1980;
+var yearMax = 2016;
 function populatePresetsType() {
     var select = $('#premade_type');
     select.append($('<option>', { value: 1, text: 'Transition over time' }));
@@ -6,7 +8,6 @@ function populatePresetsType() {
 }
 
 function showDropDown(type) {
-
   $("#startYear").hide();
   $('#startyearLabel').hide();
   $("#endYear").hide();
@@ -15,32 +16,29 @@ function showDropDown(type) {
   $("#xAttr").hide();  
   $("#yAttr").hide();
   $('#yValue').hide();
+  $('#yValueYear').hide();
   $('#yAttrLabel').hide();
   $("#xAttrLabel").hide();   
   $('#yValueLabel').hide(); 
-  $('#nLabel').hide();  
+  $('#nLabel').hide();
+  $('#yValueConf').hide();  
 
   if (type == 1) {
-
     $("#startYear").show();
     $("#endYear").show();
     $('#startyearLabel').show();
     $('#endyearLabel').show(); 
-
   } else if (type == 2) {
-
     $("#startYear").show();
     $('#startyearLabel').show();
-
   } else if (type == 3) {
-
     $("#n").show();
     $("#xAttr").show();       
     $("#xAttrLabel").show();          
     $("#yAttr").show();
-    $('#yValue').show();
     $('#yAttrLabel').show();
     $('#yValueLabel').show(); 
+    $('#yValue').show();
     $('#nLabel').show();
   }
 
@@ -50,9 +48,11 @@ function showDropDown(type) {
 function populateYear() {
   var selectStartYear = $('#startYear');
   var selectEndYear = $('#endYear');
-  for (i = 1997; i <= 2015; i++) {
+  var selectYValueYear = $('#yValueYear');
+  for (i = yearMin; i <= yearMax; i++) {
     selectStartYear.append($('<option>', { value : i, text: i}));
     selectEndYear.append($('<option>', { value : i, text: i}));    
+    selectYValueYear.append($('<option>', { value : i, text: i}));    
   }
 
 }
@@ -73,37 +73,52 @@ function populateNnX() {
   selectY.append($('<option>', { value : "author", text: "author"}));
   selectY.append($('<option>', { value : "conference", text: "conference"}));  
   selectY.append($('<option>', { value : "venue", text: "venue"}));
-  selectY.append($('<option>', { value : "year", text: "yearOfPublication"}));   
+  selectY.append($('<option>', { value : "year", text: "yearOfPublication"}));  
+  //remove author temp, author query are too big and laggy
+  //selectY.append($('<option>', { value : "author", text: "author"})); 
+
+  var selectYConf = $('#yValueConf');
+  selectYConf.append($('<option>', { value : "A4", text: "A4"}));  
   $('#yAttr').val("author").attr('selected', 'selected');
  
 }
-//temprorary populate with pre-defined
-function populateY(data, yAttr) {
+/*
+function populateY(yAttr) {
   var selectY = $('#yValue');
   $('#yValue').empty();
   if (yAttr == "conference") {
     selectY.append($('<option>', { value : "A4", text: "A4"}));
   } else if (yAttr == "author") {
-    selectY.append($('<option>', { value : "Joshua Bengio", text: "Joshua Bengio"}));
-    selectY.append($('<option>', { value : "Damien Chablat", text: "Damien Chablat"}));
-  } else if (yAttr = "venue") {
-
-  } else if (yAttr = "yearOfPublication") {
-
+    for (i = 0; i < authorArr.length; i++ ) {
+      selectY.append($('<option>', { value : authorArr[i], text: authorArr[i]}));
+    }
+  } else if (yAttr == "venue") {
+    for (i = 0; i < venueArr.length; i++ ) {
+      var venue = venueArr[1].venue;
+      selectY.append($('<option>', { value : venue, text: venue}));
+    }
+  } else if (yAttr == "yearOfPublication") {
+    for (i = yearMin; i <= yearMax; i++) {
+      selectY.append($('<option>', { value : i, text: i}));
+    }
   }
-}
+}*/
+
+
 
 $(document).ready (function () {
-    
+    //load preset and hide dropdownlist list
     populatePresetsType();
-    populateYear();
-    populateNnX();
-    hideAll();
+    showDropDown(1);
 
     sendAjaxRequest("main.html", {getVisualisation:"true"}, "GET", 
         function(data) { 
             $('#viz').attr('src', data.src)
      });
+
+    //d populate dropdownlist with the data
+    populateYear();
+    populateNnX();
 
     //to be rewritten
     $("#premade_type").on('change', function() {   
@@ -123,18 +138,24 @@ $(document).ready (function () {
     $('#constructd3').click(function () {
       var type = $("#premade_type").val();
       if (type == 3) {
+        var value;
+        if ($("#yAttr").val() == "year") {
+          value = $("#yValueYear").val();
+        } else if($("#yAttr").val() == "conference"){
+          value = $("#yValueConf").val();       
+        } else {
+          value = $("#yValue").val();
+        }
         request = {
           "getVisualisation":"true",
           "vizType" : 3,
           "n": $("#n").val(),
           "xAttr": $("#xAttr").val(),
           "yAttr": $("#yAttr").val(),
-          "yValue": $("#yValue").val(),
+          "yValue": value,
         };
+        alert(JSON.stringify(request));
         sendAjaxRequest("main.html", request, "GET", function(data) {
-          console.log(data.dataMap);
-          alert(data.dataMap);
-          alert("hertert");
           $('#viz').attr('src', data.src);
         });
       }
@@ -142,15 +163,19 @@ $(document).ready (function () {
 
     $("#yAttr").on('change', function () {
       var attr = $("#yAttr").val();
-      request = {
-        "populateDropDown" : "true",
-        "attribute" : attr
-      };
-      sendAjaxRequest("main.html", request, "GET", function(data) {
-        var dataMap = data.dataMap;
-        alert(dataMap);
-        populateY(data, yAttr);
-      })
+      if (attr == 'year') {
+        $('#yValueConf').hide();        
+        $('#yValueYear').show();
+        $('#yValue').hide();        
+      } else if (attr == 'conference') {
+        $('#yValueConf').show();
+        $('#yValueYear').hide();
+        $('#yValue').hide();          
+      } else {
+        $('#yValueConf').hide();
+        $('#yValueYear').hide();
+        $('#yValue').show();   
+      }
     });
 
   $( "#progressbar" ).progressbar({

@@ -101,9 +101,9 @@ public class WebQueryManager implements WebQuery{
 		if (type.equals("count")) {
 			return new SchemaCount(schemaAttr);
 		} else if (type.equals("max")) {
-			return new SchemaMin(schemaAttr);	
+			return new SchemaMax(schemaAttr);	
 		} else if (type.equals("min")) {
-			return new SchemaMax(schemaAttr);
+			return new SchemaMin(schemaAttr);
 		}
 		return new SchemaCountUnique(schemaAttr);
 
@@ -147,16 +147,21 @@ public class WebQueryManager implements WebQuery{
 	public String retrieveDataForDropDown(String attribute) {
 		APIQueryBuilder builder = QueryBuilder.createNewBuilder();
 		SchemaComparable selectAttr = (SchemaComparable) this.getSchemaAttr(attribute);
-		if (attribute.equals("")) {
+		if (attribute.equals("yearOfPublication")) {
 			builder = builder.select(this.getSchemaAggre(selectAttr, "min"),
-					this.getSchemaAggre(selectAttr, "max"));
+					this.getSchemaAggre(selectAttr, "max"))
+					.from(DEFAULT_CONFERENCE);
 		} else {
-			builder = builder.select(selectAttr);
+			builder = builder.select(selectAttr)
+					.from(DEFAULT_CONFERENCE)
+					.groupBy((SchemaComparable) selectAttr)
+					.orderBy(selectAttr, APIQueryBuilder.OrderByRule.ASC);
 		}
-		Query query = builder.from(DEFAULT_CONFERENCE)
-				.groupBy((SchemaComparable) selectAttr)
-				.build();
-		return query.execute();
+		Query query = builder.build();
+		String result = query.execute();
+		//query.executeAndSaveInCSV(attribute);
+		//System.out.println(result);
+		return result;
 	}
 
 }
