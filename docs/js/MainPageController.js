@@ -17,7 +17,7 @@ function populatePresetsType() {
 function populateGraphType() {
 
     var select = $('#graphType');
-
+ 
     select.append($('<option>', { value: 0, text: "" }));
 
     sendAjaxRequest("main.html", {requestType:"populateForm", formElement:"typeofgraph"}, "GET", 
@@ -83,7 +83,7 @@ function parseUserQuery() {
 
     console.log(query);
 }
-
+//to be rewritten 
 function showDropDown(type) {
   $("#startYear").hide();
   $('#startyearLabel').hide();
@@ -99,7 +99,10 @@ function showDropDown(type) {
   $('#yValueLabel').hide(); 
   $('#nLabel').hide();
   $('#yValueConf').hide();  
-
+  $('#likeRadio').hide();
+  $('#matchRadio').hide(); 
+  $('#radioLabelMatch').hide();
+  $('#radioLabelLike').hide();
   if (type == 1) {
     $("#startYear").show();
     $("#endYear").show();
@@ -115,7 +118,18 @@ function showDropDown(type) {
     $("#yAttr").show();
     $('#yAttrLabel').show();
     $('#yValueLabel').show(); 
-    $('#yValue').show();
+    var attr = $("#yAttr").val();
+    if (attr == 'year') {
+      $('#yValueYear').show();
+    } else if (attr == 'conference') {
+      $('#yValueConf').show();
+    } else {
+      $('#yValue').show();  
+      $('#likeRadio').show();
+      $('#matchRadio').show();    
+      $('#radioLabelLike').show(); 
+      $('#radioLabelMatch').show();                      
+    }
     $('#nLabel').show();
   }
 
@@ -223,7 +237,12 @@ $(document).ready (function () {
           value = $("#yValueConf").val();       
         } else {
           value = $("#yValue").val();
+          if (value == "") {
+            alert("Please do not leave Y Value Blank");
+            return;
+          }
         }
+
         request = {
           requestType:"getVisualisation",
           "vizType" : 3,
@@ -231,6 +250,7 @@ $(document).ready (function () {
           "xAttr": $("#xAttr").val(),
           "yAttr": $("#yAttr").val(),
           "yValue": value,
+          "predicate": $('.searchTypeRadio:checked').val()
         };
         alert(JSON.stringify(request));
         sendAjaxRequest("main.html", request, "GET", function(data) {
@@ -240,19 +260,6 @@ $(document).ready (function () {
     });
 
     $("#yAttr").on('change', function () {
-      var attr = $("#yAttr").val();
-      if (attr == 'year') {
-        $('#yValueConf').hide();        
-        $('#yValueYear').show();
-        $('#yValue').hide();        
-      } else if (attr == 'conference') {
-        $('#yValueConf').show();
-        $('#yValueYear').hide();
-        $('#yValue').hide();          
-      } else {
-        $('#yValueConf').hide();
-        $('#yValueYear').hide();
-        $('#yValue').show();   
-      }
+      showDropDown(3);
     });
 });

@@ -33,7 +33,7 @@ public class WebQueryManager implements WebQuery{
 		String xAttr = data.get("xAttr");
 		String yAttr = data.get("yAttr");
 		String yValue = data.get("yValue");
-		
+		String predicateType = data.get("predicate");
 		SchemaComparable selectAttribute = (SchemaComparable) this.getSchemaAttr(xAttr);
 		SchemaBase selectCount;
 		if (selectAttribute instanceof CitationAttribute) {
@@ -44,15 +44,29 @@ public class WebQueryManager implements WebQuery{
 		builder = builder.select(selectAttribute.as("attribute"), selectCount.as("count"));
 		
 		if (yAttr.equals("conference")) {
-
 			builder = builder.from(yValue);
-		} else {
-			SchemaComparable whereAttr = (SchemaComparable) this.getSchemaAttr(yAttr);
-			SchemaPredicate predicate = this.getSchemaPredi(whereAttr, yValue, null, "eqt");
-			builder = builder.from(DEFAULT_CONFERENCE).where(predicate);
+			Query query = builder.groupBy(selectAttribute)
+					.orderBy(selectCount, APIQueryBuilder.OrderByRule.DESC)
+					.limit(n)
+					.build();
+			System.out.println("savingFile");
+			query.executeAndSaveInCSV("5");
+			System.out.println("file saved");
+			return;
 		}
+		
+		SchemaComparable whereAttr = (SchemaComparable) this.getSchemaAttr(yAttr);
+		SchemaPredicate predicate;
+		if (yAttr.equals("author") || yAttr.equals("venue")) {
+			predicate = this.getSchemaPredi(whereAttr, yValue, null, predicateType);
+		} else {
+			predicate = this.getSchemaPredi(whereAttr, yValue, null, "eqt");
+		}
+		
 
-		Query query = builder.groupBy(selectAttribute)
+		Query query = builder.from(DEFAULT_CONFERENCE)
+				.where(predicate)
+				.groupBy(selectAttribute)
 				.orderBy(selectCount, APIQueryBuilder.OrderByRule.DESC)
 				.limit(n)
 				.build();
