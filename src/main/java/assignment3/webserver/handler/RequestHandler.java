@@ -12,7 +12,7 @@ public interface RequestHandler {
      * Handles the http request and returns the response as a string
      * @param httpExchange the request object
      * @return the string response
-     * @throws WebServerException if the request is illegal
+     * @throws Exception if the request is illegal
      **/
     String handleRequest(HttpExchange httpExchange) throws WebServerException;
 

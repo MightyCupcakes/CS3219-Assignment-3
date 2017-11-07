@@ -16,6 +16,7 @@ import assignment3.dataparser.xmlparser.XmlDataParser;
 
 public class StorageManager implements Storage {
 	private final static String DEFAULT_STORAGE = "Dataset/";
+	private final static String D3_STORAGE = "docs/";
 	private final String SAVED_LOCATION = "Dataset/";
 
 	private final String XML_FORMAT = ".xml";
@@ -64,7 +65,7 @@ public class StorageManager implements Storage {
 
 	@Override
 	public void saveResulToCsvData(String data, String fileName) throws Exception {
-		File csvFile = new File(SAVED_LOCATION + fileName + CSV_FORMAT);
+		File csvFile = new File(D3_STORAGE + fileName + CSV_FORMAT);
 		PrintWriter writer = new PrintWriter(csvFile);	
 		writer.write(data);
 		writer.close();

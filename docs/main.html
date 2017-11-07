@@ -43,23 +43,24 @@
               <div class="col-sm-6 form-group">
                 <label> Type of visualization </label>
                 <select class="form-control" id="premade_type" name="premade_type" placeholder="Chart type">
-                  <option></option>
                 </select>
               </div>
 
               <div class="col-sm-6 form-group">
                 <label id = "startyearLabel"> Year </label>
-                <select class="form-control" name="startyear" id="startYear" placeholder="Chart type"></select>
+                <select class="form-control" name="startyear" id="startYear" ></select>
                 <label id = "endyearLabel"> Year </label>
-                <select class="form-control" name="endyear" id="endYear" placeholder="Chart type"></select>
+                <select class="form-control" name="endyear" id="endYear" ></select>
                 <label id = "nLabel"> N attr </label>
-                <select class="form-control" name="top n" id ="n" placeholder="Chart type"></select>
+                <select class="form-control" name="top n" id ="n" ></select>
                 <label id = "xAttrLabel"> X attr </label>
-                <select class="form-control" name="xAttr" id ="xAttr" placeholder="Chart type"></select>                
+                <select class="form-control" name="xAttr" id ="xAttr" ></select>                
                 <label id = "yAttrLabel"> Y attr </label>
-                <select class="form-control" name="yAttr" id="yAttr" placeholder="Chart type"></select>                                                                     
+                <select class="form-control" name="yAttr" id="yAttr" ></select>                                                                     
                 <label id = "yValueLabel"> Y value</label>
-                <select class="form-control" name="yValue" id="yValue" placeholder="Chart type"></select>             
+                <input  class="form-control" name="yValue" id="yValue" placeholder="Enter a search word"></select>
+                <select class="form-control" name="yValueYear" id="yValueYear" ></select>
+                <select class="form-control" name="yValueConf" id="yValueConf" ></select>                         
               </div>
             </div>
 
@@ -92,9 +93,9 @@
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="#" data-value="Display">Display</a>
                     <div role="separator" class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" data-value="Count">Count</a>
-                    <a class="dropdown-item" href="#" data-value="Maximum">Maximum of</a>
-                    <a class="dropdown-item" href="#" data-value="Minimum">Minimum of</a>
+                    <a class="dropdown-item" href="#" data-value="count">Count</a>
+                    <a class="dropdown-item" href="#" data-value="max">Maximum of</a>
+                    <a class="dropdown-item" href="#" data-value="min">Minimum of</a>
                   </div>
                 </div>
                 <input type="text" class="form-control" aria-label="Text input with dropdown button" id="column1" placeholder="Enter a column to display">
@@ -108,9 +109,9 @@
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="#" data-value="Display">Display</a>
                     <div role="separator" class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" data-value="Count">Count</a>
-                    <a class="dropdown-item" href="#" data-value="Maximum">Maximum of</a>
-                    <a class="dropdown-item" href="#" data-value="Minimum">Minimum of</a>
+                    <a class="dropdown-item" href="#" data-value="count">Count</a>
+                    <a class="dropdown-item" href="#" data-value="max">Maximum of</a>
+                    <a class="dropdown-item" href="#" data-value="min">Minimum of</a>
                   </div>
                 </div>
                 <input type="text" class="form-control" aria-label="Text input with dropdown button" id="column2" placeholder="Enter a column to display">

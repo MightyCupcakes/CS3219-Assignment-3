@@ -1,16 +1,16 @@
 package assignment3.webserver.handler;
 
+
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 
 import com.google.common.collect.ImmutableMap;
 import com.sun.net.httpserver.HttpExchange;
 
+
+import assignment3.webserver.WebQuery;
+import assignment3.webserver.WebQueryManager;
 import assignment3.webserver.exceptions.WebServerException;
 import assignment3.webserver.requestprocessor.RequestProcessor;
 import assignment3.webserver.requestprocessor.RequestProcessorRegistry;
@@ -20,6 +20,7 @@ import assignment3.webserver.requestprocessor.RequestProcessorRegistry;
  * display the visualisation
  */
 public class GetRequestHandler extends FileRequestHandler {
+	WebQuery webQuery = new WebQueryManager();
 
     private static final RequestProcessorRegistry registry = RequestProcessorRegistry.getInstance();
 
@@ -42,8 +43,12 @@ public class GetRequestHandler extends FileRequestHandler {
             return super.handleRequest(httpExchange);
         }
     }
+    
 
-    private Map<String, String> parseQueryString(String queryString) {
+
+
+
+	private Map<String, String> parseQueryString(String queryString) {
         ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
         String[] keyValuePairs = queryString.split("&");
 

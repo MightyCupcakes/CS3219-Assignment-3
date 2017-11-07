@@ -201,7 +201,7 @@ public class LogicManager implements Logic{
     }
 
     @Override
-    public void saveResultIntoCsv(String jsonStringData) throws Exception {
+    public void saveResultIntoCsv(String jsonStringData, String filename) throws Exception {
         JsonReader jsonReader = Json.createReader(new StringReader(jsonStringData));
         JsonArray jsonArr = jsonReader.readArray();
         List<List<String>> dataList = new ArrayList<>();
@@ -217,9 +217,9 @@ public class LogicManager implements Logic{
             dataList.add(valueList);
         }
 
-        LocalDateTime datetime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
-        model.writeResultIntoCsvFile("query-" + formatter.format(datetime), dataList);
+      //  LocalDateTime datetime = LocalDateTime.now();
+       // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+        model.writeResultIntoCsvFile(filename, dataList);
     }
 
     private List<String> getColumnHeaderList(JsonArray json) throws Exception {
