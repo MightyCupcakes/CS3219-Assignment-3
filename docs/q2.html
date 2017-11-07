@@ -79,7 +79,7 @@ var tooltip = d3.select("body").append('div').attr('class', 'tooltip');
 var tooltipcount = tooltip.append('div').attr('class', 'count');
 
 d3.csv("5.csv", type, function(error, data) {
-  x.domain(data.map(function(d) { return d.author; }));
+  x.domain(data.map(function(d) { return d.attribute; }));
   y.domain([0, d3.max(data, function(d) { return d.count; })]);
 
   svg.append("text")
@@ -108,7 +108,7 @@ d3.csv("5.csv", type, function(error, data) {
       .data(data)
       .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return x(d.author); })
+      .attr("x", function(d) { return x(d.attribute); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.count); })
       .attr("height", function(d) { return height - y(d.count); })

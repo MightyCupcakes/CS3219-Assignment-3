@@ -147,7 +147,7 @@ $(document).ready (function () {
           value = $("#yValue").val();
         }
         request = {
-          "getVisualisation":"true",
+          requestType:"getVisualisation",
           "vizType" : 3,
           "n": $("#n").val(),
           "xAttr": $("#xAttr").val(),
