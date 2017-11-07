@@ -1,6 +1,8 @@
 package assignment3.webserver.requestprocessor;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -28,6 +30,19 @@ public class PopulateFormRequestProcessor implements RequestProcessor {
 
         } else if ("PremadeVisuals".equalsIgnoreCase(formElement)) {
             WebServerConstants.TYPES_OF_PREMADE_VISUALS.forEach(builder::add);
+
+        } else if ("columnNames".equalsIgnoreCase(formElement) && keyValuePairs.containsKey("term")) {
+            String searchTerm = keyValuePairs.get("term").toLowerCase();
+
+            Set<String> matchedColumns = new HashSet<>();
+
+            for(String columnName : WebServerConstants.COLUMNS.keySet()) {
+                if (columnName.toLowerCase().contains(searchTerm)) {
+                    matchedColumns.add(columnName);
+                }
+            }
+
+            matchedColumns.forEach(builder::add);
         }
 
         return builder.build().toString();

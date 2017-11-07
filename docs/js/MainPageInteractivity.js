@@ -12,8 +12,10 @@ $( document ).ready ( function () {
         var select = $('#premade_query');
         var selected = $(this).find(":selected").text();
 
+        select.html("");
+
         select.append($('<option>', { value: 0, text: "" }));
-        
+
         sendAjaxRequest("main.html", { requestType: "populateForm", formElement: "PremadeQueries", premadeVisuals: selected}, "GET", function(data) {
             counter = 0;
             data.forEach( function(obj) { select.append($('<option>', { value: counter++, text: obj })); } );
@@ -30,4 +32,14 @@ $(document).on('click', '.dropdown-item',  function(e) {
 
     button.text($(this).text());
     button.attr("data-value", value);
+});
+
+$(document).on('keydown.autocomplete', ".columnName", function() {
+    $(this).autocomplete({
+      source: function(request, response) {
+        $.getJSON("main.html", { term: request.term, requestType:"populateForm", formElement:"columnNames" }, 
+              response);
+    },
+      minLength: 2
+    });
 });
