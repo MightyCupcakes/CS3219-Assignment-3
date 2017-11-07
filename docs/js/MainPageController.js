@@ -199,7 +199,7 @@ $(document).ready (function () {
     populateNnX();
 
     //to be rewritten
-    $("#premade_type").on('change', function() {   
+    $("#premade_type").change( function() {   
       var type = $("#premade_type").val();
       if (type == 1) {
         showDropDown(1);        

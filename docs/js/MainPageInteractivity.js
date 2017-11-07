@@ -6,7 +6,19 @@ $( document ).ready ( function () {
 
     $('button#removecondition').click (function () {
         $('div#conditions').children("div.form-group").last().remove();
-    })
+    });
+
+    $('#premade_type').change( function() {
+        var select = $('#premade_query');
+        var selected = $(this).find(":selected").text();
+
+        select.append($('<option>', { value: 0, text: "" }));
+        
+        sendAjaxRequest("main.html", { requestType: "populateForm", formElement: "PremadeQueries", premadeVisuals: selected}, "GET", function(data) {
+            counter = 0;
+            data.forEach( function(obj) { select.append($('<option>', { value: counter++, text: obj })); } );
+        });
+    });
 });
 
 $(document).on('click', '.dropdown-item',  function(e) {
