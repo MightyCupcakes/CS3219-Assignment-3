@@ -25,12 +25,6 @@ public class PopulateFormRequestProcessor implements RequestProcessor {
         if ("typeOfGraph".equalsIgnoreCase(formElement)) {
             WebServerConstants.TYPES_OF_GRAPH.forEach(builder::add);
 
-        } else if ("PremadeQueries".equalsIgnoreCase(formElement) && keyValuePairs.containsKey("premadeVisuals")) {
-            WebServerConstants.PREMADE_QUERIES.get(keyValuePairs.get("premadeVisuals")).forEach(builder::add);
-
-        } else if ("PremadeVisuals".equalsIgnoreCase(formElement)) {
-            WebServerConstants.TYPES_OF_PREMADE_VISUALS.forEach(builder::add);
-
         } else if ("columnNames".equalsIgnoreCase(formElement) && keyValuePairs.containsKey("term")) {
             String searchTerm = keyValuePairs.get("term").toLowerCase();
 

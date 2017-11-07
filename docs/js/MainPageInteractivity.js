@@ -10,16 +10,21 @@ $( document ).ready ( function () {
 
     $('#premade_type').change( function() {
         var select = $('#premade_query');
-        var selected = $(this).find(":selected").text();
+        var selected = $(this).find(":selected").val();
 
         select.html("");
 
         select.append($('<option>', { value: 0, text: "" }));
 
-        sendAjaxRequest("main.html", { requestType: "populateForm", formElement: "PremadeQueries", premadeVisuals: selected}, "GET", function(data) {
-            counter = 0;
-            data.forEach( function(obj) { select.append($('<option>', { value: counter++, text: obj })); } );
+        premadeVisuals[selected - 1].queries.forEach(function(obj) {
+            select.append($('<option>', { value: obj, text: obj }));
         });
+    });
+
+    $('#premade_query').change( function () {
+        var selected = $(this).find(":selected").val();
+
+        generatePremadeQuery(selected);
     });
 });
 
