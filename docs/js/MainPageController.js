@@ -1,10 +1,67 @@
 var yearMin = 1980;
 var yearMax = 2016;
+
 function populatePresetsType() {
     var select = $('#premade_type');
     select.append($('<option>', { value: 1, text: 'Transition over time' }));
     select.append($('<option>', { value: 2, text: 'Contemporary comparison' }));
     select.append($('<option>', { value: 3, text: 'Top N X of Y' }));
+}
+
+function parseUserQuery() {
+    var query = {};
+
+    var typeOfGraph = $('input#graphType').val();
+    query["typeOfGraph"] = typeOfGraph;
+
+    var column1ShowType = $('#column1show').attr('data-value');
+    var column2ShowType = $('#column2show').attr('data-value');
+
+    query["column1ShowType"] = column1ShowType;
+    query["column2ShowType"] = column2ShowType;
+
+    var column1Name = $('#column1').val();
+    var column2Name = $('#column2').val();
+
+    query["column1Name"] = column1Name;
+    query["column2Name"] = column2Name;
+
+    var counter = 0;
+    var conditionDiv = $('div#conditions');
+
+    conditionDiv.find('input.conditionColumn').each( function () {
+        counter ++;
+
+        query["conditionColumn" + counter] = $(this).val();
+    });
+
+    counter = 0;
+
+    conditionDiv.find('button.conditionComparator').each ( function() {
+        counter ++;
+
+        query["conditionComparator" + counter] = $(this).attr('data-value');
+    });
+
+    counter = 0;
+
+    conditionDiv.find('input.conditionValue').each (function () {
+        counter ++;
+
+        query["conditionValue" + counter] = $(this).val();
+    });
+
+    counter = 0;
+
+    conditionDiv.find('button.conditionCombine').each (function () {
+        counter ++;
+
+        query["conditionCombine" + counter] = $(this).attr('data-value');
+    });
+
+    query["numOfConditions"] = counter;
+
+    console.log(query);
 }
 
 function showDropDown(type) {
