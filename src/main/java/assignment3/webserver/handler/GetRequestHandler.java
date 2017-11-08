@@ -1,19 +1,16 @@
 package assignment3.webserver.handler;
 
 
-import java.util.Map;
 import java.util.Optional;
 
-
-import com.google.common.collect.ImmutableMap;
 import com.sun.net.httpserver.HttpExchange;
-
 
 import assignment3.webserver.WebQuery;
 import assignment3.webserver.WebQueryManager;
 import assignment3.webserver.exceptions.WebServerException;
 import assignment3.webserver.requestprocessor.RequestProcessor;
 import assignment3.webserver.requestprocessor.RequestProcessorRegistry;
+import assignment3.webserver.webrequest.WebRequest;
 
 /**
  * Processes a GET request from the user and response with the appropriate HTML file to
@@ -30,33 +27,19 @@ public class GetRequestHandler extends FileRequestHandler {
 
     @Override
     public String handleRequest(HttpExchange httpExchange) throws WebServerException {
-        Map<String, String> keyValuePairs = parseQueryString(httpExchange.getRequestURI().getQuery());
+        WebRequest request = new WebRequest();
 
-        if (keyValuePairs.containsKey("requestType")) {
-            if (registry.getRequestProcessor(keyValuePairs.get("requestType")).isPresent()) {
-                Optional<RequestProcessor> processor = registry.getRequestProcessor(keyValuePairs.get("requestType"));
-                return processor.get().handleRequest(keyValuePairs);
+        request.parseQueryString(WebRequest.RequestType.GET, httpExchange.getRequestURI().getQuery());
+
+        if (request.doesKeyExists("requestType")) {
+            if (registry.getRequestProcessor(request.getValue("requestType")).isPresent()) {
+                Optional<RequestProcessor> processor = registry.getRequestProcessor(request.getValue("requestType"));
+                return processor.get().handleRequest(request);
             } else {
                 return super.handleRequest(httpExchange);
             }
         } else {
             return super.handleRequest(httpExchange);
         }
-    }
-    
-
-
-
-
-	private Map<String, String> parseQueryString(String queryString) {
-        ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
-        String[] keyValuePairs = queryString.split("&");
-
-        for (String keyValuePair : keyValuePairs) {
-            String[] keyAndValue = keyValuePair.split("=");
-            builder.put(keyAndValue[0], keyAndValue[1]);
-        }
-
-        return builder.build();
     }
 }
