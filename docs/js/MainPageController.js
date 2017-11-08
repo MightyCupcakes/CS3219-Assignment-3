@@ -85,6 +85,9 @@ function parseUserQuery() {
 
     query["numOfConditions"] = counter;
 
+    query["columnsort"] = $("#columnsort").val();
+    query["columnsortorder"] = $("#columnsortorder").attr('data-value');
+
     return query;
 }
 

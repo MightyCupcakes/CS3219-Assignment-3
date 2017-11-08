@@ -1,3 +1,5 @@
+var selectedColumns = [];
+
 $( document ).ready ( function () {
 
     $('button#addNewCondition').click (function () {
@@ -26,6 +28,10 @@ $( document ).ready ( function () {
 
         generatePremadeQuery(selected);
     });
+
+    $('#columnsort').autocomplete( {
+        source: selectedColumns
+    })
 });
 
 $(document).on('click', '.dropdown-item',  function(e) {
@@ -37,6 +43,15 @@ $(document).on('click', '.dropdown-item',  function(e) {
 
     button.text($(this).text());
     button.attr("data-value", value);
+});
+
+$(document).on('change', ".columnName", function() {
+    if ($(this).attr('id') == "column1") {
+        selectedColumns[0] = $(this).val();
+
+    } else if ($(this).attr('id') == "column2") {
+        selectedColumns[1] = $(this).val();
+    }
 });
 
 $(document).on('keydown.autocomplete', ".columnName", function() {
