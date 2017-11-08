@@ -20,10 +20,4 @@ public interface WebQuery {
      * @return true if everything went well, false otherwise
      */
     boolean executeAndSaveResultIntoCsvFile(String filename);
-
-    void generateTopNXofYGraph(Map<String, String> data) ;
-    void generateTrendGraph(Map<String, String> data) ;
-    void generateContemporaryGraph(Map<String, String> data);
-    void generateNewGraph(Map<String, String> data);
-    String retrieveDataForDropDown(String attribute);
 }

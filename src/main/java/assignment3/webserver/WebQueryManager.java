@@ -32,7 +32,6 @@ public class WebQueryManager implements WebQuery {
     }
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public void generateTopNXofYGraph(Map<String, String> data)  {
 		APIQueryBuilder builder = QueryBuilder.createNewBuilder();
 		int n = Integer.parseInt(data.get("n"));
@@ -40,10 +39,10 @@ public class WebQueryManager implements WebQuery {
 		String yAttr = data.get("yAttr");
 		String yValue = data.get("yValue");
 		
-		SchemaComparable selectAttribute = (SchemaComparable) this.getSchemaAttr(xAttr);
+		SchemaComparable selectAttribute = (SchemaComparable) this.getSchemaAttribute(xAttr);
 		SchemaBase selectCount;
 		if (selectAttribute instanceof CitationAttribute) {
-			selectCount = this.getSchemaAggre(selectAttribute, "count");
+			selectCount = this.getSchemaAggregate(selectAttribute, "count");
 		} else {
 			selectCount = new SchemaCount(ConferenceData.ID);
 		}
@@ -53,8 +52,8 @@ public class WebQueryManager implements WebQuery {
 
 			builder = builder.from(yValue);
 		} else {
-			SchemaComparable whereAttr = (SchemaComparable) this.getSchemaAttr(yAttr);
-			SchemaPredicate predicate = this.getSchemaPredi(whereAttr, yValue, null, "eqt");
+			SchemaComparable whereAttr = (SchemaComparable) this.getSchemaAttribute(yAttr);
+			SchemaPredicate predicate = this.getSchemaPredicate(whereAttr, yValue, null, "eqt");
 			builder = builder.from(DEFAULT_CONFERENCE).where(predicate);
 		}
 
@@ -68,24 +67,6 @@ public class WebQueryManager implements WebQuery {
 	}
 
 	@Override
-	public void generateTrendGraph(Map<String, String> data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void generateContemporaryGraph(Map<String, String> data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void generateNewGraph(Map<String, String> data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public boolean parseWebQuery(WebRequest query) {
 		return false;
 	}
@@ -96,13 +77,13 @@ public class WebQueryManager implements WebQuery {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private SchemaBase getSchemaAttr(String attribute) {
+	private SchemaBase getSchemaAttribute(String attribute) {
 		SchemaComparable schemaAttr;
 		if (attribute.equals("author")) {
 			schemaAttr = ConferenceData.AUTHOR;
 		} else if (attribute.equals("yearOfPublication")) {
 			schemaAttr = new SchemaInt(attribute);
-		} else if (isCitationAttr(attribute)){
+		} else if (isCitationAttribute(attribute)){
 			schemaAttr = attribute.equals("year") 
 					? new CitationAttribute<Integer> (attribute) :
 				new CitationAttribute<String> (attribute);
@@ -113,7 +94,7 @@ public class WebQueryManager implements WebQuery {
 		return schemaAttr;
 	}
 	
-	private SchemaBase getSchemaAggre(SchemaComparable schemaAttr, String type) {
+	private SchemaBase getSchemaAggregate(SchemaComparable schemaAttr, String type) {
 		if (type.equals("count")) {
 			return new SchemaCount(schemaAttr);
 		} else if (type.equals("max")) {
@@ -125,7 +106,7 @@ public class WebQueryManager implements WebQuery {
 
 	}
 
-	private boolean isCitationAttr(String attribute) {
+	private boolean isCitationAttribute(String attribute) {
 		return attribute.equals("citationtitle") || attribute.equals("year")
 				|| attribute.equals("booktitle") || attribute.equals("authors")
 				|| attribute.equals("citationVenue") || attribute.equals("journalId")
@@ -133,8 +114,8 @@ public class WebQueryManager implements WebQuery {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private SchemaPredicate getSchemaPredi(SchemaComparable  attribute, String valueToCompare, 
-			Set valueSet, String type){
+	private SchemaPredicate getSchemaPredicate(SchemaComparable  attribute, String valueToCompare,
+                                               Set valueSet, String type){
 		if (type.equals("gt")) {
 			return attribute.greaterThan(Integer.parseInt(valueToCompare));
 		} else if (type.equals("gte")) {
@@ -152,20 +133,14 @@ public class WebQueryManager implements WebQuery {
 		return attribute.equalsTo(valueToCompare);
 	
 	}
-	
-	private SchemaPredicate getSchemaPrediIn(SchemaComparable attribute, Set valueSet) {
-		return attribute.in(valueSet);
-	}
-	
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public String retrieveDataForDropDown(String attribute) {
 		APIQueryBuilder builder = QueryBuilder.createNewBuilder();
-		SchemaComparable selectAttr = (SchemaComparable) this.getSchemaAttr(attribute);
+		SchemaComparable selectAttr = (SchemaComparable) this.getSchemaAttribute(attribute);
 		if (attribute.equals("yearOfPublication")) {
-			builder = builder.select(this.getSchemaAggre(selectAttr, "min"),
-					this.getSchemaAggre(selectAttr, "max"))
+			builder = builder.select(this.getSchemaAggregate(selectAttr, "min"),
+					this.getSchemaAggregate(selectAttr, "max"))
 					.from(DEFAULT_CONFERENCE);
 		} else {
 			builder = builder.select(selectAttr)
