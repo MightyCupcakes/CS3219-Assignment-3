@@ -121,6 +121,27 @@ function generatePremadeQuery(selected) {
         // Get the first condition row
         firstCondition.find(".conditionColumn").first().val("Journal Venue");
         firstCondition.find(".conditionValue").first().val("ArXiV");
+
+    } else if (selected == "Number of citations for a conference over a few years") {
+        $("#limit").parent().hide();
+
+        graphType.val("Line Chart");
+
+        column1show.attr("data-value", "Display");
+        column1show.text("Display");
+
+        column2show.attr("data-value", "count");
+        column2show.text("Count");
+
+        column1.val("Journal Venue");
+        column2.val("Citations");
+
+        conditions.append($("#newConditions").html());
+
+        var firstCondition = conditions.children("div.row").first();
+
+        firstCondition.find(".conditionColumn").first().val("Journal Venue");
+        firstCondition.find(".conditionValue").first().val("ArXiV");
     }
 }
 
