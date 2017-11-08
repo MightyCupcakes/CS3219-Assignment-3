@@ -22,7 +22,6 @@ import assignment3.schema.citations.CitationAttribute;
 
 public class WebQueryManager implements WebQuery{
 
-
 	private static final String DEFAULT_CONFERENCE = "A4";
 
 	@SuppressWarnings("rawtypes")

@@ -6,7 +6,26 @@ $( document ).ready ( function () {
 
     $('button#removecondition').click (function () {
         $('div#conditions').children("div.form-group").last().remove();
-    })
+    });
+
+    $('#premade_type').change( function() {
+        var select = $('#premade_query');
+        var selected = $(this).find(":selected").val();
+
+        select.html("");
+
+        select.append($('<option>', { value: 0, text: "" }));
+
+        premadeVisuals[selected - 1].queries.forEach(function(obj) {
+            select.append($('<option>', { value: obj, text: obj }));
+        });
+    });
+
+    $('#premade_query').change( function () {
+        var selected = $(this).find(":selected").val();
+
+        generatePremadeQuery(selected);
+    });
 });
 
 $(document).on('click', '.dropdown-item',  function(e) {
@@ -18,4 +37,14 @@ $(document).on('click', '.dropdown-item',  function(e) {
 
     button.text($(this).text());
     button.attr("data-value", value);
+});
+
+$(document).on('keydown.autocomplete', ".columnName", function() {
+    $(this).autocomplete({
+      source: function(request, response) {
+        $.getJSON("main.html", { term: request.term, requestType:"populateForm", formElement:"columnNames" }, 
+              response);
+    },
+      minLength: 2
+    });
 });

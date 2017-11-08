@@ -47,6 +47,14 @@
               </div>
 
               <div class="col-sm-6 form-group">
+                <label> Type of query </label>
+                <select class="form-control" id="premade_query" name="premade_query" placeholder="Chart type">
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6 form-group">
                 <label id = "startyearLabel"> Year </label>
                 <select class="form-control" name="startyear" id="startYear" ></select>
                 <label id = "endyearLabel"> Year </label>
@@ -79,8 +87,8 @@
                 <select class="form-control" id="graphType" name="item_super" placeholder="Chart type"></select>
               </div>
               <div class="col-sm-6 form-group">
-                <label> Limit number of results</label>
-                <input type="text" class="form-control" name="item_super">
+                <label id="limitlabel"> Limit number of results</label>
+                <input type="text" class="form-control" id="limit" name="item_super">
               </div>
             </div>
 
@@ -89,34 +97,34 @@
             <div class="row form-group">
               <div class="col-sm-6 input-group">
                 <div class="input-group-btn">
-                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="Display" id="column1show">
+                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="display" id="column1show">
                     Display
                   </button>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" data-value="Display">Display</a>
+                    <a class="dropdown-item" href="#" data-value="display">Display</a>
                     <div role="separator" class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" data-value="count">Count</a>
                     <a class="dropdown-item" href="#" data-value="max">Maximum of</a>
                     <a class="dropdown-item" href="#" data-value="min">Minimum of</a>
                   </div>
                 </div>
-                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="column1" placeholder="Enter a column to display">
+                <input type="text" class="form-control columnName" aria-label="Text input with dropdown button" id="column1" placeholder="Enter a column to display">
               </div>
 
               <div class="col-sm-6 input-group">
                 <div class="input-group-btn">
-                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="Display" id="column2show">
+                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="display" id="column2show">
                     Display
                   </button>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" data-value="Display">Display</a>
+                    <a class="dropdown-item" href="#" data-value="display">Display</a>
                     <div role="separator" class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" data-value="count">Count</a>
                     <a class="dropdown-item" href="#" data-value="max">Maximum of</a>
                     <a class="dropdown-item" href="#" data-value="min">Minimum of</a>
                   </div>
                 </div>
-                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="column2" placeholder="Enter a column to display">
+                <input type="text" class="form-control columnName" aria-label="Text input with dropdown button" id="column2" placeholder="Enter a column to display">
               </div>
             </div>
 
@@ -130,7 +138,7 @@
             <div id ="newConditions" style="display: none;">
               <div class="row form-group">
                 <div class="col-sm-6 input-group">
-                  <input type="text" class="form-control conditionColumn" aria-label="Text input with dropdown button" placeholder="Enter a column name here">
+                  <input type="text" class="form-control conditionColumn columnName" aria-label="Text input with dropdown button" placeholder="Enter a column name here">
                   <div class="input-group-btn">
                     <button type="button" class="btn btn-info dropdown-toggle conditionComparator" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="e">
                       Equals
@@ -211,7 +219,7 @@
   <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 
   <script type="text/javascript" src="js/ajaxHandler.js"></script>
-  <script type="text/javascript" src="js/MainPageInteractivity.js"></script>
   <script type="text/javascript" src="js/MainPageController.js"></script>
+  <script type="text/javascript" src="js/MainPageInteractivity.js"></script>
 </body>
 </html>
