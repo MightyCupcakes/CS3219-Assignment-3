@@ -19,10 +19,17 @@ import assignment3.schema.aggregate.SchemaCountUnique;
 import assignment3.schema.aggregate.SchemaMax;
 import assignment3.schema.aggregate.SchemaMin;
 import assignment3.schema.citations.CitationAttribute;
+import assignment3.webserver.webrequest.WebRequest;
 
-public class WebQueryManager implements WebQuery{
+public class WebQueryManager implements WebQuery {
 
 	private static final String DEFAULT_CONFERENCE = "A4";
+
+	private final WebServerManager manager;
+
+	public WebQueryManager(WebServerManager manager) {
+	    this.manager = manager;
+    }
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -76,6 +83,16 @@ public class WebQueryManager implements WebQuery{
 	public void generateNewGraph(Map<String, String> data) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean parseWebQuery(WebRequest query) {
+		return false;
+	}
+
+	@Override
+	public boolean executeAndSaveResultIntoCsvFile(String filename) {
+		return false;
 	}
 
 	@SuppressWarnings("rawtypes")

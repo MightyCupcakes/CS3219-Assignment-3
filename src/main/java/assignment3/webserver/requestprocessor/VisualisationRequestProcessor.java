@@ -14,7 +14,6 @@ import assignment3.webserver.webrequest.WebRequest;
  */
 @RegisterProcessor( requestType = "getVisualisation")
 public class VisualisationRequestProcessor implements RequestProcessor {
-	WebQuery webQuery = new WebQueryManager();
 
     @Override
     public String handleRequest(WebRequest keyValuePairs) {

@@ -9,13 +9,16 @@ import java.util.logging.Logger;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import assignment3.webserver.WebServerManager;
 import assignment3.webserver.exceptions.WebServerException;
 
 public class WebServerHandler implements HttpHandler {
 
     protected final String root;
+    private final WebServerManager manager;
 
-    public WebServerHandler(String root) {
+    public WebServerHandler(String root, WebServerManager manager) {
+        this.manager = manager;
         this.root = root;
     }
 
@@ -26,7 +29,7 @@ public class WebServerHandler implements HttpHandler {
         if (isNull(t.getRequestURI().getQuery())) {
             handler = new FileRequestHandler(root);
         } else {
-            handler = new GetRequestHandler(root);
+            handler = new GetRequestHandler(root, manager);
         }
 
         try {

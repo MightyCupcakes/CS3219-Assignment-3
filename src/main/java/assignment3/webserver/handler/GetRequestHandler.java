@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpExchange;
 
 import assignment3.webserver.WebQuery;
 import assignment3.webserver.WebQueryManager;
+import assignment3.webserver.WebServerManager;
 import assignment3.webserver.exceptions.WebServerException;
 import assignment3.webserver.requestprocessor.RequestProcessor;
 import assignment3.webserver.requestprocessor.RequestProcessorRegistry;
@@ -17,12 +18,15 @@ import assignment3.webserver.webrequest.WebRequest;
  * display the visualisation
  */
 public class GetRequestHandler extends FileRequestHandler {
-	WebQuery webQuery = new WebQueryManager();
 
     private static final RequestProcessorRegistry registry = RequestProcessorRegistry.getInstance();
 
-    public GetRequestHandler(String root) {
+    private final WebServerManager manager;
+
+    public GetRequestHandler(String root, WebServerManager manager) {
         super(root);
+
+        this.manager = manager;
     }
 
     @Override

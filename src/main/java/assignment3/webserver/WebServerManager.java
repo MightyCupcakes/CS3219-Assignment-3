@@ -18,17 +18,19 @@ public class WebServerManager implements WebServer {
 
     private final int port;
     private API api;
+    private WebQuery webQuery;
 
     public WebServerManager(int port) {
         this.port = port;
         this.api = new APIManager();
+        this.webQuery = new WebQueryManager(this);
     }
 
     public void start() {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
-            server.createContext("/", new WebServerHandler(WEB_ROOT));
+            server.createContext("/", new WebServerHandler(WEB_ROOT, this));
             server.setExecutor(null); // creates a default executor
             server.start();
 
@@ -37,5 +39,9 @@ public class WebServerManager implements WebServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public API getAPI() {
+        return api;
     }
 }
