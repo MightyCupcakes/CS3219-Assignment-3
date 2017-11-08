@@ -11,7 +11,8 @@ public interface API {
     void parseConferenceJsonData(String file);
 
     /**
-     * All queries within this method will be executed.
+     * Gets a new QueryBuilder instance
      */
-    void runQueries();
+    APIQueryBuilder getQueryBuilder();
+
 }
