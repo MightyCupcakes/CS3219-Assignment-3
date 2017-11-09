@@ -24,12 +24,14 @@ public class WebServerTest {
 
     @Mock
     private HttpExchange exchange;
+    @Mock
+    private WebServerManager manager;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        handler = new WebServerHandler("src/test/data/webroot/");
+        handler = new WebServerHandler("src/test/data/webroot/", manager);
 
         outputStream = new ByteArrayOutputStream();
         when(exchange.getResponseBody()).thenReturn(outputStream);

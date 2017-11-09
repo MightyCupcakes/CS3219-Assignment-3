@@ -79,12 +79,13 @@
             <h4>Or construct your own!</h4>
             <p class="lead"> Let those creative juices flow, or so they say.</p>
 
-            <div class="row">
-              <div class="col-sm-6 form-group">
+            <div class="row form-group">
+              <div class="col-sm-6">
                 <label> Type of graph</label>
                 <select class="form-control" id="graphType" name="item_super" placeholder="Chart type"></select>
               </div>
-              <div class="col-sm-6 form-group">
+
+              <div class="col-sm-6">
                 <label id="limitlabel"> Limit number of results</label>
                 <input type="text" class="form-control" id="limit" name="item_super">
               </div>
@@ -171,6 +172,27 @@
               <div class="col-sm-12 form-group">
                 <button class="btn btn-dark" id="addNewCondition">Add new filter</button>
                 <button class="btn btn-danger" id="removecondition">Remove last filter</button>
+              </div>
+            </div>
+
+            <p/>
+            <h5> Ordering </h5>
+            <p/>
+
+            <div class="row form-group">
+              <div class="col-sm-12 input-group">
+                <span class="input-group-addon" id="basic-addon1">Sort visible column</span>
+
+                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="columnsort" placeholder="Enter a column data selected to sort by">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="desc" id="columnsortorder">
+                    Descending Order
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#" data-value="desc">Descending Order</a>
+                    <a class="dropdown-item" href="#" data-value="asc">Ascending Order</a>
+                  </div>
+                </div>
               </div>
             </div>
 

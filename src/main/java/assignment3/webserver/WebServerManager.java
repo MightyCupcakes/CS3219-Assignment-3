@@ -10,6 +10,8 @@ import com.sun.net.httpserver.HttpServer;
 import assignment3.api.API;
 import assignment3.api.APIManager;
 import assignment3.webserver.handler.WebServerHandler;
+import assignment3.webserver.webquery.WebQuery;
+import assignment3.webserver.webquery.WebQueryManager;
 
 public class WebServerManager implements WebServer {
 
@@ -18,17 +20,19 @@ public class WebServerManager implements WebServer {
 
     private final int port;
     private API api;
+    private WebQuery webQuery;
 
     public WebServerManager(int port) {
         this.port = port;
         this.api = new APIManager();
+        this.webQuery = new WebQueryManager(this);
     }
 
     public void start() {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
-            server.createContext("/", new WebServerHandler(WEB_ROOT));
+            server.createContext("/", new WebServerHandler(WEB_ROOT, this));
             server.setExecutor(null); // creates a default executor
             server.start();
 
@@ -37,5 +41,9 @@ public class WebServerManager implements WebServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public API getAPI() {
+        return api;
     }
 }

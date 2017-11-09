@@ -87,6 +87,9 @@ function parseUserQuery() {
 
     query["numOfConditions"] = counter;
 
+    query["columnsort"] = $("#columnsort").val();
+    query["columnsortorder"] = $("#columnsortorder").attr('data-value');
+
     return query;
 }
 
@@ -114,7 +117,9 @@ function generatePremadeQuery(selected) {
         column2show.text("Count");
 
         column1.val("Journal Authors");
+        column1.trigger("change");
         column2.val("Journals");
+        column2.trigger("change");
 
         conditions.append($("#newConditions").html());
 
