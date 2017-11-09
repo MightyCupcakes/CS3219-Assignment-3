@@ -69,12 +69,7 @@ public class WebQueryManager implements WebQuery {
 	}
 
 	@Override
-	public boolean parseWebQuery(WebRequest query) {
-        return false;
-	}
-
-	@Override
-	public boolean executeAndSaveResultIntoCsvFile(String filename) {
+	public boolean executeAndSaveResultIntoCsvFile(WebRequest query) {
 		return false;
 	}
 
