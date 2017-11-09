@@ -15,7 +15,8 @@ public final class WebServerConstants {
 
     public static final ImmutableList<String> TYPES_OF_GRAPH = ImmutableList.of(
             "Bar Chart",
-            "Line Chart"
+            "Line Chart",
+            "Citation Web"
     );
 
     public static final ImmutableMap<String, SchemaBase> COLUMNS = populateColumnNames();

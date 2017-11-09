@@ -3,7 +3,9 @@ var yearMax = 2016;
 
 var premadeVisuals = [{type: "Transition over time", queries: ["Number of citations for a conference over a few years","Number of citations for different conferences"]},
                     {type: "Contemporary comparison", queries:["Number of citations for two different conferences held in the same year","?????"]},
-                    {type: "Top N X of Y", queries: ["Top authors for a conference"]} ];
+                    {type: "Top N X of Y", queries: ["Top authors for a conference"]},
+                    {type: "Citation Network (Base Paper)", queries: ["Base paper = Low-density parity check codes over GF(q)"]}, 
+                    {type: "Citation Network"}];
 
 function populatePresetsType() {
     var select = $('#premade_type');
@@ -98,7 +100,7 @@ function generatePremadeQuery(selected) {
     var conditions = $('#conditions');
 
     conditions.html("");
-    showDropDown(4);
+    showDropDown(7);
 
     if (selected == "Top authors for a conference") {
         graphType.val("Bar Chart");
@@ -116,7 +118,7 @@ function generatePremadeQuery(selected) {
 
         conditions.append($("#newConditions").html());
 
-        var firstCondition = conditions.children("div.row").first()
+        var firstCondition = conditions.children("div.row").first();
 
         // Get the first condition row
         firstCondition.find(".conditionColumn").first().val("Journal Venue");
@@ -142,6 +144,8 @@ function generatePremadeQuery(selected) {
 
         firstCondition.find(".conditionColumn").first().val("Journal Venue");
         firstCondition.find(".conditionValue").first().val("ArXiV");
+    } else if (selected == "Base paper = Low-density parity check codes over GF(q)"){
+    	graphType.val("Citation Network");
     }
 }
 
@@ -179,8 +183,6 @@ function showDropDown(type) {
     $('#yValue').show();
     $('#nLabel').show();
   }
-
-
 }
 //temprorary populate with pre-defined
 function populateYear() {
