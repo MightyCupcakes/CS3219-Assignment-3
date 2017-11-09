@@ -7,6 +7,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 
 import assignment3.webserver.WebServerConstants;
+import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
 
 /**

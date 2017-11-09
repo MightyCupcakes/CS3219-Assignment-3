@@ -3,6 +3,7 @@ package assignment3.webserver.requestprocessor;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
+import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
 
 /**

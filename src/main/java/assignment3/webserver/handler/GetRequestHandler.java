@@ -7,8 +7,8 @@ import com.sun.net.httpserver.HttpExchange;
 
 import assignment3.webserver.WebServerManager;
 import assignment3.webserver.exceptions.WebServerException;
+import assignment3.webserver.registry.WebServerRegistry;
 import assignment3.webserver.requestprocessor.RequestProcessor;
-import assignment3.webserver.requestprocessor.RequestProcessorRegistry;
 import assignment3.webserver.webrequest.WebRequest;
 
 /**
@@ -17,7 +17,8 @@ import assignment3.webserver.webrequest.WebRequest;
  */
 public class GetRequestHandler extends FileRequestHandler {
 
-    private static final RequestProcessorRegistry registry = RequestProcessorRegistry.getInstance();
+    private static final WebServerRegistry<RequestProcessor> registry =
+            new WebServerRegistry<>(RequestProcessor.class.getPackage().getName());
 
     private final WebServerManager manager;
 
@@ -34,8 +35,8 @@ public class GetRequestHandler extends FileRequestHandler {
         request.parseQueryString(WebRequest.RequestType.GET, httpExchange.getRequestURI().getQuery());
 
         if (request.doesKeyExists("requestType")) {
-            if (registry.getRequestProcessor(request.getValue("requestType")).isPresent()) {
-                Optional<RequestProcessor> processor = registry.getRequestProcessor(request.getValue("requestType"));
+            if (registry.getHandler(request.getValue("requestType")).isPresent()) {
+                Optional<RequestProcessor> processor = registry.getHandler(request.getValue("requestType"));
                 return processor.get().handleRequest(request);
             } else {
                 return super.handleRequest(httpExchange);

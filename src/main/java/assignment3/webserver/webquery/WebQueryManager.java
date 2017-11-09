@@ -18,12 +18,15 @@ import assignment3.schema.aggregate.SchemaMax;
 import assignment3.schema.aggregate.SchemaMin;
 import assignment3.webserver.WebServerConstants;
 import assignment3.webserver.WebServerManager;
+import assignment3.webserver.registry.WebServerRegistry;
 import assignment3.webserver.webquery.WebQuery;
 import assignment3.webserver.webrequest.WebRequest;
 
 public class WebQueryManager implements WebQuery {
 
 	private static final String DEFAULT_CONFERENCE = "A4";
+	private static final WebServerRegistry<WebQueryProcessor> registry =
+            new WebServerRegistry<>(WebQueryProcessor.class.getPackage().getName());
 
 	private final WebServerManager manager;
 

@@ -1,4 +1,4 @@
-package assignment3.webserver.requestprocessor;
+package assignment3.webserver.registry;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
