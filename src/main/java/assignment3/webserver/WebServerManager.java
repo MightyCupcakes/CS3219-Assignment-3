@@ -10,6 +10,8 @@ import com.sun.net.httpserver.HttpServer;
 import assignment3.api.API;
 import assignment3.api.APIManager;
 import assignment3.webserver.handler.WebServerHandler;
+import assignment3.webserver.webquery.WebQuery;
+import assignment3.webserver.webquery.WebQueryManager;
 
 public class WebServerManager implements WebServer {
 

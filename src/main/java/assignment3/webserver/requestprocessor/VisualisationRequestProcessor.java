@@ -1,12 +1,8 @@
 package assignment3.webserver.requestprocessor;
 
-import java.util.Map;
-
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
-import assignment3.webserver.WebQuery;
-import assignment3.webserver.WebQueryManager;
 import assignment3.webserver.webrequest.WebRequest;
 
 /**

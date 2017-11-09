@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import com.sun.net.httpserver.HttpExchange;
 
-import assignment3.webserver.WebQuery;
-import assignment3.webserver.WebQueryManager;
 import assignment3.webserver.WebServerManager;
 import assignment3.webserver.exceptions.WebServerException;
 import assignment3.webserver.requestprocessor.RequestProcessor;

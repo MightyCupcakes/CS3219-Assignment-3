@@ -1,4 +1,4 @@
-package assignment3.webserver;
+package assignment3.webserver.webquery;
 
 import java.util.Arrays;
 import java.util.List;
