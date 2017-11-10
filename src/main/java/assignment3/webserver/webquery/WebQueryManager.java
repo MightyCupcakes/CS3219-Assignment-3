@@ -70,6 +70,13 @@ public class WebQueryManager implements WebQuery {
 
 	@Override
 	public boolean executeAndSaveResultIntoCsvFile(WebRequest query) {
+		String queryType = query.getValue("premadeType");
+        Optional<WebQueryProcessor> processor = registry.getHandler(queryType);
+
+        if (processor.isPresent()) {
+            return processor.get().processAndSaveIntoCSV(manager, query);
+        }
+
 		return false;
 	}
 
