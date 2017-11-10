@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -50,6 +53,28 @@ public class WebServerTest {
     }
 
     @Test
-    public void test_getVisualisation() {
+    public void test_GET_RequestKeyDoesNotExist() throws Exception {
+        when(exchange.getRequestURI()).thenReturn(new URI("http://127.0.0.1/?requestType=keydoesnotexist"));
+
+        handler.handle(exchange);
+
+        verify(exchange).getResponseBody();
+
+        assertEquals(outputStream.toString(),
+                Files.asCharSource(new File("src/test/data/webroot/main.html"), WebServerManager.UTF8).read());
+    }
+
+    @Test
+    public void test_GET_RequestKeyExists() throws Exception {
+        when(exchange.getRequestURI()).thenReturn(new URI("http://127.0.0.1/?requestType=populateForm&formElement=typeofgraph"));
+
+        handler.handle(exchange);
+
+        verify(exchange).getResponseBody();
+
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        WebServerConstants.TYPES_OF_GRAPH.forEach(builder::add);
+
+        assertEquals(outputStream.toString(), builder.build().toString());
     }
 }

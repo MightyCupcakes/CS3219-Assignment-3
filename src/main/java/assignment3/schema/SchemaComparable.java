@@ -46,7 +46,7 @@ public abstract class SchemaComparable<T extends Comparable> extends SchemaBase<
         for (int i = 0; i < array.size(); i ++) {
 
             Set<Map.Entry<String, JsonValue>>keySet = array.getJsonObject(i).entrySet();
-            keySet.stream().forEach(entry -> values.add(entry.getValue().toString()));
+            keySet.stream().forEach(entry -> values.add(entry.getValue().toString().replaceAll("\"", "")));
         }
 
         return new SchemaPredicate(this, o -> {
