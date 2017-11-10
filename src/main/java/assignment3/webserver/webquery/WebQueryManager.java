@@ -68,10 +68,17 @@ public class WebQueryManager implements WebQuery {
 //		System.out.println("file saved");
 	}
 
-	@Override
-	public boolean executeAndSaveResultIntoCsvFile(WebRequest query) {
-		return false;
-	}
+    @Override
+    public boolean executeAndSaveResultIntoCsvFile(WebRequest query) {
+        String queryType = query.getValue("premadeType");
+        Optional<WebQueryProcessor> processor = registry.getHandler(queryType);
+
+        if (processor.isPresent()) {
+            return processor.get().processAndSaveIntoCSV(manager, query);
+        }
+
+        return false;
+    }
 
 	
 	private SchemaBase getSchemaAggregate(SchemaComparable schemaAttr, String type) {
