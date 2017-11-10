@@ -15,71 +15,9 @@ function populateGraphType() {
      });
 }
 
-function generatePremadeQuery(selected) {
-    var graphType = $('#graphType');
-    var limitlabel = $('#limitlabel');
-    var column1show = $('#column1show');
-    var column2show = $('#column2show');
-    var column1 = $('#column1');
-    var column2 = $('#column2');
-    var conditions = $('#conditions');
-
-    conditions.html("");
-
-    if (selected == "Top authors for a conference") {
-      $('#topauthors').show();
-        graphType.val("Bar Chart");
-        limitlabel.text("Number of authors to show");
-        $("#limit").val(10);
-
-        column1show.attr("data-value", "Display");
-        column1show.text("Display");
-
-        column2show.attr("data-value", "count");
-        column2show.text("Count");
-
-        column1.val("Journal Authors");
-        column1.trigger("change");
-        column2.val("Journals");
-        column2.trigger("change");
-
-        conditions.append($("#newConditions").html());
-
-        var firstCondition = conditions.children("div.row").first();
-
-        // Get the first condition row
-        firstCondition.find(".conditionColumn").first().val("Journal Venue");
-        firstCondition.find(".conditionValue").first().val("ArXiV");
-
-    } else if (selected == "Number of citations for a conference over a few years") {
-        $("#limit").parent().hide();
-
-        graphType.val("Line Chart");
-
-        column1show.attr("data-value", "Display");
-        column1show.text("Display");
-
-        column2show.attr("data-value", "count");
-        column2show.text("Count");
-
-        column1.val("Journal Venue");
-        column2.val("Citations");
-
-        conditions.append($("#newConditions").html());
-
-        var firstCondition = conditions.children("div.row").first();
-
-        firstCondition.find(".conditionColumn").first().val("Journal Venue");
-        firstCondition.find(".conditionValue").first().val("ArXiV");
-    } else if (selected == "Base paper = Low-density parity check codes over GF(q)"){
-    	graphType.val("Citation Network");
-    } else {
-      $("#advanced").hide();
-    }
-}
 function getRequestForPremade(premadeType) {
   var requestType =premadeHtml.find("#requestType").val();
-  
+
   var request = {
     requestType: "getVisualisation",
     premadeType: premadeCursor.val(),
@@ -114,8 +52,6 @@ $(document).ready (function () {
     $('#constructd3').click(function () {
       var type = $("#premade_type").val();
 
-      // Parses the user input into a JSON string
-      var query = parseUserQuery();
       var premadeType = premadeCursor.val();
       request = getRequestForPremade(premadeType);
      
