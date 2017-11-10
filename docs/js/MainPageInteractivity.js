@@ -33,15 +33,28 @@ $( document ).ready ( function () {
         });
     });
 
-    $('#premade_query').change( function () {
-        var selected = $(this).find(":selected").val();
-
-        generatePremadeQuery(selected);
-    });
-
     $('#columnsort').autocomplete( {
         source: selectedColumns
-    })
+    });
+
+
+    $("#premade_query").on('change', function() {
+      var premadeType = $(this).val();
+      if (premadeType == 0) {
+        premadeHtml.hide();
+      } else {
+        premadeHtml.show();
+      }
+      alert(premadeType);
+      request = {
+        requestType: "retrievePremadeType",
+        premadeType : premadeType
+      };
+      sendAjaxRequest("main.html", request, "GET", function(data) {
+        premadeHtml.html(data.response);
+      });
+    });
+    
 });
 
 $(document).on('click', '.dropdown-item',  function(e) {
