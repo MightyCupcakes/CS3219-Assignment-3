@@ -11,15 +11,25 @@ $( document ).ready ( function () {
     });
 
     $('#premade_type').change( function() {
+        $('#premadeHtml').hide();
         var select = $('#premade_query');
         var selected = $(this).find(":selected").val();
+        if (selected == 0 ){
+            select.parent().hide();
 
+        } else {
+            select.parent().show();
+        }
         select.html("");
 
         select.append($('<option>', { value: 0, text: "" }));
 
-        premadeVisuals[selected - 1].queries.forEach(function(obj) {
-            select.append($('<option>', { value: obj, text: obj }));
+        sendAjaxRequest("main.html", {requestType:"populateForm", formElement:"premade_query", type:selected}, "GET", 
+        function(data) {
+            counter = 1;
+            data.forEach( function(obj) {
+                select.append($('<option>', { value: obj, text: obj }));
+            });
         });
     });
 

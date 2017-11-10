@@ -93,24 +93,5 @@ public class WebQueryManager implements WebQuery {
 				|| attribute.equals("numOfAuthors");
 	}
 
-//	@SuppressWarnings("rawtypes")
-//	public String retrieveDataForDropDown(String attribute) {
-//		APIQueryBuilder builder = QueryBuilder.createNewBuilder();
-//		SchemaComparable selectAttr = (SchemaComparable) this.getSchemaAttribute(attribute);
-//		if (attribute.equals("yearOfPublication")) {
-//			builder = builder.select(this.getSchemaAggregate(selectAttr, "min"),
-//					this.getSchemaAggregate(selectAttr, "max"))
-//					.from(DEFAULT_CONFERENCE);
-//		} else {
-//			builder = builder.select(selectAttr)
-//					.from(DEFAULT_CONFERENCE)
-//					.groupBy((SchemaComparable) selectAttr)
-//					.orderBy(selectAttr, APIQueryBuilder.OrderByRule.ASC);
-//		}
-//		Query query = builder.build();
-//		String result = query.execute();
-//		//query.executeAndSaveInCSV(attribute);
-//		//System.out.println(result);
-//		return result;
-//	}
+
 }

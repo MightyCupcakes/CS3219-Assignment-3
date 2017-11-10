@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 
 import assignment3.webserver.WebServerConstants;
 import assignment3.webserver.registry.RegisterProcessor;
@@ -38,6 +39,16 @@ public class PopulateFormRequestProcessor implements RequestProcessor {
             }
 
             matchedColumns.forEach(builder::add);
+        } else if ("premade_type".equalsIgnoreCase(formElement)) {
+            Set<String> categorySet = new HashSet<>();
+            WebServerConstants.PREMADE_QUERIES.forEach( info -> categorySet.add(info.category));
+            categorySet.forEach(category ->  builder.add(category));      
+        } else if ("premade_query".equals(formElement)) {
+            String type = keyValuePairs.getValue("type");
+            WebServerConstants.PREMADE_QUERIES.stream()
+            .filter( info -> info.category.equalsIgnoreCase(type))
+            .forEach( info -> builder.add(info.name));
+
         }
 
         return builder.build().toString();
