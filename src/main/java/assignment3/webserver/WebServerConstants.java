@@ -35,7 +35,13 @@ public final class WebServerConstants {
                             "Construct Top N X of Y Graph"),
                     new PremadeQueriesInfo("Advanced",
                     		"Advanced Query",
-                    		"Advanced")
+                    		"Advanced"),
+                    new PremadeQueriesInfo("CitationWebForBasePaper",
+                    		"Citation Web",
+                    		"Citation Web for base paper"),
+                    new PremadeQueriesInfo("CitationWebForest",
+                    		"Citation Web",
+                    		"Citation Web Forest in range of years")
             );
 
     public static final ImmutableMap<String, SchemaBase> COLUMNS = populateColumnNames();
