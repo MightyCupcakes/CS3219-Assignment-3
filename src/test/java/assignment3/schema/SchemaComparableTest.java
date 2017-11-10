@@ -2,18 +2,23 @@ package assignment3.schema;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import assignment3.api.Query;
 import assignment3.datarepresentation.SerializedCitation;
 import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
+import assignment3.logic.JsonGenerator;
 import assignment3.schema.citations.CitationAttribute;
 
 public class SchemaComparableTest {
@@ -49,6 +54,30 @@ public class SchemaComparableTest {
 
         CitationAttribute<String> ids = new CitationAttribute<String>("journalId");
         SchemaPredicate predicate = ids.in(stringSet);
+
+        SerializedJournalCitation journalCitation1 = new SerializedJournalCitation(journal, journal.citations.get(0));
+        SerializedJournalCitation journalCitation2 = new SerializedJournalCitation(journal, journal.citations.get(1));
+
+        assertTrue(predicate.test(journalCitation1));
+        assertFalse(predicate.test(journalCitation2));
+    }
+
+    @Test
+    public void test_SchemaComparable_inSubQuery() {
+        CitationAttribute<String> ids = new CitationAttribute<String>("journalId");
+
+        Query query = mock(Query.class);
+
+        JsonGenerator json = new JsonGenerator();
+
+        JsonGenerator.JsonGeneratorBuilder rowJson = new JsonGenerator.JsonGeneratorBuilder();
+        rowJson.generateJson(ids.getNameOfAttribute(), "AA1");
+
+        json.addObjectToArray(rowJson);
+
+        when(query.execute()).thenReturn(json.getJsonString());
+
+        SchemaPredicate predicate = ids.in(query);
 
         SerializedJournalCitation journalCitation1 = new SerializedJournalCitation(journal, journal.citations.get(0));
         SerializedJournalCitation journalCitation2 = new SerializedJournalCitation(journal, journal.citations.get(1));
