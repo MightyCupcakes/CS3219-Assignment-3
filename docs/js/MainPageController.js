@@ -136,10 +136,8 @@ function generatePremadeQuery(selected) {
       $("#advanced").hide();
     }
 }
-
 function getRequestForPremade(premadeType) {
-  var request =premadeHtml.find("#requestType").val();
-
+  var requestType =premadeHtml.find("#requestType").val();
   var request = {
     requestType: "getVisualisation",
     premadeType: premadeCursor.val(),
@@ -151,7 +149,7 @@ function getRequestForPremade(premadeType) {
       alert("Please do not leave any field blank");
       return false;
     }
-    request[$(this).attr("id")] = $(this).val();
+    requestType[$(this).attr("id")] = $(this).val();
   } );
   console.log(request);
   return request;
@@ -180,7 +178,7 @@ $(document).ready (function () {
       var query = parseUserQuery();
       var premadeType = premadeCursor.val();
       request = getRequestForPremade(premadeType);
-      alert(hi);
+     
       sendAjaxRequest("main.html", request, "GET", function(data) {
             $('#viz').attr('src', data.src);
       });
