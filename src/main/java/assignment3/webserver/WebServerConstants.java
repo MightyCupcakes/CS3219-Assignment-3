@@ -32,7 +32,7 @@ public final class WebServerConstants {
                             "Number of citations for two different venue held in the same year"),
                     new PremadeQueriesInfo("TopNXOFY",
                             "Top N X of Y",
-                            ""),
+                            "Construct Top N X of Y Graph"),
                     new PremadeQueriesInfo("Advanced",
                     		"Advanced Query",
                     		"Advanced")
