@@ -46,33 +46,14 @@
                 </select>
               </div>
 
-              <div class="col-sm-6 form-group">
-                <label> Type of query </label>
+              <div class="hidden col-sm-6 form-group">
+                <label > Type of query </label>
                 <select class="form-control" id="premade_query" name="premade_query" placeholder="Chart type">
+                
                 </select>
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-sm-6 form-group">
-                <label id = "startyearLabel"> Year </label>
-                <select class="form-control" name="startyear" id="startYear" ></select>
-                <label id = "endyearLabel"> Year </label>
-                <select class="form-control" name="endyear" id="endYear" ></select>
-                <label id = "nLabel"> N attr </label>
-                <select class="form-control" name="top n" id ="n" ></select>
-                <label id = "xAttrLabel"> X attr </label>
-                <select class="form-control" name="xAttr" id ="xAttr" ></select>                
-                <label id = "yAttrLabel"> Y attr </label>
-                <select class="form-control" name="yAttr" id="yAttr" ></select>                                                                     
-                <label id = "yValueLabel"> Y value</label>
-                <input  class="form-control" name="yValue" id="yValue" placeholder="Enter a search word"></select>
-                <select class="form-control" name="yValueYear" id="yValueYear" ></select>
-                <select class="form-control" name="yValueConf" id="yValueConf" ></select>
-                <label id = "radioLabelMatch"><input type="radio" id="matchRadio" value="eqs" class ="searchTypeRadio" name = "searchTypeRadio" checked="checked">Whole Match</label>
-                <label id = "radioLabelLike"><input type="radio" id="likeRadio"  class ="searchTypeRadio"  name = "searchTypeRadio" value ="like">Like</label>                         
-              </div>
-            </div>
 
             <div class="col-sm-12">
               <hr>
@@ -81,100 +62,7 @@
             <h4>Or construct your own!</h4>
             <p class="lead"> Let those creative juices flow, or so they say.</p>
 
-            <div class="row">
-              <div class="col-sm-6 form-group">
-                <label> Type of graph</label>
-                <select class="form-control" id="graphType" name="item_super" placeholder="Chart type"></select>
-              </div>
-              <div class="col-sm-6 form-group">
-                <label id="limitlabel"> Limit number of results</label>
-                <input type="text" class="form-control" id="limit" name="item_super">
-              </div>
-            </div>
-
-            <h5> Data to show </h5>
-            <p/>
-            <div class="row form-group">
-              <div class="col-sm-6 input-group">
-                <div class="input-group-btn">
-                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="display" id="column1show">
-                    Display
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" data-value="display">Display</a>
-                    <div role="separator" class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" data-value="count">Count</a>
-                    <a class="dropdown-item" href="#" data-value="max">Maximum of</a>
-                    <a class="dropdown-item" href="#" data-value="min">Minimum of</a>
-                  </div>
-                </div>
-                <input type="text" class="form-control columnName" aria-label="Text input with dropdown button" id="column1" placeholder="Enter a column to display">
-              </div>
-
-              <div class="col-sm-6 input-group">
-                <div class="input-group-btn">
-                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="display" id="column2show">
-                    Display
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" data-value="display">Display</a>
-                    <div role="separator" class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" data-value="count">Count</a>
-                    <a class="dropdown-item" href="#" data-value="max">Maximum of</a>
-                    <a class="dropdown-item" href="#" data-value="min">Minimum of</a>
-                  </div>
-                </div>
-                <input type="text" class="form-control columnName" aria-label="Text input with dropdown button" id="column2" placeholder="Enter a column to display">
-              </div>
-            </div>
-
-            <p/>
-            <h5> Filters </h5>
-            <p/>
-            <div id ="conditions">
-
-            </div>
-
-            <div id ="newConditions" style="display: none;">
-              <div class="row form-group">
-                <div class="col-sm-6 input-group">
-                  <input type="text" class="form-control conditionColumn columnName" aria-label="Text input with dropdown button" placeholder="Enter a column name here">
-                  <div class="input-group-btn">
-                    <button type="button" class="btn btn-info dropdown-toggle conditionComparator" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="e">
-                      Equals
-                    </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#" data-value="e">Equals</a>
-                        <div role="separator" class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#" data-value="gte">Greater or Equals</a>
-                      <a class="dropdown-item" href="#" data-value="lte">Lesser or Equals</a>
-                      <a class="dropdown-item" href="#" data-value="lt">Less Than</a>
-                      <a class="dropdown-item" href="#" data-value="gt">Greater Than</a>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-sm-6 input-group">
-                  <input type="text" class="form-control conditionValue" aria-label="Text input with dropdown button" placeholder="Enter a value to compare the column against">
-                  <div class="input-group-btn">
-                    <button type="button" class="btn btn-secondary dropdown-toggle conditionCombine" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="AND">
-                      AND
-                    </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#" data-value="OR">OR</a>
-                      <a class="dropdown-item" href="#" data-value="AND">AND</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-sm-12 form-group">
-                <button class="btn btn-dark" id="addNewCondition">Add new filter</button>
-                <button class="btn btn-danger" id="removecondition">Remove last filter</button>
-              </div>
-            </div>
+            <div id = "premadeHtml" ></div>
 
             <div class="row">
               <div class="col-sm-12 form-group">

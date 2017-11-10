@@ -35,6 +35,11 @@ public class APIManager implements API {
     }
 
     @Override
+    public APIQueryBuilder getQueryBuilder() {
+        return QueryBuilder.createNewBuilder();
+    }
+
+    @Override
     public void parseConferenceData(String folder) {
         try {
             logic.parseAndSaveRawData(folder);
@@ -52,15 +57,7 @@ public class APIManager implements API {
         }
     }
 
-    @Override
-    public void runQueries() {
-    	try {
-			assignment4Queries();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    }
-    
+    @Deprecated
     private void assignment4Queries() throws Exception { 
     	//String taskOne = queryForTaskOne();
     	String taskTwo = queryForTaskTwo();
@@ -68,6 +65,11 @@ public class APIManager implements API {
     	//String taskFour = queryForTaskFour();
     	//logic.saveResultIntoCsv(taskFour);
     	//String taskFive = queryForTaskFive();
+    }
+
+    @Override
+    public void runQueries() {
+
     }
 
     @Deprecated

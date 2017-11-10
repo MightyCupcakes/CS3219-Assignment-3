@@ -15,8 +15,34 @@ public final class WebServerConstants {
 
     public static final ImmutableList<String> TYPES_OF_GRAPH = ImmutableList.of(
             "Bar Chart",
-            "Line Chart"
+            "Line Chart",
+            "Citation Web"
     );
+
+    public static final ImmutableList<PremadeQueriesInfo> PREMADE_QUERIES =
+            ImmutableList.of(
+                    new PremadeQueriesInfo("TransitionOverTime",
+                            "Transition Over Time",
+                            "Number of citations for a conference over a few years"),
+                    new PremadeQueriesInfo("TransitionOverTimeMultipleConferences",
+                            "Transition Over Time",
+                            "Number of citations for different conferences"),
+                    new PremadeQueriesInfo("ContemporaryComparison",
+                            "Contemporary comparison",
+                            "Number of citations for two different venue held in the same year"),
+                    new PremadeQueriesInfo("TopNXOFY",
+                            "Top N X of Y",
+                            "Construct Top N X of Y Graph"),
+                    new PremadeQueriesInfo("Advanced",
+                    		"Advanced Query",
+                    		"Advanced"),
+                    new PremadeQueriesInfo("CitationWebForBasePaper",
+                    		"Citation Web",
+                    		"Citation Web for base paper"),
+                    new PremadeQueriesInfo("CitationWebForest",
+                    		"Citation Web",
+                    		"Citation Web Forest in range of years")
+            );
 
     public static final ImmutableMap<String, SchemaBase> COLUMNS = populateColumnNames();
 
@@ -37,4 +63,15 @@ public final class WebServerConstants {
         return columns.build();
     }
 
+    public static class PremadeQueriesInfo {
+        public final String htmlFile;
+        public final String category;
+        public final String name;
+
+        public PremadeQueriesInfo(String htmlFile, String category, String name) {
+            this.htmlFile = htmlFile;
+            this.category = category;
+            this.name = name;
+        }
+    }
 }

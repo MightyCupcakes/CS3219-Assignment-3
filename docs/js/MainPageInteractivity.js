@@ -1,3 +1,5 @@
+var selectedColumns = [];
+
 $( document ).ready ( function () {
 
     $('button#addNewCondition').click (function () {
@@ -9,15 +11,25 @@ $( document ).ready ( function () {
     });
 
     $('#premade_type').change( function() {
+        $('#premadeHtml').hide();
         var select = $('#premade_query');
         var selected = $(this).find(":selected").val();
+        if (selected == 0 ){
+            select.parent().hide();
 
+        } else {
+            select.parent().show();
+        }
         select.html("");
 
         select.append($('<option>', { value: 0, text: "" }));
 
-        premadeVisuals[selected - 1].queries.forEach(function(obj) {
-            select.append($('<option>', { value: obj, text: obj }));
+        sendAjaxRequest("main.html", {requestType:"populateForm", formElement:"premade_query", type:selected}, "GET", 
+        function(data) {
+            counter = 1;
+            data.forEach( function(obj) {
+                select.append($('<option>', { value: obj, text: obj }));
+            });
         });
     });
 
@@ -26,6 +38,10 @@ $( document ).ready ( function () {
 
         generatePremadeQuery(selected);
     });
+
+    $('#columnsort').autocomplete( {
+        source: selectedColumns
+    })
 });
 
 $(document).on('click', '.dropdown-item',  function(e) {
@@ -37,6 +53,15 @@ $(document).on('click', '.dropdown-item',  function(e) {
 
     button.text($(this).text());
     button.attr("data-value", value);
+});
+
+$(document).on('change', ".columnName", function() {
+    if ($(this).attr('id') == "column1") {
+        selectedColumns[0] = $(this).val();
+
+    } else if ($(this).attr('id') == "column2") {
+        selectedColumns[1] = $(this).val();
+    }
 });
 
 $(document).on('keydown.autocomplete', ".columnName", function() {
