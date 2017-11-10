@@ -24,7 +24,7 @@ public final class WebServerConstants {
                     new PremadeQueriesInfo("TransitionOverTime",
                             "Transition Over Time",
                             "Number of citations for a conference over a few years"),
-                    new PremadeQueriesInfo("TransitionOverTimeMultipleConferences",
+                    new PremadeQueriesInfo("TransitionOverTime",
                             "Transition Over Time",
                             "Number of citations for different conferences"),
                     new PremadeQueriesInfo("ContemporaryComparison",

@@ -1,13 +1,13 @@
 <div id ="Topnxofy" class ="col-sm-6 form-group">
   <label id = "n">Modify your N attribute</label>
-  <input  class="form-control" id ="nform" placeholder="Modify your n value"></input>
+  <input  class="form-control" type = "number" id ="nform" placeholder ="enter a value between 1 to 20"></input>
+
   <label id = "n">Modify your X attribute</label>
   <select class = "form-control" id ="xform">
   	<option id="1" value = "Journal Authors" >author</option>
   	<option id="2" value = "Journal Venue">venue</option>
   	<option id="3" value = "Journal Published YEAR">year</option>
   	<option id="4" value = "Citations">citations</option>
-
   </select>
   <label id = "n">Modify your Y Attribute</label>
   <select class = "form-control" id ="yform">
@@ -17,6 +17,47 @@
   </select>  
   <label id ="endYear">Modify your Y value</label>
   <input  class="form-control" id ="yformValue" placeholder="Modify your y value" ></input>
-  <input type="hidden" id="requestType" value="xx" />
+  <label>Search by</label>
+  <label><input type="radio" name="searchType"id ="exact" checked="checked">Exact Match</label>
+  <label><input type="radio" name="searchType" id="like">Like</label>
+  <input type="hidden" id="requestType" value="topnxofy" />
+    <script>
+  $("#nform").keyup(function(){
+    var input = parseInt(this.value);
+    if (input < 1 || input > 20) {
+      $("#nform").val('');
+      alert("please choose a n value between 1 - 20");
+      return false;
+    }
+  });
+
+  $('#yform').on('change', function() {
+    $("#yformValue").val('');
+    if ($("#yform").val() == "Journal Published YEAR") {
+      $("#yformValue").attr("type", "number");
+    } else {
+      $("#yformValue").attr("type", "");
+    }
+
+  });
+  var timer;
+  $("#yformValue").keyup(function(){
+    if ($("#yform").val() == "Journal Published YEAR") {
+      clearInterval(timer);
+      var input = parseInt(this.value);
+      timer = setTimeout(function() {
+        if (input < 1950 || input > 2017) {
+          $("#yformValue").val('');
+          alert("Please enter a valid year range");
+          return false;
+      }
+      }, 2500);
+    }
+  });
+  
+
+  </script>
+
+
 </div>
 
