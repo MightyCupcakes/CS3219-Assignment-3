@@ -73,14 +73,9 @@ public class WebQueryManager implements WebQuery {
         String queryType = query.getValue("premadeType");
         Optional<WebQueryProcessor> processor = registry.getHandler(queryType);
 
-        if (processor.isPresent()) {
-            return processor.get().processAndSaveIntoCSV(manager, query);
-        }
-
-        return false;
+        return processor.isPresent() && processor.get().processAndSaveIntoCSV(manager, query);
     }
 
-	
 	private SchemaBase getSchemaAggregate(SchemaComparable schemaAttr, String type) {
 		if (type.equals("count")) {
 			return new SchemaCount(schemaAttr);
