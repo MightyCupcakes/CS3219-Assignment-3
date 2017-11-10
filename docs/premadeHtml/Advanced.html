@@ -1,123 +1,181 @@
-<!DOCTYPE html>
-<html lang="en">
+<div id="advanced" >
+  <input type="hidden" id="requestType" value="advanced" data-custom="true"/>
+  <div class="hidden row form-group">
+    <div class="col-sm-6">
+      <label> Type of graph</label>
+      <select class="form-control" id="graphType" name="item_super" placeholder="Chart type"></select>
+    </div>
 
-            <div id="advanced" >
-            <div class="hidden row form-group">
-              <div class="col-sm-6">
-                <label> Type of graph</label>
-                <select class="form-control" id="graphType" name="item_super" placeholder="Chart type"></select>
-              </div>
+    <div class="col-sm-6">
+      <label id="limitlabel"> Limit number of results</label>
+      <input type="text" class="form-control" id="limit" name="item_super">
+    </div>
+  </div>
 
-              <div class="col-sm-6">
-                <label id="limitlabel"> Limit number of results</label>
-                <input type="text" class="form-control" id="limit" name="item_super">
-              </div>
-            </div>
+  <h5> Data to show </h5>
+  <p/>
+  <div class="row form-group">
+    <div class="col-sm-6 input-group">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="display" id="column1show">
+          Display
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#" data-value="display">Display</a>
+          <div role="separator" class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-value="count">Count</a>
+          <a class="dropdown-item" href="#" data-value="max">Maximum of</a>
+          <a class="dropdown-item" href="#" data-value="min">Minimum of</a>
+        </div>
+      </div>
+      <input type="text" class="form-control columnName" aria-label="Text input with dropdown button" id="column1" placeholder="Enter a column to display">
+    </div>
 
-            <h5> Data to show </h5>
-            <p/>
-            <div class="row form-group">
-              <div class="col-sm-6 input-group">
-                <div class="input-group-btn">
-                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="display" id="column1show">
-                    Display
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" data-value="display">Display</a>
-                    <div role="separator" class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" data-value="count">Count</a>
-                    <a class="dropdown-item" href="#" data-value="max">Maximum of</a>
-                    <a class="dropdown-item" href="#" data-value="min">Minimum of</a>
-                  </div>
-                </div>
-                <input type="text" class="form-control columnName" aria-label="Text input with dropdown button" id="column1" placeholder="Enter a column to display">
-              </div>
+    <div class="col-sm-6 input-group">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="display" id="column2show">
+          Display
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#" data-value="display">Display</a>
+          <div role="separator" class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-value="count">Count</a>
+          <a class="dropdown-item" href="#" data-value="max">Maximum of</a>
+          <a class="dropdown-item" href="#" data-value="min">Minimum of</a>
+        </div>
+      </div>
+      <input type="text" class="form-control columnName" aria-label="Text input with dropdown button" id="column2" placeholder="Enter a column to display">
+    </div>
+  </div>
 
-              <div class="col-sm-6 input-group">
-                <div class="input-group-btn">
-                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="display" id="column2show">
-                    Display
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" data-value="display">Display</a>
-                    <div role="separator" class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" data-value="count">Count</a>
-                    <a class="dropdown-item" href="#" data-value="max">Maximum of</a>
-                    <a class="dropdown-item" href="#" data-value="min">Minimum of</a>
-                  </div>
-                </div>
-                <input type="text" class="form-control columnName" aria-label="Text input with dropdown button" id="column2" placeholder="Enter a column to display">
-              </div>
-            </div>
+  <p/>
+  <h5> Filters </h5>
+  <p/>
+  <div id ="conditions">
 
-            <p/>
-            <h5> Filters </h5>
-            <p/>
-            <div id ="conditions">
+  </div>
 
-            </div>
+  <div id ="newConditions" style="display: none;">
+    <div class="row form-group">
+      <div class="col-sm-6 input-group">
+        <input type="text" class="form-control conditionColumn columnName" aria-label="Text input with dropdown button" placeholder="Enter a column name here">
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-info dropdown-toggle conditionComparator" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="e">
+            Equals
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#" data-value="e">Equals</a>
+            <div role="separator" class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" data-value="gte">Greater or Equals</a>
+            <a class="dropdown-item" href="#" data-value="lte">Lesser or Equals</a>
+            <a class="dropdown-item" href="#" data-value="lt">Less Than</a>
+            <a class="dropdown-item" href="#" data-value="gt">Greater Than</a>
+          </div>
+        </div>
+      </div>
 
-            <div id ="newConditions" style="display: none;">
-              <div class="row form-group">
-                <div class="col-sm-6 input-group">
-                  <input type="text" class="form-control conditionColumn columnName" aria-label="Text input with dropdown button" placeholder="Enter a column name here">
-                  <div class="input-group-btn">
-                    <button type="button" class="btn btn-info dropdown-toggle conditionComparator" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="e">
-                      Equals
-                    </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#" data-value="e">Equals</a>
-                        <div role="separator" class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#" data-value="gte">Greater or Equals</a>
-                      <a class="dropdown-item" href="#" data-value="lte">Lesser or Equals</a>
-                      <a class="dropdown-item" href="#" data-value="lt">Less Than</a>
-                      <a class="dropdown-item" href="#" data-value="gt">Greater Than</a>
-                    </div>
-                  </div>
-                </div>
+      <div class="col-sm-6 input-group">
+        <input type="text" class="form-control conditionValue" aria-label="Text input with dropdown button" placeholder="Enter a value to compare the column against">
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-secondary dropdown-toggle conditionCombine" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="AND">
+            AND
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#" data-value="OR">OR</a>
+            <a class="dropdown-item" href="#" data-value="AND">AND</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                <div class="col-sm-6 input-group">
-                  <input type="text" class="form-control conditionValue" aria-label="Text input with dropdown button" placeholder="Enter a value to compare the column against">
-                  <div class="input-group-btn">
-                    <button type="button" class="btn btn-secondary dropdown-toggle conditionCombine" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="AND">
-                      AND
-                    </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#" data-value="OR">OR</a>
-                      <a class="dropdown-item" href="#" data-value="AND">AND</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+  <div class="row">
+    <div class="col-sm-12 form-group">
+      <button class="btn btn-dark" id="addNewCondition">Add new filter</button>
+      <button class="btn btn-danger" id="removecondition">Remove last filter</button>
+    </div>
+  </div>
 
-            <div class="row">
-              <div class="col-sm-12 form-group">
-                <button class="btn btn-dark" id="addNewCondition">Add new filter</button>
-                <button class="btn btn-danger" id="removecondition">Remove last filter</button>
-              </div>
-            </div>
+  <p/>
+  <h5> Ordering </h5>
+  <p/>
 
-            <p/>
-            <h5> Ordering </h5>
-            <p/>
+  <div class="row form-group">
+    <div class="col-sm-12 input-group">
+      <span class="input-group-addon" id="basic-addon1">Sort visible column</span>
 
-            <div class="row form-group">
-              <div class="col-sm-12 input-group">
-                <span class="input-group-addon" id="basic-addon1">Sort visible column</span>
+      <input type="text" class="form-control" aria-label="Text input with dropdown button" id="columnsort" placeholder="Enter a column data selected to sort by">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="desc" id="columnsortorder">
+          Descending Order
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#" data-value="desc">Descending Order</a>
+          <a class="dropdown-item" href="#" data-value="asc">Ascending Order</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="columnsort" placeholder="Enter a column data selected to sort by">
-                <div class="input-group-btn">
-                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="desc" id="columnsortorder">
-                    Descending Order
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" data-value="desc">Descending Order</a>
-                    <a class="dropdown-item" href="#" data-value="asc">Ascending Order</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            </div>
+<script type="text/javascript">
+  function parseUserQuery() {
+    var query = {};
 
-</html>
+    var typeOfGraph = $('#graphType').val();
+    query["typeOfGraph"] = typeOfGraph;
+
+    var column1ShowType = $('#column1show').attr('data-value');
+    var column2ShowType = $('#column2show').attr('data-value');
+
+    query["column1ShowType"] = column1ShowType;
+    query["column2ShowType"] = column2ShowType;
+
+    var column1Name = $('#column1').val();
+    var column2Name = $('#column2').val();
+
+    query["column1Name"] = column1Name;
+    query["column2Name"] = column2Name;
+
+    var counter = 0;
+    var conditionDiv = $('div#conditions');
+
+    conditionDiv.find('input.conditionColumn').each( function () {
+        counter ++;
+
+        query["conditionColumn" + counter] = $(this).val();
+    });
+
+    counter = 0;
+
+    conditionDiv.find('button.conditionComparator').each ( function() {
+        counter ++;
+
+        query["conditionComparator" + counter] = $(this).attr('data-value');
+    });
+
+    counter = 0;
+
+    conditionDiv.find('input.conditionValue').each (function () {
+        counter ++;
+
+        query["conditionValue" + counter] = $(this).val();
+    });
+
+    counter = 0;
+
+    conditionDiv.find('button.conditionCombine').each (function () {
+        counter ++;
+
+        query["conditionCombine" + counter] = $(this).attr('data-value');
+    });
+
+    query["numOfConditions"] = counter;
+
+    query["columnsort"] = $("#columnsort").val();
+    query["columnsortorder"] = $("#columnsortorder").attr('data-value');
+
+    return query;
+  }
+
+</script>

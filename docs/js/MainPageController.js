@@ -15,65 +15,6 @@ function populateGraphType() {
      });
 }
 
-function parseUserQuery() {
-    var query = {};
-
-    var typeOfGraph = $('#graphType').val();
-    query["typeOfGraph"] = typeOfGraph;
-
-    var column1ShowType = $('#column1show').attr('data-value');
-    var column2ShowType = $('#column2show').attr('data-value');
-
-    query["column1ShowType"] = column1ShowType;
-    query["column2ShowType"] = column2ShowType;
-
-    var column1Name = $('#column1').val();
-    var column2Name = $('#column2').val();
-
-    query["column1Name"] = column1Name;
-    query["column2Name"] = column2Name;
-
-    var counter = 0;
-    var conditionDiv = $('div#conditions');
-
-    conditionDiv.find('input.conditionColumn').each( function () {
-        counter ++;
-
-        query["conditionColumn" + counter] = $(this).val();
-    });
-
-    counter = 0;
-
-    conditionDiv.find('button.conditionComparator').each ( function() {
-        counter ++;
-
-        query["conditionComparator" + counter] = $(this).attr('data-value');
-    });
-
-    counter = 0;
-
-    conditionDiv.find('input.conditionValue').each (function () {
-        counter ++;
-
-        query["conditionValue" + counter] = $(this).val();
-    });
-
-    counter = 0;
-
-    conditionDiv.find('button.conditionCombine').each (function () {
-        counter ++;
-
-        query["conditionCombine" + counter] = $(this).attr('data-value');
-    });
-
-    query["numOfConditions"] = counter;
-
-    query["columnsort"] = $("#columnsort").val();
-    query["columnsortorder"] = $("#columnsortorder").attr('data-value');
-
-    return query;
-}
-
 function generatePremadeQuery(selected) {
     var graphType = $('#graphType');
     var limitlabel = $('#limitlabel');
@@ -138,6 +79,7 @@ function generatePremadeQuery(selected) {
 }
 function getRequestForPremade(premadeType) {
   var requestType =premadeHtml.find("#requestType").val();
+  
   var request = {
     requestType: "getVisualisation",
     premadeType: premadeCursor.val(),
@@ -149,13 +91,11 @@ function getRequestForPremade(premadeType) {
       alert("Please do not leave any field blank");
       return false;
     }
-    requestType[$(this).attr("id")] = $(this).val();
+    request[$(this).attr("id")] = $(this).val();
   } );
-  console.log(request);
+
   return request;
 }
-
-
 
 $(document).ready (function () {
     //prepopulate "type of visualization" dropdownlist by sending a request to the server
