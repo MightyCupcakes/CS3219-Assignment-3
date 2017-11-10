@@ -18,8 +18,12 @@ $( document ).ready ( function () {
 
         select.append($('<option>', { value: 0, text: "" }));
 
-        premadeVisuals[selected - 1].queries.forEach(function(obj) {
-            select.append($('<option>', { value: obj, text: obj }));
+        sendAjaxRequest("main.html", {requestType:"populateForm", formElement:"premade_query", type:selected}, "GET", 
+        function(data) {
+            counter = 1;
+            data.forEach( function(obj) {
+                select.append($('<option>', { value: obj, text: obj }));
+            });
         });
     });
 

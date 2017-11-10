@@ -1,12 +1,8 @@
-var yearMin = 1980;
-var yearMax = 2016;
-
-var premadeVisuals = [{type: "Transition over time", queries: ["Number of citations for a conference over a few years","Number of citations for different conferences"]},
-                    {type: "Contemporary comparison", queries:["Number of citations for two different conferences held in the same year","?????"]},
-                    {type: "Top N X of Y", queries: ["Top authors for a conference"]},
-                    {type: "Citation Network (Base Paper)", queries: ["Base paper = Low-density parity check codes over GF(q)"]}, 
-                    {type: "Citation Network"}];
-
+//Cursor for the elements
+var premadeCursor = $('#premade_type');
+var premadeHtml = $('#premadeHtml');
+var premadeQuery = $('#premade_query');
+/*
 function populatePresetsType() {
     var select = $('#premade_type');
 
@@ -17,19 +13,16 @@ function populatePresetsType() {
     premadeVisuals.forEach(function(obj) {
         select.append($('<option>', { value: counter++, text: obj.type }));
     });
-}
+}*/
 
 function populateGraphType() {
+    premadeCursor.append($('<option>', { value: 0, text: "" }));
 
-    var select = $('#graphType');
-
-    select.append($('<option>', { value: 0, text: "" }));
-
-    sendAjaxRequest("main.html", {requestType:"populateForm", formElement:"typeofgraph"}, "GET", 
+    sendAjaxRequest("main.html", {requestType:"populateForm", formElement:"premade_type"}, "GET", 
         function(data) {
             counter = 1;
-            data.forEach( function(obj) { 
-                select.append($('<option>', { value: obj, text: obj }));
+            data.forEach( function(obj) {
+                premadeCursor.append($('<option>', { value: obj, text: obj }));
             });
      });
 }
@@ -103,9 +96,9 @@ function generatePremadeQuery(selected) {
     var conditions = $('#conditions');
 
     conditions.html("");
-    showDropDown(7);
 
     if (selected == "Top authors for a conference") {
+      $('#topauthors').show();
         graphType.val("Bar Chart");
         limitlabel.text("Number of authors to show");
         $("#limit").val(10);
@@ -151,120 +144,41 @@ function generatePremadeQuery(selected) {
         firstCondition.find(".conditionValue").first().val("ArXiV");
     } else if (selected == "Base paper = Low-density parity check codes over GF(q)"){
     	graphType.val("Citation Network");
+    } else {
+      $("#advanced").hide();
     }
 }
 
-function showDropDown(type) {
-  $("#startYear").hide();
-  $('#startyearLabel').hide();
-  $("#endYear").hide();
-  $('#endyearLabel').hide();
-  $("#n").hide();
-  $("#xAttr").hide();  
-  $("#yAttr").hide();
-  $('#yValue').hide();
-  $('#yValueYear').hide();
-  $('#yAttrLabel').hide();
-  $("#xAttrLabel").hide();   
-  $('#yValueLabel').hide(); 
-  $('#nLabel').hide();
-  $('#yValueConf').hide();  
+function getRequestForPremade(premadeType) {
+  var request =premadeHtml.find("#requestType").val();
 
-  if (type == 1) {
-    $("#startYear").show();
-    $("#endYear").show();
-    $('#startyearLabel').show();
-    $('#endyearLabel').show(); 
-  } else if (type == 2) {
-    $("#startYear").show();
-    $('#startyearLabel').show();
-  } else if (type == 3) {
-    $("#n").show();
-    $("#xAttr").show();       
-    $("#xAttrLabel").show();          
-    $("#yAttr").show();
-    $('#yAttrLabel').show();
-    $('#yValueLabel').show(); 
-    $('#yValue').show();
-    $('#nLabel').show();
-  }
+  var request = {
+    requestType: "getVisualisation",
+    premadeType: premadeCursor.val(),
+    premadeQuery: premadeQuery.val()
+  };
+  
+  premadeHtml.find(".form-control").each( function () {
+    request[$(this).attr("id")] = $(this).val();
+  } );
+  console.log(request);
+  return request;
 }
-//temprorary populate with pre-defined
-function populateYear() {
-  var selectStartYear = $('#startYear');
-  var selectEndYear = $('#endYear');
-  var selectYValueYear = $('#yValueYear');
-  for (i = yearMin; i <= yearMax; i++) {
-    selectStartYear.append($('<option>', { value : i, text: i}));
-    selectEndYear.append($('<option>', { value : i, text: i}));    
-    selectYValueYear.append($('<option>', { value : i, text: i}));    
-  }
-
-}
-//Let user choose from a predefined set of N, X 
-function populateNnX() {
-  var selectN = $('#n');
-  for (i = 1; i < 15; i++) {
-    selectN.append($('<option>', { value : i, text: i}));
-  }
-  var selectN = $('#xAttr');
-  selectN.append($('<option>', { value : "author", text: "author"}));
-  selectN.append($('<option>', { value : "citationtitle", text: "citationtitle"}));
-  selectN.append($('<option>', { value : "venue", text: "venue"}));
-  selectN.append($('<option>', { value : "title", text: "title"}));
-  //base paper may require the query to be processed in another way
-  selectN.append($('<option>', { value : "basepaper", text: "basepaper"})); 
-  var selectY = $('#yAttr');
-  selectY.append($('<option>', { value : "author", text: "author"}));
-  selectY.append($('<option>', { value : "conference", text: "conference"}));  
-  selectY.append($('<option>', { value : "venue", text: "venue"}));
-  selectY.append($('<option>', { value : "year", text: "yearOfPublication"}));  
-  //remove author temp, author query are too big and laggy
-  //selectY.append($('<option>', { value : "author", text: "author"})); 
-
-  var selectYConf = $('#yValueConf');
-  selectYConf.append($('<option>', { value : "A4", text: "A4"}));  
-  $('#yAttr').val("author").attr('selected', 'selected');
- 
-}
-/*
-function populateY(yAttr) {
-  var selectY = $('#yValue');
-  $('#yValue').empty();
-  if (yAttr == "conference") {
-    selectY.append($('<option>', { value : "A4", text: "A4"}));
-  } else if (yAttr == "author") {
-    for (i = 0; i < authorArr.length; i++ ) {
-      selectY.append($('<option>', { value : authorArr[i], text: authorArr[i]}));
-    }
-  } else if (yAttr == "venue") {
-    for (i = 0; i < venueArr.length; i++ ) {
-      var venue = venueArr[1].venue;
-      selectY.append($('<option>', { value : venue, text: venue}));
-    }
-  } else if (yAttr == "yearOfPublication") {
-    for (i = yearMin; i <= yearMax; i++) {
-      selectY.append($('<option>', { value : i, text: i}));
-    }
-  }
-}*/
 
 
 
 $(document).ready (function () {
     //load preset and hide dropdownlist list
-    populatePresetsType();
+  //  populatePresetsType();
     populateGraphType();
-    showDropDown(1);
+
+    $('.hidden').hide();
 
     sendAjaxRequest("main.html", {requestType:"getVisualisation"}, "GET", 
         function(data) { 
             $('#viz').attr('src', data.src)
      });
 
-    //d populate dropdownlist with the data
-    populateYear();
-    populateNnX();
 
     //to be rewritten
     $('#constructd3').click(function () {
@@ -273,28 +187,11 @@ $(document).ready (function () {
       // Parses the user input into a JSON string
       var query = parseUserQuery();
 
-      if (type == 3) {
-        var value;
-        if ($("#yAttr").val() == "year") {
-          value = $("#yValueYear").val();
-        } else if($("#yAttr").val() == "conference"){
-          value = $("#yValueConf").val();       
-        } else {
-          value = $("#yValue").val();
-        }
-        request = {
-          requestType:"getVisualisation",
-          "vizType" : 3,
-          "n": $("#n").val(),
-          "xAttr": $("#xAttr").val(),
-          "yAttr": $("#yAttr").val(),
-          "yValue": value,
-        };
-        alert(JSON.stringify(request));
-        sendAjaxRequest("main.html", request, "GET", function(data) {
-          $('#viz').attr('src', data.src);
-        });
-      }
+      var premadeType = premadeCursor.val();
+      request = getRequestForPremade(premadeType);
+      sendAjaxRequest("main.html", request, "GET", function(data) {
+            $('#viz').attr('src', data.src);
+      });
     });
 
     $("#yAttr").on('change', function () {
@@ -312,5 +209,17 @@ $(document).ready (function () {
         $('#yValueYear').hide();
         $('#yValue').show();   
       }
+    });
+
+    $("#premade_query").on('change', function() {
+      var premadeType = $(this).val();
+      alert(premadeType);
+      request = {
+        requestType: "retrievePremadeType",
+        premadeType : premadeType
+      };
+      sendAjaxRequest("main.html", request, "GET", function(data) {
+        premadeHtml.html(data.response);
+      });
     });
 });
