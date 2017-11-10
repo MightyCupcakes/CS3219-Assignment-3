@@ -1,13 +1,12 @@
 <div id ="Topnxofy" class ="col-sm-6 form-group">
   <label id = "n">Modify your N attribute</label>
-  <input  class="form-control" id ="nform" placeholder="Modify your n value"></input>
+  <input  class="form-control" type"number" min="1" max="20" id ="nform" placeholder="Modify your n value" placeholder ="enter a value between 1 to 20"></input>
   <label id = "n">Modify your X attribute</label>
   <select class = "form-control" id ="xform">
   	<option id="1" value = "Journal Authors" >author</option>
   	<option id="2" value = "Journal Venue">venue</option>
   	<option id="3" value = "Journal Published YEAR">year</option>
   	<option id="4" value = "Citations">citations</option>
-
   </select>
   <label id = "n">Modify your Y Attribute</label>
   <select class = "form-control" id ="yform">
@@ -17,6 +16,9 @@
   </select>  
   <label id ="endYear">Modify your Y value</label>
   <input  class="form-control" id ="yformValue" placeholder="Modify your y value" ></input>
-  <input type="hidden" id="requestType" value="xx" />
+  <label>Search by</label>
+  <label><input type="radio" name="searchType"id ="exact" checked="checked">Exact Match</label>
+  <label><input type="radio" name="searchType" id="like">Like</label>
+  <input type="hidden" id="requestType" value="topnxofy" />
 </div>
 

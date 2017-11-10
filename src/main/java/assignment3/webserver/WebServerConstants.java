@@ -35,7 +35,7 @@ public final class WebServerConstants {
                             "Construct Top N X of Y Graph"),
                     new PremadeQueriesInfo("Advanced",
                     		"Advanced Query",
-                    		"Advanced")
+                    		"Construct your own query!")
             );
 
     public static final ImmutableMap<String, SchemaBase> COLUMNS = populateColumnNames();

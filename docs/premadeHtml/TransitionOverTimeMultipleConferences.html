@@ -3,15 +3,20 @@
 
 <div id ="TransitionOverTime" class ="col-sm-6 form-group">
 <label id = "startYear">start Year</label>
-<input  class="form-control" type = "number" id ="yformValue" placeholder="Modify your y value" ></input>
+<input  class="form-control" type = "number" id ="yformValue" placeholder="Enter a year between 1950 and 2017"></input>
 
 <label id ="endYear">end Year</label>
-<input class = "form-control" type = "number" id ="endYear"></select>
+<input class = "form-control" type = "number" id ="endYear" placeholder="Enter a year between 1950 and 2017"></select>
 
 <label id ="confernece">conference</label>
 <select class = "form-control" id ="conference">
 	<option id = "conference" value= "A4"></option>
 </select>
+<label>Search by</label>
+<label><input type="radio" name="searchType"id ="exact" checked="checked">Exact Match</label>
+<label><input type="radio" name="searchType" id="like">Like</label>
+<input type="hidden" id="requestType" value="transitionovertime" />
+
 </div>
 
 </html>

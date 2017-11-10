@@ -2,18 +2,6 @@
 var premadeCursor = $('#premade_type');
 var premadeHtml = $('#premadeHtml');
 var premadeQuery = $('#premade_query');
-/*
-function populatePresetsType() {
-    var select = $('#premade_type');
-
-    select.append($('<option>', { value: 0, text: "" }));
-
-    counter = 1;
-
-    premadeVisuals.forEach(function(obj) {
-        select.append($('<option>', { value: counter++, text: obj.type }));
-    });
-}*/
 
 function populateGraphType() {
     premadeCursor.append($('<option>', { value: 0, text: "" }));
@@ -159,6 +147,10 @@ function getRequestForPremade(premadeType) {
   };
   
   premadeHtml.find(".form-control").each( function () {
+    if ($(this).val() == "") {
+      alert("Please do not leave any field blank");
+      return false;
+    }
     request[$(this).attr("id")] = $(this).val();
   } );
   console.log(request);
@@ -168,27 +160,27 @@ function getRequestForPremade(premadeType) {
 
 
 $(document).ready (function () {
-    //load preset and hide dropdownlist list
-  //  populatePresetsType();
+    //prepopulate "type of visualization" dropdownlist by sending a request to the server
     populateGraphType();
 
     $('.hidden').hide();
 
+    //loading a default visualization d3 graph
     sendAjaxRequest("main.html", {requestType:"getVisualisation"}, "GET", 
         function(data) { 
             $('#viz').attr('src', data.src)
      });
 
 
-    //to be rewritten
+    //sending a request to the server to run the query and load a new d3 graph
     $('#constructd3').click(function () {
       var type = $("#premade_type").val();
 
       // Parses the user input into a JSON string
       var query = parseUserQuery();
-
       var premadeType = premadeCursor.val();
       request = getRequestForPremade(premadeType);
+      alert(hi);
       sendAjaxRequest("main.html", request, "GET", function(data) {
             $('#viz').attr('src', data.src);
       });
