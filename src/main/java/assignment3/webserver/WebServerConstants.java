@@ -19,6 +19,22 @@ public final class WebServerConstants {
             "Citation Web"
     );
 
+    public static final ImmutableList<PremadeQueriesInfo> PREMADE_QUERIES =
+            ImmutableList.of(
+                    new PremadeQueriesInfo("NumCitationsConference",
+                            "Transition Over Time",
+                            "Number of citations for a conference over a few years"),
+                    new PremadeQueriesInfo("NumCitationDifferentConference",
+                            "Transition Over Time",
+                            "Number of citations for different conferences"),
+                    new PremadeQueriesInfo("NumCitationsDifferentConferenceSameYear",
+                            "Contemporary comparison",
+                            "Number of citations for two different conferences held in the same year"),
+                    new PremadeQueriesInfo("TopAuthorsByConference",
+                            "Top N X of Y",
+                            "Top authors for a conference")
+            );
+
     public static final ImmutableMap<String, SchemaBase> COLUMNS = populateColumnNames();
 
     private static ImmutableMap<String, SchemaBase> populateColumnNames() {
@@ -38,4 +54,15 @@ public final class WebServerConstants {
         return columns.build();
     }
 
+    private static class PremadeQueriesInfo {
+        public final String htmlFile;
+        public final String category;
+        public final String name;
+
+        public PremadeQueriesInfo(String htmlFile, String category, String name) {
+            this.htmlFile = htmlFile;
+            this.category = category;
+            this.name = name;
+        }
+    }
 }
