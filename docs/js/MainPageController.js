@@ -171,7 +171,6 @@ $(document).ready (function () {
     //load preset and hide dropdownlist list
   //  populatePresetsType();
     populateGraphType();
-
     $('.hidden').hide();
 
     sendAjaxRequest("main.html", {requestType:"getVisualisation"}, "GET", 
@@ -213,6 +212,7 @@ $(document).ready (function () {
 
     $("#premade_query").on('change', function() {
       var premadeType = $(this).val();
+
       alert(premadeType);
       request = {
         requestType: "retrievePremadeType",

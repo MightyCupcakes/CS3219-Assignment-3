@@ -13,7 +13,12 @@ $( document ).ready ( function () {
     $('#premade_type').change( function() {
         var select = $('#premade_query');
         var selected = $(this).find(":selected").val();
+        if (selected == 0 ){
+            select.parent().hide();
 
+        } else {
+            select.parent().show();
+        }
         select.html("");
 
         select.append($('<option>', { value: 0, text: "" }));
