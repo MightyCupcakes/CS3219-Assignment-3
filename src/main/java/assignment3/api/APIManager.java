@@ -68,7 +68,7 @@ public class APIManager implements API {
     }
 
     @Override
-    public void runQuries() {
+    public void runQueries() {
 
     }
 

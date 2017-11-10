@@ -12,7 +12,7 @@ public class MainApp {
     public static void main(String[] args) throws IOException {
         if (args.length > 0 && args[0].equalsIgnoreCase("runquery")) {
             API api = new APIManager();
-            api.runQuries();
+            api.runQueries();
         } else {
             WebServer server = new WebServerManager(8004);
             server.start();

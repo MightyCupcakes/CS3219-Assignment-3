@@ -18,5 +18,5 @@ public interface API {
     /**
      * All queries in this method will be executed.
      */
-    void runQuries();
+    void runQueries();
 }
