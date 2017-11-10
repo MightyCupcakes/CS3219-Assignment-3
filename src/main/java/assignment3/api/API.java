@@ -15,4 +15,8 @@ public interface API {
      */
     APIQueryBuilder getQueryBuilder();
 
+    /**
+     * All queries in this method will be executed.
+     */
+    void runQuries();
 }

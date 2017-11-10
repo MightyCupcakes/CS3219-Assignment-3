@@ -67,6 +67,11 @@ public class APIManager implements API {
     	//String taskFive = queryForTaskFive();
     }
 
+    @Override
+    public void runQuries() {
+
+    }
+
     @Deprecated
     private void assignment3Queries() {
         BufferedWriter writer;
