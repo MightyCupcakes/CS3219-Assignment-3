@@ -11,6 +11,7 @@ $( document ).ready ( function () {
     });
 
     $('#premade_type').change( function() {
+        $('#premadeHtml').hide();
         var select = $('#premade_query');
         var selected = $(this).find(":selected").val();
         if (selected == 0 ){
