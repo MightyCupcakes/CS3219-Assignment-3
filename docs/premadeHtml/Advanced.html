@@ -120,7 +120,8 @@
 
 <script type="text/javascript">
 
-  functions = {
+  var selectedColumns = [];
+  var functions = {
     parse : parseUserQuery
   };
   
@@ -183,4 +184,29 @@
     return query;
   }
 
+  function populateGraphType() {
+    var graphType = $('#graphType');
+
+    graphType.append($('<option>', { value: 0, text: "" }));
+
+    sendAjaxRequest("main.html", {requestType:"populateForm", formElement:"typeOfGraph"}, "GET", 
+        function(data) {
+            data.forEach( function(obj) {
+                graphType.append($('<option>', { value: obj, text: obj }));
+            });
+     });
+  }
+
+  $ ( document ).ready ( function () {
+    populateGraphType();
+
+    $('#columnsort').autocomplete( {
+        source: selectedColumns,
+
+        change: function( event, ui ) {
+          var id = $(this).attr('id');
+          selectedColumns[id.substring(id.length - 1, id.length)] = ui.value;
+        }
+    });
+});
 </script>
