@@ -15,7 +15,6 @@ import assignment3.webserver.webrequest.WebRequest;
 @RegisterProcessor( requestType = "Top N X of Y")
 public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
 	private static final String DEFAULT_FILE = "donut.html";
-	private static final String DEFAULT_DATA_SET = "A4";
 	@Override
 	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
@@ -40,7 +39,7 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
         }
         
         System.out.println("selecting : " + selectAttrX.getNameOfAttribute());
-        builder = builder.select(selectAttrX, count).from(DEFAULT_DATA_SET);
+        builder = builder.select(selectAttrX, count).from(WebQueryProcessor.DEFAULT_CONFERENCE);
        
         SchemaPredicate predicate;
         if (yAttr.equals("Journal Published Year")) {
