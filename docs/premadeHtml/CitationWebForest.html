@@ -9,27 +9,13 @@
 </style>
 
 <div id ="CitationWebForBasePaper" class ="col-sm-6 form-group">
-	<label id = "startYear">Start Year</label> <br>
-	<input id = "startYearDate"  type="text" class="form-control" readonly='true'><br>
-	<label id ="endYear">End Year </label> <br>
-	<input id = "endYearDate"  type="text" class="form-control" readonly='true'>
+	<label id = "currentYear">Start Year</label> <br>
+	<input id = "currentYearDate"  type="text" class="form-control" readonly='true'><br>
 </div>
 <script>
 
 
-$("#startYearDate").datepicker({
-	changeMonth: false,
-	changeYear: true,
-	dateFormat: "yy",
-	yearRange: "1975:2017",
-	showButtonPanel: true,
-	onClose: function(dateText, inst) { 
-		$(this).datepicker('setDate', new Date(inst.selectedYear,1, 1));
-	}
-
-});
-
-$("#endYearDate").datepicker({
+$("#currentYearDate").datepicker({
 	changeMonth: false,
 	changeYear: true,
 	dateFormat: "yy",
