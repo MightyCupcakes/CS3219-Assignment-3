@@ -1,5 +1,3 @@
-var selectedColumns = [];
-
 $( document ).ready ( function () {
 
     $('button#addNewCondition').click (function () {
@@ -33,14 +31,9 @@ $( document ).ready ( function () {
         });
     });
 
-    $('#columnsort').autocomplete( {
-        source: selectedColumns
-    });
-
-
     $("#premade_query").on('change', function() {
       var premadeType = $(this).val();
-      
+
       if (premadeType == 0) {
         premadeHtml.hide();
       } else {
@@ -51,6 +44,7 @@ $( document ).ready ( function () {
         requestType: "retrievePremadeType",
         premadeType : premadeType
       };
+
       sendAjaxRequest("main.html", request, "GET", function(data) {
         premadeHtml.html(data.response);
       });
