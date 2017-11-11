@@ -1,57 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
+<style>
+.ui-datepicker-calendar {
+	display: none;
+}
+.ui-datepicker-month {
+	display: none;
+}
+.hide { display: none;}
+</style>
 
 <div id ="TransitionOverTime" class ="col-sm-6 form-group">
-	<label id = "startYearText">start Year</label>
-	<input  class="form-control" type = "number" id ="startYearValue" placeholder="Enter a year between 1950 and 2017" ></input>
-
-	<label id ="endYearText">end Year</label>
-	<input class = "form-control" type = "number" id ="endYearValue" placeholder="Enter a year between 1950 and 2017"></select>
-
 	<label id ="conferenceText">conference</label>
 	<select class = "form-control" id ="conferenceValue" multiple="disabled">
 		<option value= "A4" >A4</option>
 		<option value= "D12" >D12</option>
 		<option value= "J14" >J14</option>
 	</select>
-	<script>
-	var timer;
-	$("#startYearValue").keyup(function(){
-		clearInterval(timer);
-		var input = parseInt(this.value);
-		timer = setTimeout(function() {
-			if (input < 1950 || input > 2017) {
-				$("#startYearValue").val('');
-				alert("Please enter a valid year range");
-				return false;
-			}
-		}, 2500);
-		
-	});
-	var timer;
-	$("#endYearValue").keyup(function(){
-		clearInterval(timer);
-		var input = parseInt(this.value);
-		timer = setTimeout(function() {
-			if (input < 1950 || input > 2017) {
-				$("#endYearValue").val('');
-				alert("Please enter a valid year range");
-				return false;
-			}
-		}, 2500);
-		
-	});
-	var conferenceSelect = $("#conferenceValue");
-	if ($("#premade_query").val() != "Number of citations for different conferences") {
-		conferenceSelect.removeAttr("multiple");
-	} else {
-		$("#startYearText").hide();
-		$("#endYearText").hide();
-		$("#startYearValue").hide();
-		$("#endYearValue").hide();
+	<label id = "startYearText">Start Year</label> <br>
+	<input id = "startYearDate"  type="text" class="date-picker" readonly='true'><br>
+	<label id ="endYearText">End Year </label> <br>
+	<input id = "endYearDate"  type="text" class="date-picker" readonly='true'>
+	
+
+
+
+</div>
+<input type="hidden" id="requestType" value="transitionovertime" />
+
+<script>
+
+$("#startYearDate").datepicker({
+	changeMonth: false,
+	changeYear: true,
+	dateFormat: "yy",
+	yearRange: "1975:2017",
+	showButtonPanel: true,
+	onClose: function(dateText, inst) { 
+		$(this).datepicker('setDate', new Date(inst.selectedYear,1, 1));
 	}
-	</script>
-	<input type="hidden" id="requestType" value="transitionovertime" />
+
+});
+
+$("#endYearDate").datepicker({
+	changeMonth: false,
+	changeYear: true,
+	dateFormat: "yy",
+	yearRange: "1975:2017",
+	showButtonPanel: true,
+	onClose: function(dateText, inst) { 
+		$(this).datepicker('setDate', new Date(inst.selectedYear,1, 1));
+	}
+
+});
+var conferenceSelect = $("#conferenceValue");
+if ($("#premade_query").val() != "Number of citations for different conferences") {
+	conferenceSelect.removeAttr("multiple");
+} else {
+	$("#startYearText").hide();
+	$("#endYearText").hide();
+	$("#startYearDate").datepicker("destroy");
+	$("#startYearDate").hide();
+	$("#endYearDate").datepicker("destroy");
+	$("#endYearDate").hide();
+}
+</script>
+<input type="hidden" id="requestType" value="transitionovertime" />
 </div>
 
-</html>

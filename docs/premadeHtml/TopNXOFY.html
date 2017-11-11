@@ -1,3 +1,12 @@
+<style>
+.ui-datepicker-calendar {
+  display: none;
+}
+.ui-datepicker-month {
+  display: none;
+}
+
+</style>
 <div id ="Topnxofy" class ="col-sm-6 form-group">
   <label id = "n">Modify your N attribute</label>
   <input  class="form-control" type = "number" id ="nform" placeholder ="enter a value between 1 to 20"></input>
@@ -17,7 +26,12 @@
   </select>  
   <label id ="endYear">Modify your Y value</label>
   <input  class="form-control" id ="yformValue" placeholder="Modify your y value" ></input>
+  <br>
+  <input id = "yformValueYear"  type="text" class="date-picker" readonly='true' placeholder="Modify your y value">
+
+  <br>
   <label>Search by</label>
+  <br>
   <label><input type="radio" name="searchType"id ="exact" checked="checked">Exact Match</label>
   <label><input type="radio" name="searchType" id="like">Like</label>
   <input type="hidden" id="requestType" value="topnxofy" />
@@ -30,30 +44,30 @@
       return false;
     }
   });
-
+  $("#yformValueYear").hide();
   $('#yform').on('change', function() {
     $("#yformValue").val('');
     if ($("#yform").val() == "Journal Published YEAR") {
-      $("#yformValue").attr("type", "number");
+      $("#yformValue").hide();
+      $("#yformValueYear").show();
     } else {
-      $("#yformValue").attr("type", "");
+      $("#yformValue").show();
+      $("#yformValueYear").hide();
     }
 
   });
-  var timer;
-  $("#yformValue").keyup(function(){
-    if ($("#yform").val() == "Journal Published YEAR") {
-      clearInterval(timer);
-      var input = parseInt(this.value);
-      timer = setTimeout(function() {
-        if (input < 1950 || input > 2017) {
-          $("#yformValue").val('');
-          alert("Please enter a valid year range");
-          return false;
-      }
-      }, 2500);
-    }
-  });
+$("#yformValueYear").datepicker({
+  changeMonth: false,
+  changeYear: true,
+  dateFormat: "yy",
+  yearRange: "1975:2017",
+  showButtonPanel: true,
+  onClose: function(dateText, inst) { 
+    $(this).datepicker('setDate', new Date(inst.selectedYear,1, 1));
+  }
+
+});
+
   
 
   </script>

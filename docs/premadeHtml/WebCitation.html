@@ -1,11 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
+<style>
+.ui-datepicker-calendar {
+	display: none;
+}
+.ui-datepicker-month {
+	display: none;
+}
 
-<div id ="TransitionOverTime" class ="col-sm-6 form-group">
-<label id = "startYear">startYear</label>
-<select class = "form-control" id ="startYear"></select>
-<label id ="endYear">endYear</label>
-<select class = "form-control" id ="endYear"</select>
+</style>
+
+<div id ="CitationWeb" class ="col-sm-6 form-group">
+	<label id = "startYear">startYear</label>
+	<input id = "startYearDate" style="width: 300px;" type="text" class="date-picker" readonly='true'>
+	<label id ="endYear">endYear</label>
+	<input id = "endYearDate" style="width: 300px;" type="text" class="date-picker" readonly='true'>
 </div>
+<script>
 
-</html>
+
+$("#startYearDate").datepicker({
+	changeMonth: false,
+	changeYear: true,
+	dateFormat: "yy",
+	yearRange: "1975:2017",
+	showButtonPanel: true,
+	onClose: function(dateText, inst) { 
+		$(this).datepicker('setDate', new Date(inst.selectedYear,1, 1));
+	}
+
+});
+
+$("#endYearDate").datepicker({
+	changeMonth: false,
+	changeYear: true,
+	dateFormat: "yy",
+	yearRange: "1975:2017",
+	showButtonPanel: true,
+	onClose: function(dateText, inst) { 
+		$(this).datepicker('setDate', new Date(inst.selectedYear,1, 1));
+	}
+
+});
+
+</script>

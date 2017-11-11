@@ -1,15 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
+<style>
+.ui-datepicker-calendar {
+	display: none;
+}
+.ui-datepicker-month {
+	display: none;
+}
+
+</style>
 
 <div id ="ContemporaryComparison" class ="col-sm-6 form-group">
-  <label id = "n">First Venue</label>
-  <input class = "form-control" id ="firstVenue"  placeholder="Choose a Venue"></select>
-  <label id ="endYear">Second Venue</label>
-  <input  class="form-control" id ="secondVenue" placeholder="Choose a Venue"></input>
-  <label>Search by</label>
-  <label><input type="radio" name="searchType"id ="exact" checked="checked">Exact Match</label>
-  <label><input type="radio" name="searchType" id="like">Like</label>
-  <input type="hidden" id="requestType" value="contemporary" />
+	<label id = "secondvenue">First Venue</label>
+	<input class = "form-control" id ="firstVenue"  placeholder="Choose a Venue"></select>
+	<label id ="firstvenue">Second Venue</label>
+	<input  class="form-control" id ="secondVenue" placeholder="Choose a Venue"></input>
+	<label id ="year">Year</label> <br>
+	<input id = "Year"  type="text" class="date-picker" readonly='true'></input>
+	<br>
+	<label>Search by</label>
+	<br>
+	<label><input type="radio" name="searchType"id ="exact" checked="checked">
+		Exact Match</label>
+		<label><input type="radio" name="searchType" id="like">Like</label>
+		<input type="hidden" id="requestType" value="contemporary" />
 
-</div>
-</html>
+	</div>
+
+<script>
+$("#Year").datepicker({
+changeMonth: false,
+changeYear: true,
+dateFormat: "yy",
+yearRange: "1975:2017",
+showButtonPanel: true,
+onClose: function(dateText, inst) { 
+$(this).datepicker('setDate', new Date(inst.selectedYear,1, 1));
+}
+
+});
+</script>
