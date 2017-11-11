@@ -126,6 +126,6 @@ public class ForestWebQueryProcessor implements WebQueryProcessor {
 
     @Override
     public String getHtmlFileName() {
-        return "CollapsibleTree";
+        return "Forest";
     }
 }
