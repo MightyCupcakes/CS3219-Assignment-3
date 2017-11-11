@@ -1,7 +1,5 @@
 package assignment3.webserver.webquery;
 
-
-
 import assignment3.api.APIQueryBuilder;
 import assignment3.api.Query;
 import assignment3.schema.SchemaBase;
@@ -15,7 +13,9 @@ import assignment3.webserver.webrequest.WebRequest;
 
 @RegisterProcessor( requestType = "Top N X of Y")
 public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
+
 	private static final String DEFAULT_FILE = "donutData";
+
 	@Override
 	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
@@ -73,8 +73,6 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
 
 		return true;
 	}
-	
-
 
     @Override
     public String getHtmlFileName() {

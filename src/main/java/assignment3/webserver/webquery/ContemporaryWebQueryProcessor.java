@@ -11,7 +11,7 @@ import assignment3.webserver.WebServerManager;
 import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
 
-@RegisterProcessor( requestType = "Contemporary comparisong")
+@RegisterProcessor( requestType = "Contemporary comparison")
 public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
 
 	@Override
