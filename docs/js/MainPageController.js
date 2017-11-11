@@ -38,7 +38,6 @@ function getRequestForPremade() {
 
     return request;
   }
-
   premadeHtml.find(".form-control").each( function () {
     if ($(this).val() == "") {
       alert("Please do not leave any field blank");
@@ -46,7 +45,9 @@ function getRequestForPremade() {
     }
     request[$(this).attr("id")] = $(this).val();
   } );
-
+  premadeHtml.find("#exact").each( function () {
+      request["isExact"] = $(this).is(":checked");
+  });
   return request;
 }
 
@@ -61,7 +62,7 @@ $(document).ready (function () {
       var type = $("#premade_type").val();
 
       request = getRequestForPremade();
-
+      alert(JSON.stringify(request));
       if (!request) return;
      
       sendAjaxRequest("main.html", request, "GET", function(data) {
