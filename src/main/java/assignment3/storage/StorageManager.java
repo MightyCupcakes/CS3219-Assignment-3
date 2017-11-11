@@ -16,7 +16,7 @@ import assignment3.dataparser.xmlparser.XmlDataParser;
 
 public class StorageManager implements Storage {
 	private final static String DEFAULT_STORAGE = "Dataset/";
-	private final static String D3_STORAGE = "docs/d3SavedData/";
+	private final static String D3_STORAGE = "docs/d3chart/d3SavedData/";
 	private final String SAVED_LOCATION = "Dataset/";
 
 	private final String XML_FORMAT = ".xml";
