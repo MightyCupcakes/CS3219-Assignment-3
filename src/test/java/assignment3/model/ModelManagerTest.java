@@ -65,7 +65,7 @@ public class ModelManagerTest {
 		dataList.add(Arrays.asList("Saturday", "368239"));
 		dataList.add(Arrays.asList("Sunday", "282701"));
 		model.writeResultIntoCsvFile("testResult", dataList);
-		File file = new File("docs/testResult.csv");
+		File file = new File("docs/d3chart/d3SavedData/testResult.csv");
 		assertTrue(file.exists());
 		file.delete();
 	}
