@@ -25,9 +25,9 @@
   	<option id="3" value = "Journal Published YEAR">year</option>
   </select>  
   <label id ="endYear">Modify your Y value</label>
-  <input  class="form-control" id ="yformValue" placeholder="Modify your y value" ></input>
+  <input  class="form-control" id ="yformValue" placeholder="Modify your y value"  ></input>
   <br>
-  <input id = "yformValueYear"  type="text" class="date-picker" readonly='true' placeholder="Modify your y value">
+  <input id = "yformValueYear"  type="text" class="form-control" readonly='true' placeholder="Modify your y value" value="2017"></input>
 
   <br>
   <label>Search by</label>
@@ -46,7 +46,7 @@
   });
   $("#yformValueYear").hide();
   $('#yform').on('change', function() {
-    $("#yformValue").val('');
+    $("#yformValue").val('enter a value');
     if ($("#yform").val() == "Journal Published YEAR") {
       $("#yformValue").hide();
       $("#yformValueYear").show();
