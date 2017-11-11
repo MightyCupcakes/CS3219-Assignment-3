@@ -51,6 +51,8 @@ $("#endYearDate").datepicker({
 	}
 
 });
+
+$("#premade_query").on('change', function() {
 var conferenceSelect = $("#conferenceValue");
 if ($("#premade_query").val() != "Number of citations for different conferences") {
 	conferenceSelect.removeAttr("multiple");
@@ -62,6 +64,7 @@ if ($("#premade_query").val() != "Number of citations for different conferences"
 	$("#endYearDate").datepicker("destroy");
 	$("#endYearDate").hide();
 }
+});
 </script>
 <input type="hidden" id="requestType" value="transitionovertime" />
 </div>
