@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar build/jar/CIR_QuerySystem.jar
+web: java -Dserver.port=8003 $JAVA_OPTS -jar build/jar/CIR_QuerySystem.jar
