@@ -8,25 +8,30 @@
 .hide { display: none;}
 </style>
 
-<div id ="TransitionOverTime" class ="col-sm-6 form-group">
-	<label id ="conferenceText">conference</label>
-	<select class = "form-control" id ="conferenceValue" multiple="disabled">
-		<option value= "A4" >A4</option>
-		<option value= "D12" >D12</option>
-		<option value= "J14" >J14</option>
-		<option value= "D15" >D15</option>
-		<option value= "Q14" >Q14</option>
-	</select>
-	<label id = "startYearText">Start Year</label> <br>
-	<input id = "startYearDate"  type="text" class="form-control" readonly='true' value ="2017"><br>
-	<label id ="endYearText">End Year </label> <br>
-	<input id = "endYearDate"  type="text" class="form-control" readonly='true' value = "2017">
-	
+<div id ="TransitionOverTime" class ="col-sm-6">
+	<div class="form-group">
+		<label id ="conferenceText">conference</label>
+		<select class = "form-control" id ="conferenceValue" multiple="disabled">
+			<option value= "A4" >A4</option>
+			<option value= "D12" >D12</option>
+			<option value= "J14" >J14</option>
+			<option value= "D15" >D15</option>
+			<option value= "Q14" >Q14</option>
+		</select>
+	</div>
 
+	<div class="form-group">
+		<label id = "startYearText">Start Year</label>
+		<input id = "startYearDate"  type="text" class="form-control" readonly='true' value ="2017">
+	</div>
 
+	<div class="form-group">
+		<label id ="endYearText">End Year </label>
+		<input id = "endYearDate"  type="text" class="form-control" readonly='true' value = "2017">
+	</div>
 
+	<input type="hidden" id="requestType" value="transitionovertime" />
 </div>
-<input type="hidden" id="requestType" value="transitionovertime" />
 
 <script>
 
@@ -75,6 +80,4 @@ if ($("#premade_query").val() != "Number of citations for different conferences"
 }
 });
 </script>
-<input type="hidden" id="requestType" value="transitionovertime" />
-</div>
 
