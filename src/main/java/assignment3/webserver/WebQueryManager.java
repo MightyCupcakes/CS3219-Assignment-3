@@ -1,14 +1,10 @@
 package assignment3.webserver;
 
-import java.util.Map;
 import java.util.Set;
 
 
 
-import assignment3.api.APIQueryBuilder;
 import assignment3.api.ConferenceData;
-import assignment3.api.Query;
-import assignment3.logic.QueryBuilder;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaInt;
@@ -19,78 +15,13 @@ import assignment3.schema.aggregate.SchemaCountUnique;
 import assignment3.schema.aggregate.SchemaMax;
 import assignment3.schema.aggregate.SchemaMin;
 import assignment3.schema.citations.CitationAttribute;
+import assignment3.webserver.webquery.WebQuery;
+import assignment3.webserver.webrequest.WebRequest;
 
 public class WebQueryManager implements WebQuery{
 
 	private static final String DEFAULT_CONFERENCE = "A4";
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void generateTopNXofYGraph(Map<String, String> data)  {
-		APIQueryBuilder builder = QueryBuilder.createNewBuilder();
-		int n = Integer.parseInt(data.get("n"));
-		String xAttr = data.get("xAttr");
-		String yAttr = data.get("yAttr");
-		String yValue = data.get("yValue");
-		String predicateType = data.get("predicate");
-		SchemaComparable selectAttribute = (SchemaComparable) this.getSchemaAttr(xAttr);
-		SchemaBase selectCount;
-		if (selectAttribute instanceof CitationAttribute) {
-			selectCount = this.getSchemaAggre(selectAttribute, "count");
-		} else {
-			selectCount = new SchemaCount(ConferenceData.ID);
-		}
-		builder = builder.select(selectAttribute.as("attribute"), selectCount.as("count"));
-		
-		if (yAttr.equals("conference")) {
-			builder = builder.from(yValue);
-			Query query = builder.groupBy(selectAttribute)
-					.orderBy(selectCount, APIQueryBuilder.OrderByRule.DESC)
-					.limit(n)
-					.build();
-			System.out.println("savingFile");
-			query.executeAndSaveInCSV("5");
-			System.out.println("file saved");
-			return;
-		}
-		
-		SchemaComparable whereAttr = (SchemaComparable) this.getSchemaAttr(yAttr);
-		SchemaPredicate predicate;
-		if (yAttr.equals("author") || yAttr.equals("venue")) {
-			predicate = this.getSchemaPredi(whereAttr, yValue, null, predicateType);
-		} else {
-			predicate = this.getSchemaPredi(whereAttr, yValue, null, "eqt");
-		}
-		
-
-		Query query = builder.from(DEFAULT_CONFERENCE)
-				.where(predicate)
-				.groupBy(selectAttribute)
-				.orderBy(selectCount, APIQueryBuilder.OrderByRule.DESC)
-				.limit(n)
-				.build();
-		System.out.println("savingFile");
-		query.executeAndSaveInCSV("5");
-		System.out.println("file saved");
-	}
-
-	@Override
-	public void generateTrendGraph(Map<String, String> data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void generateContemporaryGraph(Map<String, String> data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void generateNewGraph(Map<String, String> data) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@SuppressWarnings("rawtypes")
 	private SchemaBase getSchemaAttr(String attribute) {
@@ -153,28 +84,14 @@ public class WebQueryManager implements WebQuery{
 	private SchemaPredicate getSchemaPrediIn(SchemaComparable attribute, Set valueSet) {
 		return attribute.in(valueSet);
 	}
+
+	@Override
+	public boolean executeAndSaveResultIntoCsvFile(WebRequest query) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public String retrieveDataForDropDown(String attribute) {
-		APIQueryBuilder builder = QueryBuilder.createNewBuilder();
-		SchemaComparable selectAttr = (SchemaComparable) this.getSchemaAttr(attribute);
-		if (attribute.equals("yearOfPublication")) {
-			builder = builder.select(this.getSchemaAggre(selectAttr, "min"),
-					this.getSchemaAggre(selectAttr, "max"))
-					.from(DEFAULT_CONFERENCE);
-		} else {
-			builder = builder.select(selectAttr)
-					.from(DEFAULT_CONFERENCE)
-					.groupBy((SchemaComparable) selectAttr)
-					.orderBy(selectAttr, APIQueryBuilder.OrderByRule.ASC);
-		}
-		Query query = builder.build();
-		String result = query.execute();
-		//query.executeAndSaveInCSV(attribute);
-		//System.out.println(result);
-		return result;
-	}
+
 
 }
