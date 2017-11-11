@@ -6,7 +6,6 @@ var premadeQuery = $('#premade_query');
 function populateGraphType() {
     premadeCursor.append($('<option>', { value: 0, text: "" }));
 
-
     sendAjaxRequest("main.html", {requestType:"populateForm", formElement:"premade_type"}, "GET", 
         function(data) {
             counter = 1;
@@ -16,15 +15,25 @@ function populateGraphType() {
      });
 }
 
-function getRequestForPremade(premadeType) {
-  var requestType =premadeHtml.find("#requestType").val();
+function getRequestForPremade() {
+  var requestType = premadeHtml.find("#requestType").val();
 
   var request = {
     requestType: "getVisualisation",
     premadeType: premadeCursor.val(),
     premadeQuery: premadeQuery.val()
   };
-  
+
+  if (premadeHtml.find("#requestType").attr('data-custom') == 'true') {
+    custom_request = functions['parse']();
+
+    for (var key in custom_request) {
+        request[key] = custom_request[key];
+    }
+
+    return request;
+  }
+
   premadeHtml.find(".form-control").each( function () {
     if ($(this).val() == "") {
       alert("Please do not leave any field blank");
@@ -50,12 +59,10 @@ $(document).ready (function () {
 
 
     //sending a request to the server to run the query and load a new d3 graph
-    $('#constructd3').click(function () {
+    $('#constructd3').click( function () {
       var type = $("#premade_type").val();
 
-
-      var premadeType = premadeCursor.val();
-      request = getRequestForPremade(premadeType);
+      request = getRequestForPremade();
      
       sendAjaxRequest("main.html", request, "GET", function(data) {
             $('#viz').attr('src', data.src);
@@ -64,22 +71,5 @@ $(document).ready (function () {
 
     $("#yAttr").on('change', function () {
       showDropDown(3);
-    });
-
-    $("#premade_query").on('change', function() {
-      var premadeType = $(this).val();
-      if (premadeType == 0) {
-        premadeHtml.hide();
-      } else {
-        premadeHtml.show();
-      }
-      alert(premadeType);
-      request = {
-        requestType: "retrievePremadeType",
-        premadeType : premadeType
-      };
-      sendAjaxRequest("main.html", request, "GET", function(data) {
-        premadeHtml.html(data.response);
-      });
     });
 });
