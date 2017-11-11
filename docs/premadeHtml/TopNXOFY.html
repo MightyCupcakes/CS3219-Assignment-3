@@ -23,12 +23,17 @@
   	<option id="1" value = "Journal Author" >author</option>
   	<option id="2" value = "Journal Venue">venue</option>
   	<option id="3" value = "Journal Published YEAR">year</option>
+    <option id="4" value = "Conference">conference</option>
   </select>  
   <label id ="endYear">Modify your Y value</label>
   <input  class="form-control" id ="yformValue" placeholder="Modify your y value"  ></input>
+  <select class = "form-control" id = yformValueConference> 
+    <option value= "A4" >A4</option>
+    <option value= "D12" >D12</option>
+    <option value= "J14" >J14</option>
+  </select>
   <br>
   <input id = "yformValueYear"  type="text" class="form-control" readonly='true' placeholder="Modify your y value" value="2017"></input>
-
   <br>
   <label>Search by</label>
   <br>
@@ -45,15 +50,22 @@
     }
   });
   $("#yformValueYear").hide();
+  $("#yformValueConference").hide();
   $('#yform').on('change', function() {
   	alert($("#yformValue").val());
     $("#yformValue").val('enter a value');
     if ($("#yform").val() == "Journal Published YEAR") {
       $("#yformValue").hide();
       $("#yformValueYear").show();
+      $("#yformValueConference").hide(); 
+    } else if ($("#yform").val() == "Conference") {
+      $("#yformValue").hide();
+      $("#yformValueYear").hide(); 
+      $("#yformValueConference").show();    
     } else {
       $("#yformValue").show();
-      $("#yformValueYear").hide();
+      $("#yformValueYear").hide();     
+      $("#yformValueConference").hide(); 
     }
 
   });
