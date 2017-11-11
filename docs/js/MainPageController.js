@@ -64,9 +64,12 @@ $(document).ready (function () {
       request = getRequestForPremade();
       alert(JSON.stringify(request));
       if (!request) return;
+
+      $('#constructd3').attr("disabled", "true"); // Disable button until the server responses to prevent spam clicking.
      
       sendAjaxRequest("main.html", request, "GET", function(data) {
             $('#viz').attr('src', data.src);
+            $('#constructd3').removeAttr("disabled");
       });
     });
 

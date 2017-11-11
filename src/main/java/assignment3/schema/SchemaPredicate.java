@@ -1,9 +1,10 @@
 package assignment3.schema;
 
+import static java.util.Objects.isNull;
+
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import assignment3.datarepresentation.SerializedJournal;
 import assignment3.datarepresentation.SerializedJournalCitation;
 
 public class SchemaPredicate {
@@ -28,7 +29,7 @@ public class SchemaPredicate {
 
     public boolean test(SerializedJournalCitation serializedJournalCitation) {
 
-        if (Objects.isNull(column)) {
+        if (isNull(column)) {
             return true;
         }
 
@@ -42,13 +43,19 @@ public class SchemaPredicate {
     }
 
     public SchemaPredicate and(SchemaPredicate other) {
-        this.conditional = this.conditional.and(other.conditional);
+        if (!isNull(conditional)) {
+            this.conditional = this.conditional.and(other.conditional);
+        } else {
+            return other;
+        }
 
         return this;
     }
 
     public SchemaPredicate or(SchemaPredicate other) {
-        this.conditional = this.conditional.or(other.conditional);
+        if (!isNull(conditional)) {
+            this.conditional = this.conditional.or(other.conditional);
+        }
 
         return this;
     }
