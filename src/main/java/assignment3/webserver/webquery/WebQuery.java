@@ -29,35 +29,4 @@ public interface WebQuery {
      * @return
      */
     String getHtmlFileName();
-
-    enum DisplayOption {
-        DISPLAY("Display", base -> base),
-        COUNT ("count", SchemaCount::new),
-        MIN("min", SchemaMin::new),
-        MAX("max", SchemaMax::new);
-
-        public final String stringValue;
-        public final Function<SchemaComparable, SchemaBase> converterFunction;
-
-        private static final Stream<DisplayOption> VALUES = Arrays.stream(DisplayOption.values());
-
-        DisplayOption(String stringValue, Function<SchemaComparable, SchemaBase> converterFunction) {
-            this.stringValue = stringValue;
-            this.converterFunction = converterFunction;
-        }
-
-        public static Optional<DisplayOption> getOptionWithStringValue(String value) {
-            List<DisplayOption> results = VALUES
-                    .filter( displayOption -> displayOption.stringValue.equalsIgnoreCase(value))
-                    .collect(Collectors.toList());
-
-            assert results.size() <= 1;
-
-            if (results.isEmpty()) {
-                return Optional.empty();
-            } else {
-                return Optional.of(results.get(0));
-            }
-        }
-    }
 }

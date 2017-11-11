@@ -13,10 +13,10 @@ import assignment3.schema.SchemaBase;
  */
 public final class WebServerConstants {
 
-    public static final ImmutableList<String> TYPES_OF_GRAPH = ImmutableList.of(
-            "Bar Chart",
-            "Line Chart",
-            "Citation Web"
+    public static final ImmutableList<GraphTypeInfo> TYPES_OF_GRAPH = ImmutableList.of(
+            new GraphTypeInfo("Bar Chart", "1.csv", "q1"),
+            new GraphTypeInfo("Line Chart", "2.csv", "q2"),
+            new GraphTypeInfo("Citation Web", "", "")
     );
 
     public static final ImmutableList<PremadeQueriesInfo> PREMADE_QUERIES =
@@ -72,6 +72,21 @@ public final class WebServerConstants {
             this.htmlFile = htmlFile;
             this.category = category;
             this.name = name;
+        }
+    }
+
+    public static class GraphTypeInfo {
+        /** The name of this type of graph **/
+        public final String graphName;
+        /** The name of the file that this graph is using as a datasource */
+        public final String dataSourceFile;
+        /** The name of the d3 HTML file for this graph */
+        public final String htmlFileName;
+
+        public GraphTypeInfo (String graphName, String dataSourceFile, String htmlFileName) {
+            this.graphName = graphName;
+            this.dataSourceFile = dataSourceFile;
+            this.htmlFileName = htmlFileName;
         }
     }
 }

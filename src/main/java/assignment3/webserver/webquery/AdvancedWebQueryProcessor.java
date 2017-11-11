@@ -3,14 +3,23 @@ package assignment3.webserver.webquery;
 import static java.util.Objects.isNull;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import com.google.common.collect.ImmutableMap;
 
 import assignment3.api.APIQueryBuilder;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
 import assignment3.schema.aggregate.SchemaAggregate;
+import assignment3.schema.aggregate.SchemaCount;
+import assignment3.schema.aggregate.SchemaMax;
+import assignment3.schema.aggregate.SchemaMin;
 import assignment3.webserver.WebServerConstants;
 import assignment3.webserver.WebServerManager;
 import assignment3.webserver.registry.RegisterProcessor;
@@ -19,31 +28,80 @@ import assignment3.webserver.webrequest.WebRequest;
 @RegisterProcessor( requestType = "Advanced Query")
 public class AdvancedWebQueryProcessor implements WebQueryProcessor {
 
+    private static final Map<String, Function<SchemaComparable, SchemaAggregate>> stringSchemaAggregateMap;
+
+    private String htmlFile;
+
+    static {
+        ImmutableMap.Builder<String, Function<SchemaComparable, SchemaAggregate>> builder = ImmutableMap.builder();
+
+        builder.put("count", SchemaCount::new);
+        builder.put("max", SchemaMax::new);
+        builder.put("min", SchemaMin::new);
+
+        stringSchemaAggregateMap = builder.build();
+    }
+
     @Override
-    public boolean processAndSaveIntoCSV(WebServerManager manager,WebRequest query) {
+    public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest query) {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
 
-        // Get columns to be displayed
-        SchemaBase column1 = getSchemaAttribute(query.getValue("column1Name"), query.getValue("column1ShowType"));
-        SchemaBase column2 = getSchemaAttribute(query.getValue("column2Name"), query.getValue("column2ShowType"));
-
-        builder.select(column1, column2);
         builder.from(DEFAULT_CONFERENCE);
+        builder = getColumnsToBeDisplayed(builder, query);
 
-        // If any of the columns is an aggregate, the other column will require a group by
-        if ( column1 instanceof SchemaAggregate && column2 instanceof SchemaAggregate) {
-            return false;
-
-        } else if (column1 instanceof SchemaAggregate && column2 instanceof SchemaComparable) {
-            builder.groupBy( (SchemaComparable) column2);
-
-        } else if (column2 instanceof SchemaAggregate && column1 instanceof SchemaComparable) {
-            builder.groupBy( (SchemaComparable) column1);
-
-        } else {
+        if (isNull(builder)) {
             return false;
         }
 
+        builder = getConditions(builder, query);
+        builder = getOrderBy(builder, query);
+        builder = getLimitBy(builder, query);
+
+        List<WebServerConstants.GraphTypeInfo> graphInfoList = WebServerConstants.TYPES_OF_GRAPH.stream()
+                .filter( graphTypeInfo -> graphTypeInfo.graphName.equalsIgnoreCase(query.getValue("typeOfGraph")))
+                .collect(Collectors.toList());
+
+        if (graphInfoList.isEmpty() || graphInfoList.size() > 1) return false;
+
+        builder.build().executeAndSaveInCSV(graphInfoList.get(0).dataSourceFile);
+        htmlFile = graphInfoList.get(0).htmlFileName;
+
+        return true;
+    }
+
+    @Override
+    public String getHtmlFileName() {
+        return htmlFile;
+    }
+
+    private APIQueryBuilder getLimitBy(APIQueryBuilder builder, WebRequest query) {
+        if (query.getValue("limit").isEmpty()) return builder;
+
+        return builder.limit(Integer.parseInt(query.getValue("limit")));
+    }
+
+    private APIQueryBuilder getOrderBy(APIQueryBuilder builder, WebRequest query) {
+        if (query.getValue("columnsort").isEmpty()) return builder;
+
+        SchemaBase orderByColumn = null;
+
+        if (query.getValue("column1Name").equalsIgnoreCase(query.getValue("columnsort"))) {
+            orderByColumn = getSchemaAttribute(query.getValue("column1Name"), query.getValue("column1ShowType"));
+
+        } else if (query.getValue("column2Name").equalsIgnoreCase(query.getValue("columnsort"))) {
+            orderByColumn = getSchemaAttribute(query.getValue("column2Name"), query.getValue("column2ShowType"));
+        }
+
+        if (isNull(orderByColumn)) return builder;
+
+        APIQueryBuilder.OrderByRule orderByRule =
+                (query.getValue("columnsortorder").equalsIgnoreCase("desc"))
+                        ? APIQueryBuilder.OrderByRule.DESC : APIQueryBuilder.OrderByRule.ASC;
+
+        return builder.orderBy(orderByColumn, orderByRule);
+    }
+
+    private APIQueryBuilder getConditions(APIQueryBuilder builder, WebRequest query) {
         // Get the number of conditions
         int numConditions = Integer.parseInt(query.getValue("numOfConditions"));
 
@@ -74,12 +132,36 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
             builder.where(condition);
         }
 
-        return false;
+        return builder;
+    }
+
+    private APIQueryBuilder getColumnsToBeDisplayed(APIQueryBuilder builder, WebRequest query) {
+        // Get columns to be displayed
+        SchemaBase column1 = getSchemaAttribute(query.getValue("column1Name"), query.getValue("column1ShowType"));
+        SchemaBase column2 = getSchemaAttribute(query.getValue("column2Name"), query.getValue("column2ShowType"));
+
+        builder.select(column1, column2);
+
+        // If any of the columns is an aggregate, the other column will require a group by
+        if ( column1 instanceof SchemaAggregate && column2 instanceof SchemaAggregate) {
+            return null;
+
+        } else if (column1 instanceof SchemaAggregate && column2 instanceof SchemaComparable) {
+            builder.groupBy( (SchemaComparable) column2);
+
+        } else if (column2 instanceof SchemaAggregate && column1 instanceof SchemaComparable) {
+            builder.groupBy( (SchemaComparable) column1);
+
+        } else {
+            return null;
+        }
+
+        return builder;
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private SchemaPredicate getSchemaPredicate(SchemaComparable attribute, String valueToCompare,
-                                               Set valueSet, String type){
+                                               Set valueSet, String type) {
         if (type.equals("gt")) {
             return attribute.greaterThan(Integer.parseInt(valueToCompare));
         } else if (type.equals("gte")) {
@@ -106,17 +188,10 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
             return null;
         }
 
-        Optional<WebQuery.DisplayOption> option = WebQuery.DisplayOption.getOptionWithStringValue(attributeDisplayOption);
-
-        if (option.isPresent()) {
-            return option.get().converterFunction.apply( (SchemaComparable) schema);
+        if (stringSchemaAggregateMap.containsKey(attributeDisplayOption)) {
+            return stringSchemaAggregateMap.get(attributeDisplayOption).apply( (SchemaComparable) schema);
         } else {
-            return null;
+            return schema;
         }
-    }
-
-    @Override
-    public String getHtmlFileName() {
-        return null;
     }
 }
