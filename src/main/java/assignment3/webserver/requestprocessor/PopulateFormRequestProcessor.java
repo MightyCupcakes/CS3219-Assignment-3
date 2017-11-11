@@ -25,7 +25,7 @@ public class PopulateFormRequestProcessor implements RequestProcessor {
         String formElement = keyValuePairs.getValue("formElement");
 
         if ("typeOfGraph".equalsIgnoreCase(formElement)) {
-            WebServerConstants.TYPES_OF_GRAPH.forEach(builder::add);
+            WebServerConstants.TYPES_OF_GRAPH.forEach(graphTypeInfo -> builder.add(graphTypeInfo.graphName));
 
         } else if ("columnNames".equalsIgnoreCase(formElement) && keyValuePairs.doesKeyExists("term")) {
             String searchTerm = keyValuePairs.getValue("term").toLowerCase();
