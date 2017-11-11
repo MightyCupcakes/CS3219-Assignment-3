@@ -1,13 +1,5 @@
 $( document ).ready ( function () {
 
-    $('button#addNewCondition').click (function () {
-        $('div#conditions').append($('div#newConditions').html())
-    });
-
-    $('button#removecondition').click (function () {
-        $('div#conditions').children("div.form-group").last().remove();
-    });
-
     $('#premade_type').change( function() {
         $('#premadeHtml').hide();
         var select = $('#premade_query');
