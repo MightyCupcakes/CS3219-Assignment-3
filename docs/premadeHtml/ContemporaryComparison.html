@@ -8,22 +8,39 @@
 
 </style>
 
-<div id ="ContemporaryComparison" class ="col-sm-6 form-group">
-	<label id = "secondvenue">First Venue</label>
-	<input class = "form-control" id ="firstVenue"  placeholder="Choose a Venue"></select>
-	<label id ="firstvenue">Second Venue</label>
-	<input  class="form-control" id ="secondVenue" placeholder="Choose a Venue"></input>
-	<label id ="year">Year</label> <br>
-	<input id = "Year"  type="text" class="form-control" readonly='true'></input>
-	<br>
-	<label>Search by</label>
-	<br>
-	<label><input type="radio" name="searchType"id ="exact" checked="checked">
-		Exact Match</label>
-		<label><input type="radio" name="searchType" id="like">Like</label>
-		<input type="hidden" id="requestType" value="contemporary" />
+<div id ="ContemporaryComparison" class ="col-sm-6">
 
+	<div class="form-group">
+		<label id = "secondvenue">First Venue</label>
+		<input class = "form-control" id ="firstVenue"  placeholder="Choose a Venue">
 	</div>
+
+	<div class="form-group">
+		<label id ="firstvenue">Second Venue</label>
+		<input  class="form-control" id ="secondVenue" placeholder="Choose a Venue">
+	</div>
+
+	<div class="form-group">
+		<label id ="year">Year</label>
+		<input id = "Year"  type="text" class="form-control" readonly='true'>
+	</div>
+
+	<label>Search by</label>
+	<div class="form-check">
+		<label class ="form-check-label">
+			<input class="form-check-input" type="radio" name="searchType" id ="exact" checked="checked">
+				Exact Match
+		</label>
+	</div>
+	<div class="form-check">
+		<label class ="form-check-label">
+			<input class="form-check-input" type="radio" name="searchType" id="like">
+			Like
+		</label>
+	</div>
+	<input type="hidden" id="requestType" value="contemporary" />
+
+</div>
 
 <script>
 $("#Year").datepicker({
