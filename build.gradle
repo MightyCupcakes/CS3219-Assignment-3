@@ -66,6 +66,9 @@ test {
     }
 }
 
+task stage(dependsOn: ['shadowJar', 'clean'])
+build.mustRunAfter clean
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.12'
 }
