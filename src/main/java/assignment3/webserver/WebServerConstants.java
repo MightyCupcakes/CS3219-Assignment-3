@@ -14,9 +14,9 @@ import assignment3.schema.SchemaBase;
 public final class WebServerConstants {
 
     public static final ImmutableList<GraphTypeInfo> TYPES_OF_GRAPH = ImmutableList.of(
-            new GraphTypeInfo("Bar Chart", "1.csv", "q1"),
-            new GraphTypeInfo("Line Chart", "2.csv", "q2"),
-            new GraphTypeInfo("Citation Web", "", "")
+            new GraphTypeInfo("Bar Chart", "1.csv", "BarChart"),
+            new GraphTypeInfo("Line Chart", "2.csv", "LineChart"),
+            new GraphTypeInfo("Citation Web", "", "CollapsibleTree")
     );
 
     public static final ImmutableList<PremadeQueriesInfo> PREMADE_QUERIES =
