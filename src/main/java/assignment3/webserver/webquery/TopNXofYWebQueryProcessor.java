@@ -41,7 +41,7 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
         	count = new SchemaCount(base);      	
         }
         
-        builder = builder.select(selectAttrX, count);
+        builder = builder.select(selectAttrX.as("x"), count.as("y"));
         SchemaPredicate predicate = null;
         if (yAttr.equals("Journal Published Year")) {
         	int yValueYear = Integer.parseInt(webRequest.getValue("yformValueYear"));
