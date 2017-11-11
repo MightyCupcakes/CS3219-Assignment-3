@@ -18,6 +18,11 @@ function populateGraphType() {
 function getRequestForPremade() {
   var requestType = premadeHtml.find("#requestType").val();
 
+  if (typeof requestType == "undefined") {
+    alert ("An empty visualization is no visualization!");
+    return false;
+  }
+
   var request = {
     requestType: "getVisualisation",
     premadeType: premadeCursor.val(),
@@ -51,18 +56,13 @@ $(document).ready (function () {
 
     $('.hidden').hide();
 
-    //loading a default visualization d3 graph
-    sendAjaxRequest("main.html", {requestType:"getVisualisation"}, "GET", 
-        function(data) { 
-            $('#viz').attr('src', data.src)
-     });
-
-
     //sending a request to the server to run the query and load a new d3 graph
     $('#constructd3').click( function () {
       var type = $("#premade_type").val();
 
       request = getRequestForPremade();
+
+      if (!request) return;
      
       sendAjaxRequest("main.html", request, "GET", function(data) {
             $('#viz').attr('src', data.src);

@@ -13,4 +13,8 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
 		return false;
 	}
 
+    @Override
+    public String getHtmlFileName() {
+        return null;
+    }
 }

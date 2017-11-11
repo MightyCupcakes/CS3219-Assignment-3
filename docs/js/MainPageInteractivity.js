@@ -40,12 +40,13 @@ $( document ).ready ( function () {
 
     $("#premade_query").on('change', function() {
       var premadeType = $(this).val();
+      
       if (premadeType == 0) {
         premadeHtml.hide();
       } else {
         premadeHtml.show();
       }
-      alert(premadeType);
+
       request = {
         requestType: "retrievePremadeType",
         premadeType : premadeType

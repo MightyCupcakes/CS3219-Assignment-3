@@ -12,4 +12,11 @@ public interface WebQueryProcessor {
      * saves the result into a CSV file. Returns true if the operation is successful; false otherwise.
      */
     boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest);
+
+    /**
+     * Get the name of the html file (without the .html postfix) to display to the user for the
+     * web request if the execute operation is successful (that is processAndSaveIntoCSV returns true)
+     * @return
+     */
+    String getHtmlFileName();
 }

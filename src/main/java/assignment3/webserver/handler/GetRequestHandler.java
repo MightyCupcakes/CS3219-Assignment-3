@@ -33,11 +33,18 @@ public class GetRequestHandler extends FileRequestHandler {
         WebRequest request = new WebRequest();
 
         request.parseQueryString(WebRequest.RequestType.GET, httpExchange.getRequestURI().getQuery());
-
         if (request.doesKeyExists("requestType")) {
             if (registry.getHandler(request.getValue("requestType")).isPresent()) {
                 Optional<RequestProcessor> processor = registry.getHandler(request.getValue("requestType"));
-                return processor.get().handleRequest(request);
+
+                if (processor.isPresent()) {
+                    RequestProcessor requestProcessor = processor.get();
+
+                    requestProcessor.setWebManager(manager);
+                    return requestProcessor.handleRequest(request);
+                }
+
+                return super.handleRequest(httpExchange);
             } else {
                 return super.handleRequest(httpExchange);
             }

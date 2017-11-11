@@ -3,6 +3,8 @@ package assignment3.webserver.requestprocessor;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
+import assignment3.webserver.WebServerManager;
+import assignment3.webserver.exceptions.WebServerException;
 import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
 
@@ -12,36 +14,26 @@ import assignment3.webserver.webrequest.WebRequest;
 @RegisterProcessor( requestType = "getVisualisation")
 public class VisualisationRequestProcessor implements RequestProcessor {
 
+    private WebServerManager manager;
+
     @Override
     public String handleRequest(WebRequest keyValuePairs) {
         // Create JSON response
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        // TODO: Not hardcode this
 
-        String html = "q1.html";
-        if (keyValuePairs.doesKeyExists("vizType")) {
-        	html = generateNewCsvData(keyValuePairs);
+        if (manager.getWebQuery().executeAndSaveResultIntoCsvFile(keyValuePairs)) {
+            String htmlFile = manager.getWebQuery().getHtmlFileName() + ".html";
+
+            builder.add("src", htmlFile);
+        } else {
+            builder.add("src", "");
         }
-        builder.add("src", html);
+
         return builder.build().toString();
     }
-    /**
-     * 
-     * @param data that contain the request from client side
-     * @return the html string that tell which html should the client load
-     */
-    private String generateNewCsvData(WebRequest data)  {
-		int type = Integer.parseInt(data.getValue("vizType"));
 
-		if (type == 1) {
-			
-		} else if (type == 2) {
-			
-		} else if (type == 3) {
-			//webQuery.generateTopNXofYGraph(data);
-			return "q2.html";
-		} 
-		return "q1.html";
-	}
-
+    @Override
+    public void setWebManager(WebServerManager manager) {
+        this.manager = manager;
+    }
 }

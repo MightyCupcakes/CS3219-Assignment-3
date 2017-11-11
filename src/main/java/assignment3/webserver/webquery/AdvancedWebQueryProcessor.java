@@ -16,7 +16,7 @@ import assignment3.webserver.WebServerManager;
 import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
 
-@RegisterProcessor( requestType = "advanced")
+@RegisterProcessor( requestType = "Advanced Query")
 public class AdvancedWebQueryProcessor implements WebQueryProcessor {
 
     @Override
@@ -113,5 +113,10 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public String getHtmlFileName() {
+        return null;
     }
 }

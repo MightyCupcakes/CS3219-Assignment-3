@@ -23,6 +23,13 @@ public interface WebQuery {
      */
     boolean executeAndSaveResultIntoCsvFile(WebRequest query);
 
+    /**
+     * Get the name of the html file (without the .html postfix) to display to the user for the
+     * web request if the execute operation is successful (that is executeAndSaveResultIntoCsvFile returns true)
+     * @return
+     */
+    String getHtmlFileName();
+
     enum DisplayOption {
         DISPLAY("Display", base -> base),
         COUNT ("count", SchemaCount::new),

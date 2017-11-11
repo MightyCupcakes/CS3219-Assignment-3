@@ -1,6 +1,8 @@
 package assignment3.webserver.webrequest;
 
+import java.net.URLDecoder;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -31,7 +33,9 @@ public class WebRequest {
 
         for (String keyValuePair : keyValuePairs) {
             String[] keyAndValue = keyValuePair.split("=");
-            builder.put(keyAndValue[0], keyAndValue[1]);
+            String value = (keyAndValue.length == 2) ? keyAndValue[1] : "";
+
+            builder.put(keyAndValue[0],value);
         }
 
         keyValueMap = builder.build();

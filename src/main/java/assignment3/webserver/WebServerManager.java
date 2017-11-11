@@ -46,4 +46,8 @@ public class WebServerManager implements WebServer {
     public API getAPI() {
         return api;
     }
+
+    public WebQuery getWebQuery() {
+        return webQuery;
+    }
 }
