@@ -90,7 +90,7 @@ public class ForestWebQueryProcessor implements WebQueryProcessor {
         
         FileWriter fileWriter;
         try {
-            fileWriter = new FileWriter("docs/d3charts/d3SavedData/citationWebForForest.json");  
+            fileWriter = new FileWriter("docs/d3charts/d3SavedData/citationWebForest.json");  
             fileWriter.write(JSON);
             fileWriter.flush();
         } catch (IOException e) {
