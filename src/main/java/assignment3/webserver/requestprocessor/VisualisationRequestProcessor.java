@@ -14,7 +14,7 @@ import assignment3.webserver.webrequest.WebRequest;
 @RegisterProcessor( requestType = "getVisualisation")
 public class VisualisationRequestProcessor implements RequestProcessor {
 
-    private static final String GRAPH_HTML_FOLDER = "d3chart/";
+    private static final String GRAPH_HTML_FOLDER = "d3charts/";
 
     private WebServerManager manager;
 
