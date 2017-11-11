@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.xml.validation.Schema;
+
 import com.google.common.collect.ImmutableMap;
 
 import assignment3.api.APIQueryBuilder;
@@ -31,6 +33,8 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
     private static final Map<String, Function<SchemaComparable, SchemaAggregate>> stringSchemaAggregateMap;
 
     private String htmlFile;
+    private SchemaBase column1;
+    private SchemaBase column2;
 
     static {
         ImmutableMap.Builder<String, Function<SchemaComparable, SchemaAggregate>> builder = ImmutableMap.builder();
@@ -46,8 +50,14 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
     public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest query) {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
 
+        List<WebServerConstants.GraphTypeInfo> graphInfoList = WebServerConstants.TYPES_OF_GRAPH.stream()
+                .filter( graphTypeInfo -> graphTypeInfo.graphName.equalsIgnoreCase(query.getValue("typeOfGraph")))
+                .collect(Collectors.toList());
+
+        if (graphInfoList.isEmpty() || graphInfoList.size() > 1) return false;
+
         builder.from(DEFAULT_CONFERENCE);
-        builder = getColumnsToBeDisplayed(builder, query);
+        builder = getColumnsToBeDisplayed(builder, query, graphInfoList.get(0));
 
         if (isNull(builder)) {
             return false;
@@ -56,12 +66,6 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
         builder = getConditions(builder, query);
         builder = getOrderBy(builder, query);
         builder = getLimitBy(builder, query);
-
-        List<WebServerConstants.GraphTypeInfo> graphInfoList = WebServerConstants.TYPES_OF_GRAPH.stream()
-                .filter( graphTypeInfo -> graphTypeInfo.graphName.equalsIgnoreCase(query.getValue("typeOfGraph")))
-                .collect(Collectors.toList());
-
-        if (graphInfoList.isEmpty() || graphInfoList.size() > 1) return false;
 
         builder.build().executeAndSaveInCSV(graphInfoList.get(0).dataSourceFile);
         htmlFile = graphInfoList.get(0).htmlFileName;
@@ -115,7 +119,7 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
 
             SchemaComparable column = (SchemaComparable) WebServerConstants.COLUMNS.get(columnName);
 
-            if (!isNull(condition)) {
+            if (isNull(condition)) {
                 condition = getSchemaPredicate(column, value, Collections.emptySet(), comparator);
             } else {
                 if ("OR".equalsIgnoreCase(conditionCombine)) {
@@ -128,19 +132,25 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
             conditionCombine = query.getValue("conditionCombine" + i);
         }
 
-        if (!isNull(condition)) {
-            builder.where(condition);
+        if (isNull(condition)) condition = SchemaPredicate.ALWAYS_TRUE;
+
+        if (column1 instanceof SchemaComparable) {
+            condition = condition.and( ((SchemaComparable) column1).isNotNull());
         }
 
-        return builder;
+        if (column2 instanceof SchemaComparable) {
+            condition = condition.and( ((SchemaComparable) column2).isNotNull());
+        }
+
+        return builder.where(condition);
     }
 
-    private APIQueryBuilder getColumnsToBeDisplayed(APIQueryBuilder builder, WebRequest query) {
+    private APIQueryBuilder getColumnsToBeDisplayed(APIQueryBuilder builder, WebRequest query, WebServerConstants.GraphTypeInfo graphInfo) {
         // Get columns to be displayed
-        SchemaBase column1 = getSchemaAttribute(query.getValue("column1Name"), query.getValue("column1ShowType"));
-        SchemaBase column2 = getSchemaAttribute(query.getValue("column2Name"), query.getValue("column2ShowType"));
+        column1 = getSchemaAttribute(query.getValue("column1Name"), query.getValue("column1ShowType"));
+        column2 = getSchemaAttribute(query.getValue("column2Name"), query.getValue("column2ShowType"));
 
-        builder.select(column1, column2);
+        builder.select(column1.as(graphInfo.columnNames.get(0)), column2.as(graphInfo.columnNames.get(1)));
 
         // If any of the columns is an aggregate, the other column will require a group by
         if ( column1 instanceof SchemaAggregate && column2 instanceof SchemaAggregate) {
@@ -174,6 +184,8 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
             return attribute.like(valueToCompare);
         } else if (type.equals("in") && valueSet != null) {
             return attribute.in(valueSet);
+        } else if (type.equals("neq")) {
+            return attribute.notEqualsTo(valueToCompare);
         }
 
         return attribute.equalsTo(valueToCompare);

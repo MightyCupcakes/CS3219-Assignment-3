@@ -14,6 +14,8 @@ import assignment3.webserver.webrequest.WebRequest;
 @RegisterProcessor( requestType = "getVisualisation")
 public class VisualisationRequestProcessor implements RequestProcessor {
 
+    private static final String GRAPH_HTML_FOLDER = "d3charts/";
+
     private WebServerManager manager;
 
     @Override
@@ -24,7 +26,7 @@ public class VisualisationRequestProcessor implements RequestProcessor {
         if (manager.getWebQuery().executeAndSaveResultIntoCsvFile(keyValuePairs)) {
             String htmlFile = manager.getWebQuery().getHtmlFileName() + ".html";
 
-            builder.add("src", htmlFile);
+            builder.add("src", GRAPH_HTML_FOLDER + htmlFile);
         } else {
             builder.add("src", "");
         }

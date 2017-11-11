@@ -87,6 +87,13 @@ public abstract class SchemaComparable<T extends Comparable> extends SchemaBase<
         });
     }
 
+    public SchemaPredicate notEqualsTo(T value) {
+        return new SchemaPredicate(this, o -> {
+            T v = this.getValue(o);
+            return (v != null) && !v.equals(value);
+        });
+    }
+
     public SchemaPredicate equalsToIgnoreCase(String value) {
         return new SchemaPredicate(this, o -> {
             T v = this.getValue(o);
@@ -95,6 +102,7 @@ public abstract class SchemaComparable<T extends Comparable> extends SchemaBase<
             return v.toString().equalsIgnoreCase(value);
         });
     }
+
     public SchemaPredicate lessThanOrEqualsTo(T value) {
         return new SchemaPredicate(this, o -> {
             T v = this.getValue(o);
