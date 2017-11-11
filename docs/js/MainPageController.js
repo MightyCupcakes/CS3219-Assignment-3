@@ -43,7 +43,12 @@ function getRequestForPremade() {
       alert("Please do not leave any field blank");
       return false;
     }
-    request[$(this).attr("id")] = $(this).val();
+    if (Array.isArray($(this).val())) {
+      alert($(this).val().toString());
+      request[$(this).attr("id")] = $(this).val().toString();
+    } else {
+      request[$(this).attr("id")] = $(this).val();
+    }
   } );
   premadeHtml.find("#exact").each( function () {
       request["isExact"] = $(this).is(":checked");
@@ -63,7 +68,7 @@ $(document).ready (function () {
 
       request = getRequestForPremade();
       alert(JSON.stringify(request));
-      if (!request) return;
+      if (!request) return false;
 
       $('#constructd3').attr("disabled", "true"); // Disable button until the server responses to prevent spam clicking.
      

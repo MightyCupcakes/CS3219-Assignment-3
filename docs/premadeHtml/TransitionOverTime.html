@@ -54,22 +54,20 @@ $("#endYearDate").datepicker({
 var conferenceSelect = $("#conferenceValue");
 if ($("#premade_query").val() != "Number of citations for different conferences") {
 	conferenceSelect.removeAttr("multiple");
+	$("#startYearText").text("Start year");
 } else {
-	$("#startYearText").hide();
+	$("#startYearText").text("Year");
 	$("#endYearText").hide();
-	$("#startYearDate").datepicker("destroy");
-	$("#startYearDate").hide();
 	$("#endYearDate").datepicker("destroy");
 	$("#endYearDate").hide();
 }
 $("#premade_query").on('change', function() {
 if ($("#premade_query").val() != "Number of citations for different conferences") {
 	conferenceSelect.removeAttr("multiple");
+	$("#startYearText").text("Start year");
 } else {
-	$("#startYearText").hide();
+	$("#startYearText").text("Year");	
 	$("#endYearText").hide();
-	$("#startYearDate").datepicker("destroy");
-	$("#startYearDate").hide();
 	$("#endYearDate").datepicker("destroy");
 	$("#endYearDate").hide();
 }
