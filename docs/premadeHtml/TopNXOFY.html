@@ -13,14 +13,14 @@
 
   <label id = "n">Modify your X attribute</label>
   <select class = "form-control" id ="xform">
-  	<option id="1" value = "Journal Authors" >author</option>
+  	<option id="1" value = "Journal Author" >author</option>
   	<option id="2" value = "Journal Venue">venue</option>
   	<option id="3" value = "Journal Published YEAR">year</option>
   	<option id="4" value = "Citations">citations</option>
   </select>
   <label id = "n">Modify your Y Attribute</label>
   <select class = "form-control" id ="yform">
-  	<option id="1" value = "Journal Authors" >author</option>
+  	<option id="1" value = "Journal Author" >author</option>
   	<option id="2" value = "Journal Venue">venue</option>
   	<option id="3" value = "Journal Published YEAR">year</option>
   </select>  
@@ -46,6 +46,7 @@
   });
   $("#yformValueYear").hide();
   $('#yform').on('change', function() {
+  	alert($("#yformValue").val());
     $("#yformValue").val('enter a value');
     if ($("#yform").val() == "Journal Published YEAR") {
       $("#yformValue").hide();

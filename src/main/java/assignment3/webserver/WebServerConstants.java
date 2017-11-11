@@ -16,7 +16,8 @@ public final class WebServerConstants {
     public static final ImmutableList<GraphTypeInfo> TYPES_OF_GRAPH = ImmutableList.of(
             new GraphTypeInfo("Bar Chart", "1.csv", "BarChart"),
             new GraphTypeInfo("Line Chart", "2.csv", "LineChart"),
-            new GraphTypeInfo("Citation Web", "", "CollapsibleTree")
+            new GraphTypeInfo("Citation Web", "", "CollapsibleTree"),
+            new GraphTypeInfo("Donut Chat", "donutData.csv", "DonutChart")
     );
 
     public static final ImmutableList<PremadeQueriesInfo> PREMADE_QUERIES =
@@ -51,6 +52,7 @@ public final class WebServerConstants {
 
         columns.put("Journals", ConferenceData.ID);
         columns.put("Journal Authors", ConferenceData.AUTHORS);
+        columns.put("Journal Author", ConferenceData.AUTHOR);
         columns.put("Journal Title", ConferenceData.TITLE);
         columns.put("Journal Venue", ConferenceData.VENUE);
         columns.put("Journal Published Year", ConferenceData.YEAR_OF_PUBLICATION);
