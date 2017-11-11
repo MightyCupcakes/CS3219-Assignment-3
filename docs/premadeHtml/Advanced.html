@@ -65,6 +65,7 @@
           </button>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="#" data-value="e">Equals</a>
+            <a class="dropdown-item" href="#" data-value="neq">Not Equals To</a>
             <div role="separator" class="dropdown-divider"></div>
             <a class="dropdown-item" href="#" data-value="gte">Greater or Equals</a>
             <a class="dropdown-item" href="#" data-value="lte">Lesser or Equals</a>
@@ -208,6 +209,14 @@
           var id = $(this).attr('id');
           selectedColumns[id.substring(id.length - 1, id.length)] = ui.value;
         }
+    });
+
+    $('button#addNewCondition').click (function () {
+        $('div#conditions').append($('div#newConditions').html())
+    });
+
+    $('button#removecondition').click (function () {
+        $('div#conditions').children("div.form-group").last().remove();
     });
 });
 </script>

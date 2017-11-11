@@ -14,10 +14,10 @@ import assignment3.schema.SchemaBase;
 public final class WebServerConstants {
 
     public static final ImmutableList<GraphTypeInfo> TYPES_OF_GRAPH = ImmutableList.of(
-            new GraphTypeInfo("Bar Chart", "1.csv", "BarChart"),
-            new GraphTypeInfo("Line Chart", "2.csv", "LineChart"),
-            new GraphTypeInfo("Citation Web", "", "CollapsibleTree"),
-            new GraphTypeInfo("Donut Chat", "donutData.csv", "DonutChart")
+            new GraphTypeInfo("Bar Chart", "1.csv", ImmutableList.of("x", "y"),"BarChart"),
+            new GraphTypeInfo("Line Chart", "2.csv", ImmutableList.of("x", "y"), "LineChart"),
+            new GraphTypeInfo("Citation Web", "", ImmutableList.of("x", "y"), "CollapsibleTree"),
+            new GraphTypeInfo("Donut Chat", "donutData.csv", ImmutableList.of("x", "y"),"DonutChart")
     );
 
     public static final ImmutableList<PremadeQueriesInfo> PREMADE_QUERIES =
@@ -82,13 +82,16 @@ public final class WebServerConstants {
         public final String graphName;
         /** The name of the file that this graph is using as a datasource */
         public final String dataSourceFile;
+        /** The column names the D3 expects for the data **/
+        public final List<String> columnNames;
         /** The name of the d3 HTML file for this graph */
         public final String htmlFileName;
 
-        public GraphTypeInfo (String graphName, String dataSourceFile, String htmlFileName) {
+        public GraphTypeInfo (String graphName, String dataSourceFile, List<String> columns,String htmlFileName) {
             this.graphName = graphName;
             this.dataSourceFile = dataSourceFile;
             this.htmlFileName = htmlFileName;
+            this.columnNames = columns;
         }
     }
 }

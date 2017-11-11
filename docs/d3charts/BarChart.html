@@ -80,12 +80,12 @@ var tooltip = d3.select("body").append('div').attr('class', 'tooltip');
 var tooltipcount = tooltip.append('div').attr('class', 'count');
 
 d3.csv("d3SavedData/1.csv", type, function(error, data) {
-  x.domain(data.map(function(d) { return d.author; }));
-  y.domain([0, d3.max(data, function(d) { return d.count; })]);
+  x.domain(data.map(function(d) { return d.x; }));
+  y.domain([0, d3.max(data, function(d) { return d.y; })]);
 
   svg.append("text")
       .attr("class", "title")
-      .attr("x", x(data[0].author))
+      .attr("x", x(data[0].x))
       .attr("y", -26)
       .text("Top 10 authors for venue arXiv");
 
@@ -109,13 +109,13 @@ d3.csv("d3SavedData/1.csv", type, function(error, data) {
       .data(data)
     .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return x(d.author); })
+      .attr("x", function(d) { return x(d.x); })
       .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.count); })
-      .attr("height", function(d) { return height - y(d.count); })
+      .attr("y", function(d) { return y(d.y); })
+      .attr("height", function(d) { return height - y(d.y); })
       .on('mouseover', function(d) {
         tooltip.style('display', 'block');
-        tooltipcount.text("Papers published: " + d.count);
+        tooltipcount.text("Papers published: " + d.y);
        })
       .on('mouseout', function() {
          tooltip.style('display', 'none');
@@ -148,7 +148,7 @@ function wrap(text, width) {
 }
 
 function type(d) {
-  d.count = +d.count;
+  d.y = +d.y;
   return d;
 }
 
