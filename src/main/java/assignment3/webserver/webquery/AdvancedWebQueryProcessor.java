@@ -34,6 +34,8 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
     private SchemaBase column1;
     private SchemaBase column2;
 
+    private String yAxis;
+
     static {
         ImmutableMap.Builder<String, Function<SchemaComparable, SchemaAggregate>> builder = ImmutableMap.builder();
 
@@ -73,7 +75,7 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
 
     @Override
     public String getHtmlFileName() {
-        return htmlFile;
+        return htmlFile + ".html?" + "?yAxis=" + yAxis;
     }
 
     private APIQueryBuilder getLimitBy(APIQueryBuilder builder, WebRequest query) {
@@ -150,6 +152,8 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
 
         builder.select(column1.as(graphInfo.columnNames.get(0)), column2.as(graphInfo.columnNames.get(1)));
 
+        yAxis = query.getValue("column2ShowType").toUpperCase() + "(" + query.getValue("column2Name") + ")";
+
         // If any of the columns is an aggregate, the other column will require a group by
         if ( column1 instanceof SchemaAggregate && column2 instanceof SchemaAggregate) {
             return null;
@@ -187,7 +191,7 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
             return attribute.notEqualsTo(valueToCompare);
         }
 
-        return attribute.equalsTo(valueToCompare);
+        return attribute.equalsToIgnoreCase(valueToCompare);
 
     }
 
