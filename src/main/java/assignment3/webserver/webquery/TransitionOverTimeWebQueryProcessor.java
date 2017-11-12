@@ -36,12 +36,13 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
 		Query query = null;
 		if (premadeType.equals(QUERY_FOR_YEARS)) {
 			query = getQueryForMultipleYears(builder, webRequest);
+			query.executeAndSaveInCSV("1");
 		} else if (premadeType.equals(QUERY_FOR_CONFS)) {
 			getQueryForMultipleConfs(manager, webRequest);
 			return true;
 		}
 		
-		query.executeAndSaveInCSV("1");
+		
 		return true;
 	}
 
@@ -59,7 +60,8 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
 				new SchemaCount(ConferenceData.CITATION.title).as("y"))
 				.from(conf)
 				.where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(startYear)
-						.and(ConferenceData.CITATION.year.lessThanOrEqualsTo(endYear)))
+						.and(ConferenceData.CITATION.year.lessThanOrEqualsTo(endYear)
+								.and(ConferenceData.CITATION.year.isNotNull())))
 				.groupBy(ConferenceData.CITATION.year)
 				.orderBy(ConferenceData.CITATION.year, APIQueryBuilder.OrderByRule.ASC);
 				
@@ -76,7 +78,8 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
 	        Query query = builder.select(ConferenceData.CITATION.year.as("x"), 
 				new SchemaCount(ConferenceData.CITATION.title).as("y"))
 				.from(conference)
-				.where(ConferenceData.CITATION.year.equalsTo(year))
+				.where(ConferenceData.CITATION.year.equalsTo(year)
+						.and(ConferenceData.CITATION.year.isNotNull()))
 				.groupBy(ConferenceData.CITATION.year)
 				.build();
 	        String result = query.execute();

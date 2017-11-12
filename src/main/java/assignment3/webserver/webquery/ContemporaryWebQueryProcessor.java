@@ -39,10 +39,10 @@ public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
         		.select(ConferenceData.CITATION.citationVenue.as("x"),
         				new SchemaCount(ConferenceData.CITATION.citationVenue).as("y"))
         		.from(WebQueryProcessor.DEFAULT_CONFERENCE)
-        		.where(predicate)
+        		.where(predicate.and(ConferenceData.CITATION.citationVenue.isNotNull()))
         		.groupBy(ConferenceData.CITATION.citationVenue)
         		.build();
-        query.executeAndSaveInCSV("2");
+        query.executeAndSaveInCSV("1");
         return false;
 	}
 
