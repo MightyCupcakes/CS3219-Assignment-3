@@ -47,7 +47,6 @@ public class VisualisationRequestProcessor implements RequestProcessor {
         	if (e instanceof IndexOutOfBoundsException) {
               	builder.add("isEmpty", "true");
               	builder.add("src", "");
-              	return builder.build().toString();
         	}
         }
      
