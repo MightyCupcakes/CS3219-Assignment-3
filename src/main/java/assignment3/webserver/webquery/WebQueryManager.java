@@ -33,11 +33,7 @@ public class WebQueryManager implements WebQuery {
 
     @Override
     public String getHtmlFileName() {
-        if (latestResult) {
-            return queryProcessor.getHtmlFileName();
-        } else {
-            return "";
-        }
+        return (latestResult) ? queryProcessor.getHtmlFileName() : "" ;
     }
 
     private void getProcessorAndExecute(WebQueryProcessor processor, WebRequest query) {
