@@ -31,6 +31,7 @@ path {
  
 <!-- load the d3.js library --> 
 <script src="//d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="../js/UtilityJs.js"></script>
  
 <script>
  
@@ -107,13 +108,13 @@ d3.csv("d3SavedData/2.csv", function(error, data) {
   svg.append("text")
     .attr("text-anchor", "middle")
     .attr("transform", "translate(-35," + (height/2) + ")rotate(-90)")
-    .text("Number of papers published");
+    .text( (getParameterByName("yAxis") != null) ? getParameterByName("yAxis") : "Number of papers published");
   //add x axis text
   svg.append("text")
     .attr("class", "x label")
     .attr("text-anchor", "middle")
     .attr("transform", "translate(" + (width/2) + "," + (height + 40 ) + ")")
-    .text("Year");
+    .text( (getParameterByName("xAxis") != null) ? getParameterByName("xAxis") : "Year" );
   // focus and mouseover
     var focus = svg.append("g")
        .attr("class", "focus")
