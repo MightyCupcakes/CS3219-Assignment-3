@@ -7,11 +7,22 @@
 }
 </style>
 
+<div class = "row">
+  <div class="col-sm-12">
+    <h5>
+    Top N X of Y
+    <small class="text-muted">queries refers to queries that answers the question of the top N of the variable X in question within a defined set defined by the variable Y</small>
+    </h5>
+
+    <hr>
+  </div>
+
 <div id ="Topnxofy" class ="col-sm-6">
 
   <div class="form-group">
     <label id = "n">Modify your N attribute</label>
     <input  class="form-control" type = "number" id ="nform" placeholder ="enter a value between 1 to 20"/>
+    <small class="form-text text-muted"> Enter the number of results to display; that is the top N you're interested in. </small>
   </div>
 
   <div class="form-group">
@@ -22,6 +33,7 @@
     	<option id="3" value = "Journal Published Year">year</option>
     	<option id="4" value = "Citations">citations</option>
     </select>
+    <small class="form-text text-muted"> Enter the variable you're interested in ranking. If you want to find the top authors, then the X variable here is author. </small>
   </div>
 
   <div class="form-group">
@@ -32,11 +44,13 @@
     	<option id="3" value = "Journal Published Year">year</option>
       <option id="4" value = "Conference">conference</option>
     </select>
+    <small class="form-text text-muted"> Enter the Y variable type that is defining the set. That is if you want only the top authors from the venue ArXiV, then the Y variable here is venue</small>
   </div>
 
   <div class="form-group">
     <label id ="endYear">Modify your Y value</label>
     <input  class="form-control" id ="yformValue" placeholder="Modify your y value">
+    <small class="form-text text-muted">Enter the Y variable value here. From the previous example, it would be ArXiV. </small>
   </div>
 
   <div class="form-group">

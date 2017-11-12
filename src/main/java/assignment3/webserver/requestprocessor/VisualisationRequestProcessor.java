@@ -28,6 +28,7 @@ public class VisualisationRequestProcessor implements RequestProcessor {
 
             builder.add("src", GRAPH_HTML_FOLDER + htmlFile);
         } else {
+            // Something went wrong with the execution.
             builder.add("src", "");
         }
 
