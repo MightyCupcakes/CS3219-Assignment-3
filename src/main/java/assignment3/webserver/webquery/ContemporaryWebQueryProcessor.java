@@ -32,7 +32,7 @@ import assignment3.webserver.webrequest.WebRequest;
 public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
     private static final Logic logic = new LogicManager();
     private static final String MULTI_CONF_A_YEAR = PREMADE_QUERIES.get(2).name;
-    private static final String CONF_TREND = PREMADE_QUERIES.get(3).name;
+    private static final String CONF_TREND = PREMADE_QUERIES.get(6).name;
     private static String requiredHtml;
 	@Override
 	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) throws Exception {
