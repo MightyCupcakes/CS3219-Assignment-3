@@ -36,9 +36,12 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
         if (!xAttr.equals("Citations")) {
         	base = (SchemaComparable) WebServerConstants.COLUMNS.get("Journals");
         	count = new SchemaCount(base);
-        } else {
+        } else if (xAttr.equals("Citations") && !yAttr.equals("Conference")){
         	base = (SchemaComparable) WebServerConstants.COLUMNS.get(yAttr);
         	count = new SchemaCount(base);      	
+        } else {
+        	base = (SchemaComparable) WebServerConstants.COLUMNS.get("Citation Title");
+        	count = new SchemaCount(base);
         }
         
         builder = builder.select(selectAttrX.as("x"), count.as("y"));
@@ -62,7 +65,7 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
         }
         if (requirePredicate) {
         	builder = builder.from(WebQueryProcessor.DEFAULT_CONFERENCE)
-        			.where(predicate);
+        			.where(predicate.and(searchAttrY.isNotNull()));
         }
         
         Query query = builder.groupBy((SchemaComparable)selectAttrX)

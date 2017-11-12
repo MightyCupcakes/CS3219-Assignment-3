@@ -85,8 +85,8 @@
       return d.y;
     }));
      var percent = Math.round(1000 * d.data.y / total) / 10;
-     tooltipyear.text("Year: " + d.data.x);
-     tooltipcount.text("Papers published: " + d.data.y);
+     tooltipyear.text(d.data.x);
+     tooltipcount.text(d.data.y);
      tooltippercent.text("% of total: " + percent + "%");
      tooltip.style('display', 'block');     
    })
@@ -96,19 +96,19 @@
      .attr("d", arc);    
      tooltip.style('display', 'none');
    });
-
+/*
     //add text to the slices
     g.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-    .attr("dy", ".35em")
-    .text(function(d) { return d.data.x; });
-
+    .attr("dy", ".01em")
+    .text(function(d) { return d.data.x; });*/
+/*
     //title
     svg.append("text")
     .attr("text-anchor", "middle")
     .attr("transform", "translate(500," + (height - 480) + ")")
     .text("Number of papers published in ArXiv for the past 6 years");
-
+*/
 
   });
 
