@@ -1,5 +1,7 @@
 package assignment3.webserver.webquery;
 
+import static assignment3.webserver.WebServerConstants.PREMADE_QUERIES;
+
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,16 +31,36 @@ import assignment3.webserver.webrequest.WebRequest;
 @RegisterProcessor( requestType = "Contemporary comparison")
 public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
     private static final Logic logic = new LogicManager();
-    
+    private static final String MULTI_CONF_A_YEAR = PREMADE_QUERIES.get(2).name;
+    private static final String CONF_TREND = PREMADE_QUERIES.get(3).name;
+    private static String requiredHtml;
 	@Override
 	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) throws Exception {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         String premadeType = webRequest.getValue("premadeQuery");
-        getQueryForMultipleConfs(manager, webRequest);
+        if (premadeType.equals(MULTI_CONF_A_YEAR)) {
+        	getQueryForMultipleConfs(manager, webRequest);
+        	requiredHtml = "BarChart";
+        } else if (premadeType.equals(CONF_TREND)) {
+        	queryForAConf(manager, webRequest);
+        	requiredHtml = "LineChart";
+        }
 		return true;
 	}
 	
-	   private static void getQueryForMultipleConfs(WebServerManager manager, WebRequest request) throws Exception {
+	   private void queryForAConf(WebServerManager manager, WebRequest webRequest) throws Exception {
+	        APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
+	        String conference = webRequest.getValue("conferenceValue");
+	        Query query = builder.select(ConferenceData.CITATION.year.as("x"), new SchemaCount(ConferenceData.CITATION.title).as("y"))
+	        		.from(conference)
+	        		.where(ConferenceData.CITATION.year.isNotNull().and(ConferenceData.CITATION.year.greaterThan(0)))
+	        		.groupBy(ConferenceData.CITATION.year)
+	        		.orderBy(ConferenceData.CITATION.year, APIQueryBuilder.OrderByRule.ASC)
+	        		.build();
+	        query.executeAndSaveInCSV("2");
+	}
+
+	private static void getQueryForMultipleConfs(WebServerManager manager, WebRequest request) throws Exception {
 	        String conferenceValues = request.getValue("conferenceValue");
 	        int year = Integer.parseInt(request.getValue("startYearDate"));
 	        List<String> confList = Arrays.asList(conferenceValues.split(","));
@@ -85,42 +107,10 @@ public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
 	       
 	        return objectBuilder;
 	    }
-	/*
-	@Override
-	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) throws Exception {
-        APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
-        
-        String firstVenue = webRequest.getValue("firstVenue");
-        String secondVenue = webRequest.getValue("secondVenue");
-        Boolean isExact = Boolean.valueOf(webRequest.getValue("Exact"));
-        int year = Integer.parseInt(webRequest.getValue("Year"));
-        
-        System.out.println("comparing " + firstVenue + " " + secondVenue + " " + year);
-        SchemaPredicate predicate;
-        predicate = ConferenceData.YEAR_OF_PUBLICATION.equalsTo(year);
-        if (isExact) {
-        	predicate = predicate
-        			.and(ConferenceData.CITATION.citationVenue.equalsToIgnoreCase(firstVenue))
-        			.or(ConferenceData.CITATION.citationVenue.equalsToIgnoreCase(secondVenue));
-        } else {
-        	predicate = predicate
-        			.and(ConferenceData.CITATION.citationVenue.like(firstVenue))
-        			.or(ConferenceData.CITATION.citationVenue.like(secondVenue));    	
-        }
-        Query query = builder
-        		.select(ConferenceData.CITATION.citationVenue.as("x"),
-        				new SchemaCount(ConferenceData.CITATION.citationVenue).as("y"))
-        		.from(WebQueryProcessor.DEFAULT_CONFERENCE)
-        		.where(predicate.and(ConferenceData.CITATION.citationVenue.isNotNull()))
-        		.groupBy(ConferenceData.CITATION.citationVenue)
-        		.build();
-        query.executeAndSaveInCSV("1");
-        return true;
-	}
-*/
+
 	@Override
 	public String getHtmlFileName() {
-		return "BarChart";
+		return requiredHtml;
 	}
 
 }

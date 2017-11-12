@@ -31,6 +31,9 @@ public final class WebServerConstants {
                     new PremadeQueriesInfo("ContemporaryComparison",
                             "Contemporary comparison",
                             "Number of citations for different conferences in the same year"),
+                    new PremadeQueriesInfo("ContemporaryComparison",
+                    		"Contemporary comparison",
+                    		"Number of citations for a conference"),
                     new PremadeQueriesInfo("TopNXOFY",
                             "Top N X of Y",
                             "Construct Top N X of Y Graph"),
@@ -42,7 +45,7 @@ public final class WebServerConstants {
                     		"Citation Web for base paper"),
                     new PremadeQueriesInfo("CitationWebForest",
                     		"Citation Web",
-                    		"Citation Web Forest for specific year")
+                    		"Citation Web Forest in range of years")
             );
 
     public static final ImmutableMap<String, SchemaBase> COLUMNS = populateColumnNames();

@@ -42,7 +42,12 @@ $("#startYearDate").datepicker({
 	}
 
 });
-
+var conferenceSelect = $("#conferenceValue");
+if ($("#premade_query").val() == "Number of citations for a conference") {
+	$("#startYearDate").hide();
+	$("#startYearText").hide();
+	conferenceSelect.removeAttr("multiple");
+} 
 
 </script>
 
