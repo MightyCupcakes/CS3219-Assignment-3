@@ -38,7 +38,7 @@ public class VisualisationRequestProcessor implements RequestProcessor {
         	builder.add("isEmpty", "false");
         } else {
         	// Something went wrong with the execution.
-        	builder.add("src", "");
+        	builder.add("src", "error.html");
         	builder.add("isEmpty", "");
         	
         } 
