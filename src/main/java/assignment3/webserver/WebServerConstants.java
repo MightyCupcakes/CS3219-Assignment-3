@@ -14,10 +14,10 @@ import assignment3.schema.SchemaBase;
 public final class WebServerConstants {
 
     public static final ImmutableList<GraphTypeInfo> TYPES_OF_GRAPH = ImmutableList.of(
-            new GraphTypeInfo("Bar Chart", "1.csv", ImmutableList.of("x", "y"),"BarChart"),
-            new GraphTypeInfo("Line Chart", "2.csv", ImmutableList.of("x", "y"), "LineChart"),
+            new GraphTypeInfo("Bar Chart", "1", ImmutableList.of("x", "y"),"BarChart"),
+            new GraphTypeInfo("Line Chart", "2", ImmutableList.of("x", "y"), "LineChart"),
             new GraphTypeInfo("Citation Web", "", ImmutableList.of("x", "y"), "CollapsibleTree"),
-            new GraphTypeInfo("Donut Chat", "donutData.csv", ImmutableList.of("x", "y"),"DonutChart")
+            new GraphTypeInfo("Donut Chat", "donutData", ImmutableList.of("x", "y"),"DonutChart")
     );
 
     public static final ImmutableList<PremadeQueriesInfo> PREMADE_QUERIES =

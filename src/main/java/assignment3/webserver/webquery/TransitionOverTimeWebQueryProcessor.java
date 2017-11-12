@@ -47,8 +47,7 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
 
 	@Override
 	public String getHtmlFileName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "BarChart";
 	}
 	
 	private static Query getQueryForMultipleYears(APIQueryBuilder builder, WebRequest request) {

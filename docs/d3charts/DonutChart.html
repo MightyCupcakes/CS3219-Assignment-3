@@ -33,8 +33,7 @@
     height = 500,
     radius = Math.min(width, height) / 2;
     var donutWidth = 105;   
-    var color = d3.scale.ordinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c"]);
+    var color = d3.scale.category20b();
     //size of arc
     var arc = d3.svg.arc()
     .outerRadius(radius - donutWidth)
@@ -42,7 +41,7 @@
 
     var pie = d3.layout.pie()
     .sort(null)
-    .value(function(d) { return d.count; });
+    .value(function(d) { return d.y; });
     //size of arc when hovered 
     var arcHover = d3.svg.arc().
     innerRadius(radius - donutWidth). 
@@ -61,8 +60,8 @@
     var tooltipcount = tooltip.append('div').attr('class', 'count');
     var tooltippercent = tooltip.append('div').attr('class', 'percent');
 
-    d3.csv("5.csv", function(error, data) {
-      data.forEach(function(d) { d.count=+d.count;});
+    d3.csv("d3SavedData/donutData.csv", function(error, data) {
+      data.forEach(function(d) { d.y=+d.y;});
 
     //draw slices 
     var g = svg.selectAll(".arc")
@@ -76,18 +75,18 @@
     .attr('d', arc)
     .attr('class', 'path')
     .style('fill', function(d) {
-      return color(d.data.year);
+      return color(d.data.x);
     })
     .on('mouseover', function(d) {
      d3.select(this).transition()
      .duration(500)
      .attr("d", arcHover);
      var total = d3.sum(data.map(function(d) { 
-      return d.count;
+      return d.y;
     }));
-     var percent = Math.round(1000 * d.data.count / total) / 10;
-     tooltipyear.text("Year: " + d.data.year);
-     tooltipcount.text("Papers published: " + d.data.count);
+     var percent = Math.round(1000 * d.data.y / total) / 10;
+     tooltipyear.text("Year: " + d.data.x);
+     tooltipcount.text("Papers published: " + d.data.y);
      tooltippercent.text("% of total: " + percent + "%");
      tooltip.style('display', 'block');     
    })
@@ -102,7 +101,7 @@
     g.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("dy", ".35em")
-    .text(function(d) { return d.data.year; });
+    .text(function(d) { return d.data.x; });
 
     //title
     svg.append("text")

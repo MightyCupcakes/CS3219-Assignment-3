@@ -42,14 +42,13 @@ public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
         		.where(predicate)
         		.groupBy(ConferenceData.CITATION.citationVenue)
         		.build();
-        query.executeAndSaveInCSV("1.csv");
+        query.executeAndSaveInCSV("2");
         return false;
 	}
 
 	@Override
 	public String getHtmlFileName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "BarChart";
 	}
 
 }
