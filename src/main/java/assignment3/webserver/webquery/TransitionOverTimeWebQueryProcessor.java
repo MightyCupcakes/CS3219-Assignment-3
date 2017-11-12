@@ -76,7 +76,7 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
 
         return builder.build();
     }
-    private static void getQueryForMultipleConfs(WebServerManager manager, WebRequest request) {
+    private static void getQueryForMultipleConfs(WebServerManager manager, WebRequest request) throws Exception {
         String conferenceValues = request.getValue("conferenceValue");
         int year = Integer.parseInt(request.getValue("startYearDate"));
         List<String> confList = Arrays.asList(conferenceValues.split(","));
@@ -94,11 +94,8 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
             confResultMap.put(conference, result);
         }
         String compiledResult = compileJsonResults(confResultMap);
-        try {
-            logic.saveResultIntoCsv(compiledResult, "1");
-        } catch (Exception e) {
-;
-        }
+        logic.saveResultIntoCsv(compiledResult, "1");
+ 
     }
 
 

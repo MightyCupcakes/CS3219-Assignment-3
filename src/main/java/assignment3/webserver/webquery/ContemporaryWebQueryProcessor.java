@@ -43,7 +43,7 @@ public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
         		.groupBy(ConferenceData.CITATION.citationVenue)
         		.build();
         query.executeAndSaveInCSV("1");
-        return false;
+        return true;
 	}
 
 	@Override
