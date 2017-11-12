@@ -19,11 +19,10 @@ import assignment3.api.ConferenceData;
 import assignment3.api.Query;
 import assignment3.logic.QueryBuilder;
 import assignment3.webserver.WebServerManager;
-import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
 
 public class ForestWebQueryProcessor implements WebQueryProcessor {
-    
+
     private static final String TITLE = "title";
     private static final String CITATION_TITLE = "citationtitle";
     private static final String SOURCE = "source";
@@ -31,74 +30,69 @@ public class ForestWebQueryProcessor implements WebQueryProcessor {
     private static final String TYPE = "type";
     private static final String LINK = "links = '";
     private static final String END = "';";
-    
+
     @Override
-    public boolean processAndSaveIntoCSV(WebServerManager manager,WebRequest webRequest) {
+    public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         String result = webRequest.getValue("currentYearDate");
-        
+
         int currentYear = Integer.parseInt(result);
-        
-        Query query = QueryBuilder.createNewBuilder()
-                .select(ConferenceData.TITLE, ConferenceData.CITATION.title)
-                .from("A4")
-                .where((ConferenceData.YEAR_OF_PUBLICATION.equalsTo(currentYear))
-                          .and(ConferenceData.CITATION.title.isNotNull()))
+
+        Query query = QueryBuilder.createNewBuilder().select(ConferenceData.TITLE, ConferenceData.CITATION.title)
+                .from("A4").where((ConferenceData.YEAR_OF_PUBLICATION.equalsTo(currentYear))
+                        .and(ConferenceData.CITATION.title.isNotNull()))
                 .build();
-        
+
         String temp = query.execute();
         JsonReader reader = Json.createReader(new StringReader(temp));
         JsonArray array = reader.readArray();
         reader.close();
-        
+
         HashMap<String, Integer> map = new HashMap<String, Integer>();
         int link = 0;
         JsonArray jsonArray = Json.createArrayBuilder().build();
-        
-        String JSON = LINK;
-        int size = array.size();
-        
-        for (int i=0; i < size; i++) {
-           JsonObject curr = array.getJsonObject(i);
-           String title = curr.getString(TITLE).toString();
-           String citation = curr.getString(CITATION_TITLE).toString();
-           // title = title.replaceAll("[^a-zA-Z0-9]", " ");
-           // citation = citation.replaceAll("[^a-zA-Z0-9]", " ");
-           
-           title = reduce(title);
-           citation = reduce(title);
-         
-           if (map.containsKey(title)) {
-               int value = map.get(title);
-               JsonObject jsonObj = Json.createObjectBuilder().build();
-               jsonObj = jsonObjectToBuilder(jsonObj).add(SOURCE, title.trim()).build();
-               jsonObj = jsonObjectToBuilder(jsonObj).add(TARGET, citation.trim()).build();
-               String valueStr = "" + value;
-               jsonObj = jsonObjectToBuilder(jsonObj).add(TYPE, valueStr).build();
 
-               jsonArray = addJsonObjectToArray(jsonArray, jsonObj);
-           } else {
-               map.put(title, link);
-               link++;
-           }
+        String toPrint = "links = '";
+        int size = array.size();
+
+        for (int i = 0; i < size; i++) {
+            JsonObject curr = array.getJsonObject(i);
+            String title = curr.getString("title").toString();
+            String citation = curr.getString("citationtitle").toString();
+            title = title.replaceAll("[^a-zA-Z0-9]", " ");
+            citation = citation.replaceAll("[^a-zA-Z0-9]", " ");
+
+            if (map.containsKey(title)) {
+                int value = map.get(title);
+                JsonObject jsonObj = Json.createObjectBuilder().build();
+                jsonObj = jsonObjectToBuilder(jsonObj).add("source", title.trim()).build();
+                jsonObj = jsonObjectToBuilder(jsonObj).add("target", citation.trim()).build();
+                String valueStr = "" + value;
+                jsonObj = jsonObjectToBuilder(jsonObj).add("type", valueStr).build();
+
+                jsonArray = addJsonObjectToArray(jsonArray, jsonObj);
+            } else {
+                map.put(title, link);
+                link++;
+            }
         }
-       
-        JSON += jsonArray.toString();
-        JSON += END;
-        // System.out.print(JSON);
-        
+
+        toPrint += jsonArray.toString();
+        toPrint += "';";
+        System.out.print(toPrint);
+
         FileWriter fileWriter;
         try {
-            fileWriter = new FileWriter("docs/d3charts/d3SavedData/citationWebForest.json");  
-            fileWriter.write(JSON);
+            fileWriter = new FileWriter("docs/d3charts/d3SavedData/citationWebForest.json");
+            fileWriter.write(toPrint);
             fileWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return true;
     }
-    
+
     private JsonObjectBuilder jsonObjectToBuilder(JsonObject jo) {
         JsonObjectBuilder job = Json.createObjectBuilder();
 
@@ -108,8 +102,8 @@ public class ForestWebQueryProcessor implements WebQueryProcessor {
 
         return job;
     }
-    
-    private JsonArray addJsonObjectToArray(JsonArray jsonArray, JsonObject jsonObject){
+
+    private JsonArray addJsonObjectToArray(JsonArray jsonArray, JsonObject jsonObject) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
         for (JsonValue value : jsonArray) {
             builder.add(value);
@@ -118,8 +112,8 @@ public class ForestWebQueryProcessor implements WebQueryProcessor {
         JsonArray newArray = builder.build();
         return newArray;
     }
-    
-    private String reduce(String str){
+
+    private String reduce(String str) {
         return str.replaceAll("[^a-zA-Z0-9]", " ");
     }
 
