@@ -41,7 +41,7 @@ public class WebServerHandler implements HttpHandler {
     }
 
     protected static void sendSuccessResponse(String response, HttpExchange exchange) throws IOException {
-        exchange.sendResponseHeaders(200, response.length());
+        exchange.sendResponseHeaders(200, response.getBytes().length);
 
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes());
