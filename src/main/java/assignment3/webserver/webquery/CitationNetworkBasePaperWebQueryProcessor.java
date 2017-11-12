@@ -22,7 +22,6 @@ import assignment3.webserver.WebServerManager;
 import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
 
-@RegisterProcessor( requestType = "Citation Network")
 public class CitationNetworkBasePaperWebQueryProcessor implements WebQueryProcessor {
 	
 	private static final String DEFAULT_FILE = "citationNetworkBasePaperData";
@@ -31,7 +30,7 @@ public class CitationNetworkBasePaperWebQueryProcessor implements WebQueryProces
     public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         String basePaperTitle = webRequest.getValue("basepapertitle");
-                
+        
         JsonReader jsonReader;
     	JsonArray jsonTuples;
     	JsonObjectBuilder objectBuilder;

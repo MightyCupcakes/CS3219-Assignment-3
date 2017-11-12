@@ -22,7 +22,6 @@ import assignment3.webserver.WebServerManager;
 import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
 
-@RegisterProcessor( requestType = "Citation Forest")
 public class ForestWebQueryProcessor implements WebQueryProcessor {
     
     private static final String TITLE = "title";
