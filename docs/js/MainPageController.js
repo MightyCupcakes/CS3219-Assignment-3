@@ -38,21 +38,28 @@ function getRequestForPremade() {
 
     return request;
   }
+  
   premadeHtml.find(".form-control").each( function () {
     if ($(this).val() == "") {
       alert("Please do not leave any field blank");
-      return false;
+      request = false;
+      return request;
     }
+
     if (Array.isArray($(this).val())) {
-      alert($(this).val().toString());
       request[$(this).attr("id")] = $(this).val().toString();
     } else {
       request[$(this).attr("id")] = $(this).val();
     }
-  } );
+
+  });
+
+  if (!request) return request;
+
   premadeHtml.find("#exact").each( function () {
       request["isExact"] = $(this).is(":checked");
   });
+
   return request;
 }
 
@@ -67,8 +74,8 @@ $(document).ready (function () {
       var type = $("#premade_type").val();
 
       request = getRequestForPremade();
-      alert(JSON.stringify(request));
-      if (!request) return false;
+
+      if (!request) return;
 
       $('#constructd3').attr("disabled", "true"); // Disable button until the server responses to prevent spam clicking.
      
