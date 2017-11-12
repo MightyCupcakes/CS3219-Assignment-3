@@ -5,7 +5,9 @@ import assignment3.api.Query;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
+import assignment3.schema.aggregate.SchemaAggregate;
 import assignment3.schema.aggregate.SchemaCount;
+import assignment3.schema.aggregate.SchemaCountUnique;
 import assignment3.webserver.WebServerConstants;
 import assignment3.webserver.WebServerManager;
 import assignment3.webserver.registry.RegisterProcessor;
@@ -29,7 +31,7 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
         
         SchemaBase selectAttrX = WebServerConstants.COLUMNS.get(xAttr);
         SchemaComparable searchAttrY = (SchemaComparable) WebServerConstants.COLUMNS.get(yAttr);
-        SchemaCount count;
+        SchemaAggregate count;
         SchemaComparable base;
         
         if (!xAttr.equals("Citations")) {
