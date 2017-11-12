@@ -30,11 +30,11 @@ public class ForestWebQueryProcessor implements WebQueryProcessor {
     private static final String TYPE = "type";
     private static final String LINK = "links = '";
     private static final String END = "';";
+    private static final String CURRENT_YEAR = "currentYearDate";
 
     @Override
     public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) {
-        APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
-        String result = webRequest.getValue("currentYearDate");
+        String result = webRequest.getValue(CURRENT_YEAR);
 
         int currentYear = Integer.parseInt(result);
 
@@ -52,23 +52,23 @@ public class ForestWebQueryProcessor implements WebQueryProcessor {
         int link = 0;
         JsonArray jsonArray = Json.createArrayBuilder().build();
 
-        String toPrint = "links = '";
+        String toPrint = LINK;
         int size = array.size();
 
         for (int i = 0; i < size; i++) {
             JsonObject curr = array.getJsonObject(i);
-            String title = curr.getString("title").toString();
-            String citation = curr.getString("citationtitle").toString();
-            title = title.replaceAll("[^a-zA-Z0-9]", " ");
-            citation = citation.replaceAll("[^a-zA-Z0-9]", " ");
+            String title = curr.getString(TITLE).toString();
+            String citation = curr.getString(CITATION_TITLE).toString();
+            title = reduce(title);
+            citation = reduce(citation);
 
             if (map.containsKey(title)) {
                 int value = map.get(title);
                 JsonObject jsonObj = Json.createObjectBuilder().build();
-                jsonObj = jsonObjectToBuilder(jsonObj).add("source", title.trim()).build();
-                jsonObj = jsonObjectToBuilder(jsonObj).add("target", citation.trim()).build();
+                jsonObj = jsonObjectToBuilder(jsonObj).add(SOURCE, title.trim()).build();
+                jsonObj = jsonObjectToBuilder(jsonObj).add(TARGET, citation.trim()).build();
                 String valueStr = "" + value;
-                jsonObj = jsonObjectToBuilder(jsonObj).add("type", valueStr).build();
+                jsonObj = jsonObjectToBuilder(jsonObj).add(TYPE, valueStr).build();
 
                 jsonArray = addJsonObjectToArray(jsonArray, jsonObj);
             } else {
@@ -78,7 +78,7 @@ public class ForestWebQueryProcessor implements WebQueryProcessor {
         }
 
         toPrint += jsonArray.toString();
-        toPrint += "';";
+        toPrint += END;
         System.out.print(toPrint);
 
         FileWriter fileWriter;
