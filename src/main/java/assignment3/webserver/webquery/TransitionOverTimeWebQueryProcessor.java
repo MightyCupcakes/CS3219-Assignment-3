@@ -89,17 +89,23 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
 
         String conf = request.getValue("conferenceValue");
         String conf2 = request.getValue("conferenceValue2");
+        int endYear = getHighestYear(request);
+        int startYear = getLowestYear(request);
         Query query1 = builder.select(ConferenceData.CITATION.year.as("x"), 
         		new SchemaCountUnique(ConferenceData.CITATION.title).as("y"))
         		.from(conf)
-        		.where(ConferenceData.CITATION.year.isNotNull().and(ConferenceData.CITATION.year.greaterThan(0)))
+                .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(startYear)
+                        .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(endYear)
+                                .and(ConferenceData.CITATION.year.isNotNull())))
         		.groupBy(ConferenceData.CITATION.year)
         		.orderBy(ConferenceData.CITATION.year, APIQueryBuilder.OrderByRule.ASC).build();
         
         Query query2 = builder2.select(ConferenceData.CITATION.year.as("x"), 
         		new SchemaCountUnique(ConferenceData.CITATION.title).as("z"))
         		.from(conf2)
-        		.where(ConferenceData.CITATION.year.isNotNull().and(ConferenceData.CITATION.year.greaterThan(0)))
+                .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(startYear)
+                        .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(endYear)
+                                .and(ConferenceData.CITATION.year.isNotNull())))
         		.groupBy(ConferenceData.CITATION.year)
         		.orderBy(ConferenceData.CITATION.year, APIQueryBuilder.OrderByRule.ASC).build();
         

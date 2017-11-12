@@ -38,7 +38,7 @@ path {
 // Set the dimensions of the canvas / graph
 var margin = {top: 30, right: 20, bottom: 40, left: 50},
   width = 1000 - margin.left - margin.right,
-  height = 520 - margin.top - margin.bottom;
+  height = 1000 - margin.top - margin.bottom;
  
 // Parse the date / time
 var parseDate = d3.time.format("%Y").parse;
@@ -56,7 +56,7 @@ var xAxis = d3.svg.axis()
               .tickFormat(d3.time.format("%Y"));
  
 var yAxis = d3.svg.axis().scale(y)
-  .orient("left").ticks(10);
+  .orient("left").ticks(30);
  
 // Define the line
 var valueline = d3.svg.line()

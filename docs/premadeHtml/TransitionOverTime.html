@@ -62,10 +62,7 @@ $("#endYearDate").datepicker({
 });
 var conferenceSelect = $("#conferenceValue");
 if ($("#premade_query").val() == "Number of citations for 2 conference over a few years") {
-	$("#startYearText").hide();
-	$("#startYearDate").hide();
-	$("#endYearText").hide();
-	$("#endYearDate").hide();
+
 	$("#conferenceValue option[value='A4']").remove();
 	$("#conferenceValue").append($('<option>', { value: "D12", text: "D12" }));
 	$("#conferenceValue").append($('<option>', { value: "J14", text: "J14" }));
