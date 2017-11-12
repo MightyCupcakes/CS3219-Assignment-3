@@ -16,7 +16,7 @@ public final class WebServerConstants {
     public static final ImmutableList<GraphTypeInfo> TYPES_OF_GRAPH = ImmutableList.of(
             new GraphTypeInfo("Bar Chart", "1", ImmutableList.of("x", "y"),"BarChart"),
             new GraphTypeInfo("Line Chart", "2", ImmutableList.of("x", "y"), "LineChart"),
-            new GraphTypeInfo("Citation Web", "", ImmutableList.of("x", "y"), "CollapsibleTree"),
+            new GraphTypeInfo("Citation Web", "", ImmutableList.of("x", "y"), "CollapsibleTree", false),
             new GraphTypeInfo("Donut Chat", "donutData", ImmutableList.of("x", "y"),"DonutChart")
     );
 
@@ -86,12 +86,19 @@ public final class WebServerConstants {
         public final List<String> columnNames;
         /** The name of the d3 HTML file for this graph */
         public final String htmlFileName;
+        /** Whether if this graph type is allowed in advanced query **/
+        public final boolean showInAdvanced;
 
-        public GraphTypeInfo (String graphName, String dataSourceFile, List<String> columns,String htmlFileName) {
+        public GraphTypeInfo (String graphName, String dataSourceFile, List<String> columns, String htmlFileName) {
+            this (graphName, dataSourceFile, columns, htmlFileName, true);
+        }
+
+        public GraphTypeInfo (String graphName, String dataSourceFile, List<String> columns, String htmlFileName, boolean showInAdvanced) {
             this.graphName = graphName;
             this.dataSourceFile = dataSourceFile;
             this.htmlFileName = htmlFileName;
             this.columnNames = columns;
+            this.showInAdvanced = showInAdvanced;
         }
     }
 }
