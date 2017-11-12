@@ -110,20 +110,13 @@ public abstract class QueryBase implements Query {
     }
 
     @Override
-    public void executeAndSaveInCSV(String filename) {
+    public void executeAndSaveInCSV(String filename) throws Exception{
         requireNonNull(logic);
 
         String json = execute();
 
-        try {
-            logic.saveResultIntoCsv(json, filename);
-        } catch (Exception e) {
-            Logger.getLogger(this.getClass().toString()).warning(
-                    "An error occured when saving the data into CSV!"
-            );
+        logic.saveResultIntoCsv(json, filename);
 
-            e.printStackTrace();
-        }
     }
 
     public abstract List<SchemaBase> getColumnsSelected();

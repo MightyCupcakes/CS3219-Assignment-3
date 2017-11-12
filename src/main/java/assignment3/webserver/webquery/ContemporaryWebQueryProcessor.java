@@ -15,7 +15,7 @@ import assignment3.webserver.webrequest.WebRequest;
 public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
 
 	@Override
-	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) {
+	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) throws Exception {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         
         String firstVenue = webRequest.getValue("firstVenue");

@@ -1,5 +1,7 @@
 package assignment3.webserver.requestprocessor;
 
+import java.util.logging.Logger;
+
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
@@ -22,15 +24,28 @@ public class VisualisationRequestProcessor implements RequestProcessor {
     public String handleRequest(WebRequest keyValuePairs) {
         // Create JSON response
         JsonObjectBuilder builder = Json.createObjectBuilder();
-
+        
+        try {	
         if (manager.getWebQuery().executeAndSaveResultIntoCsvFile(keyValuePairs)) {
-            String htmlFile = manager.getWebQuery().getHtmlFileName() + ".html";
+        	String htmlFile = manager.getWebQuery().getHtmlFileName() + ".html";
 
-            builder.add("src", GRAPH_HTML_FOLDER + htmlFile);
+        	builder.add("src", GRAPH_HTML_FOLDER + htmlFile);
+        	builder.add("isEmpty", "false");
         } else {
-            // Something went wrong with the execution.
-            builder.add("src", "");
+        	// Something went wrong with the execution.
+        	builder.add("src", "");
+        	builder.add("isEmpty", "");
+        	
+        } 
+        } catch (Exception e) {
+        	// empty query result that doesnt match any search criteria, alert user instead of loading a old d3 html file
+        	if (e instanceof IndexOutOfBoundsException) {
+              	builder.add("isEmpty", "true");
+              	builder.add("src", "");
+              	return builder.build().toString();
+        	}
         }
+     
 
         return builder.build().toString();
     }

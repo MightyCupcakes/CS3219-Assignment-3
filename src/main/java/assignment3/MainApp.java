@@ -14,7 +14,7 @@ public class MainApp {
             API api = new APIManager();
             api.runQueries();
         } else {
-            WebServer server = new WebServerManager(8003);
+            WebServer server = new WebServerManager(8005);
             server.start();
         }
     }

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ImmutableMap;
 
 import assignment3.api.APIQueryBuilder;
+import assignment3.api.exceptions.QueryException;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaComparable;
 import assignment3.schema.SchemaPredicate;
@@ -44,7 +45,7 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
     }
 
     @Override
-    public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest query) {
+    public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest query) throws QueryException, Exception {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
 
         List<WebServerConstants.GraphTypeInfo> graphInfoList = WebServerConstants.TYPES_OF_GRAPH.stream()

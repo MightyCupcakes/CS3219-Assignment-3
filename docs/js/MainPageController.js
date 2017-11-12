@@ -80,8 +80,12 @@ $(document).ready (function () {
       $('#constructd3').attr("disabled", "true"); // Disable button until the server responses to prevent spam clicking.
      
       sendAjaxRequest("main.html", request, "GET", function(data) {
-            $('#viz').attr('src', data.src);
             $('#constructd3').removeAttr("disabled");
+            if (data.isEmpty == "true") {
+              alert("Empty result, please try another search conditions");
+              return false;
+            }
+            $('#viz').attr('src', data.src);
       });
     });
 

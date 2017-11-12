@@ -17,7 +17,7 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
 	private static final String DEFAULT_FILE = "donutData";
 
 	@Override
-	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) {
+	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) throws Exception {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         
         int topN = Integer.parseInt(webRequest.getValue("nform"));

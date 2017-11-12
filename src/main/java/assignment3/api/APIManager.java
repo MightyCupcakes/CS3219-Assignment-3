@@ -97,7 +97,7 @@ public class APIManager implements API {
             return;
         }
     }
-    private String queryForTaskOne() {
+    private String queryForTaskOne() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
                 .select(ConferenceData.AUTHOR.as("author"), new SchemaCount(ConferenceData.ID).as("count"))
                 .from("A4")
@@ -110,7 +110,7 @@ public class APIManager implements API {
         return "";
     }
     
-    private String queryForTaskTwo() {
+    private String queryForTaskTwo() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
                 .select(ConferenceData.CITATION.title.as("title"), new SchemaCount(ConferenceData.ID).as("numOfInCitation"))
                 .from("A4")
@@ -123,7 +123,7 @@ public class APIManager implements API {
         return "";
     }
     
-    private String queryForTaskThree() {
+    private String queryForTaskThree() throws Exception {
         Query query = QueryBuilder.createNewBuilder()
                 .select(ConferenceData.YEAR_OF_PUBLICATION, new SchemaCountUnique(ConferenceData.ID).as("count"))
                 .from("A4")

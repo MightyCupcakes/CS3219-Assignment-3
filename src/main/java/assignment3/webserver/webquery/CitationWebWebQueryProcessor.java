@@ -2,6 +2,7 @@ package assignment3.webserver.webquery;
 
 import static assignment3.webserver.WebServerConstants.PREMADE_QUERIES;
 
+import assignment3.api.exceptions.QueryException;
 import assignment3.webserver.WebServerManager;
 import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
@@ -15,7 +16,7 @@ public class CitationWebWebQueryProcessor implements WebQueryProcessor {
     private WebQueryProcessor processor;
 
     @Override
-    public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) {
+    public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) throws QueryException, Exception {
         String premadeQuery = webRequest.getValue("premadeQuery");
 
         if(CITATION_WEB.equalsIgnoreCase(premadeQuery)) {

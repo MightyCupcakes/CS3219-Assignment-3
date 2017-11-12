@@ -7,9 +7,10 @@ public interface WebQuery {
     /**
      * Executes the web query represented by the WebRequest object and saves the result
      * into a CSV file. Returns true if the operation is successful; false otherwise.
+     * @throws Exception 
      *
      */
-    boolean executeAndSaveResultIntoCsvFile(WebRequest query);
+    boolean executeAndSaveResultIntoCsvFile(WebRequest query) throws Exception;
 
     /**
      * Get the name of the html file (without the .html postfix) to display to the user for the

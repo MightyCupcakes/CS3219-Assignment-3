@@ -16,7 +16,8 @@ public interface Query {
      * this will instead save the results into the "dataset" folder as a CSV file.
      * The filename will be in the following format of a string query followed by the date and time
      * the query executed like the following: "query-yyyymmdd-HHmmss.csv"
+     * @throws Exception 
      *
      */
-    void executeAndSaveInCSV(String filename);
+    void executeAndSaveInCSV(String filename) throws Exception;
 }
