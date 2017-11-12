@@ -189,14 +189,13 @@ public class ModelManager implements Model {
 		for (List<String> valueList : resultLists) {
 			Iterator<String> valueIterator = valueList.iterator();
 			while (valueIterator.hasNext()) {
-				builder.append(valueIterator.next());
+				builder.append(valueIterator.next().replaceAll(",", ";"));
 				if (valueIterator.hasNext()) {
 					builder.append(CSV_SEPERATOR);
 				}
 			}
 			builder.append(CSV_NEWLINE);
 		}
-		builder.append(CSV_NEWLINE);
 		storage.saveResulToCsvData(builder.toString(), filename);
 	}
 

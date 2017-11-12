@@ -33,13 +33,7 @@ public class SchemaPredicate {
             return true;
         }
 
-        Object value = column.getValue(serializedJournalCitation);
-
-        if (value != null) {
-            return conditional.test(serializedJournalCitation);
-        }
-
-        return false;
+        return conditional.test(serializedJournalCitation);
     }
 
     public SchemaPredicate and(SchemaPredicate other) {

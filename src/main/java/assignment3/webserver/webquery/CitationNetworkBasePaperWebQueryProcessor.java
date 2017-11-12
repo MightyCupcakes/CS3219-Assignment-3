@@ -18,25 +18,26 @@ import javax.json.JsonValue;
 import assignment3.api.APIQueryBuilder;
 import assignment3.api.ConferenceData;
 import assignment3.api.Query;
+import assignment3.logic.QueryBuilder;
 import assignment3.webserver.WebServerManager;
 import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
 
 public class CitationNetworkBasePaperWebQueryProcessor implements WebQueryProcessor {
 	
-	private static final String DEFAULT_FILE = "citationNetworkBasePaperData";
+	private static final String DEFAULT_FILE = "docs/d3charts/d3SavedData/citationWebForBasePaper.json";
 	
 	@Override
     public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) {
-        APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         String basePaperTitle = webRequest.getValue("basepapertitle");
+        //System.out.println(basePaperTitle);
         
-        JsonReader jsonReader;
+		JsonReader jsonReader;
     	JsonArray jsonTuples;
     	JsonObjectBuilder objectBuilder;
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                
-    	Query query = builder
+    	Query query = QueryBuilder.createNewBuilder()
                 .select(ConferenceData.ID)
                 .from("A4")
                 .where(ConferenceData.TITLE.equalsTo(basePaperTitle))
@@ -49,7 +50,7 @@ public class CitationNetworkBasePaperWebQueryProcessor implements WebQueryProces
     	basePaperID = ((JsonObject) object.get(0)).get("id").toString();
     	basePaperID = basePaperID.replaceAll("\"", "");
         
-        Query query2 = builder
+        Query query2 = QueryBuilder.createNewBuilder()
                 .select(ConferenceData.ID.as("journalId"),
                         ConferenceData.TITLE.as("journalTitle"),
                 		ConferenceData.AUTHORS.as("journalAuthors"),
@@ -71,7 +72,7 @@ public class CitationNetworkBasePaperWebQueryProcessor implements WebQueryProces
         	citatingJournalIdSet.add(jsonTuple.getString("journalId"));
         }
         
-        Query query3 = builder
+        Query query3 = QueryBuilder.createNewBuilder()
                 .select(ConferenceData.ID.as("journalId"),
                         ConferenceData.TITLE.as("journalTitle"),
                         ConferenceData.AUTHORS.as("journalAuthors"),
@@ -82,6 +83,7 @@ public class CitationNetworkBasePaperWebQueryProcessor implements WebQueryProces
                 .from("A4")
                 .where(ConferenceData.CITATION.journalId.in(citatingJournalIdSet))
                 .build();
+        
         jsonReader = Json.createReader(new StringReader(query3.execute()));
         jsonTuples = jsonReader.readArray();
         for (int i=0; i<jsonTuples.size(); i++) {
@@ -94,7 +96,7 @@ public class CitationNetworkBasePaperWebQueryProcessor implements WebQueryProces
         //System.out.println(jsonObject.toString());
 		FileWriter fileWriter;
 		try {
-			fileWriter = new FileWriter("docs/d3charts/d3SavedData/citationWebForBasePaper.json");	
+			fileWriter = new FileWriter(DEFAULT_FILE);	
 			fileWriter.write(jsonObject.toString());
 			fileWriter.flush();
 		} catch (IOException e) {
@@ -107,6 +109,7 @@ public class CitationNetworkBasePaperWebQueryProcessor implements WebQueryProces
 	private JsonObject convertToCitationNetworkJSON(JsonArray array, String basePaperTitle, String basePaperID){
         JsonObject jsonObject = Json.createObjectBuilder().build();
         JsonArray jsonArray = Json.createArrayBuilder().build();
+
         int count = 0;
         
         for(int i=0; i<array.size(); i++){
@@ -146,12 +149,14 @@ public class CitationNetworkBasePaperWebQueryProcessor implements WebQueryProces
                 	journalTitleJ = trim(journalTitleJ);
                 	String journalAuthorJ = currentJ.get("journalAuthors").toString();
                 	journalAuthorJ = trim(journalAuthorJ);
+        			
         			String citedJournalTitleJ = currentJ.get("citedJournalTitle").toString();
                 	citedJournalTitleJ = trim(citedJournalTitleJ);
                 	String citedJournalIDJ = currentJ.get("citedJournalId").toString();
                 	citedJournalIDJ = trim(citedJournalIDJ);
                 	String citedJournalAuthorJ = currentJ.get("citedJournalAuthors").toString();
                 	citedJournalAuthorJ = trim(citedJournalAuthorJ);
+                	
                 	if(journalID.equals(citedJournalIDJ)){
         				JsonObject jsonObject3 = Json.createObjectBuilder().build();        				
         				jsonObject3 = jsonObjectToBuilder(jsonObject3).add("name", journalTitleJ).build();

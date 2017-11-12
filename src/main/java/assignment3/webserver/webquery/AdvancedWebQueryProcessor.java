@@ -170,6 +170,7 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private SchemaPredicate getSchemaPredicate(SchemaComparable attribute, String valueToCompare,
                                                Set valueSet, String type) {
+
         if (type.equals("gt")) {
             return attribute.greaterThan(Integer.parseInt(valueToCompare));
         } else if (type.equals("gte")) {
