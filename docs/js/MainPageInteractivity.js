@@ -41,6 +41,13 @@ $( document ).ready ( function () {
         premadeHtml.html(data.response);
       });
     });
+
+    $('#newWindow').click( function () {
+      if ($('#viz').attr('src') == "") {
+        return;
+      }
+      window.open($('#viz').attr('src'));
+    });
     
 });
 
