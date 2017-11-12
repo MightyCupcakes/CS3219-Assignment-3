@@ -20,11 +20,10 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
 	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         
-        int topn = Integer.parseInt(webRequest.getValue("nform"));
+        int topN = Integer.parseInt(webRequest.getValue("nform"));
         String xAttr = webRequest.getValue("xform");
         String yAttr = webRequest.getValue("yform");
 
-        
         Boolean isExact = Boolean.valueOf(webRequest.getValue("isExact"));
         Boolean requirePredicate = true;
         
@@ -46,6 +45,7 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
         
         builder = builder.select(selectAttrX.as("x"), count.as("y"));
         SchemaPredicate predicate = null;
+
         if (yAttr.equals("Journal Published Year")) {
         	int yValueYear = Integer.parseInt(webRequest.getValue("yformValueYear"));
         	predicate = searchAttrY.equalsTo(yValueYear);
@@ -70,7 +70,7 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
         
         Query query = builder.groupBy((SchemaComparable)selectAttrX)
         		.orderBy(count, APIQueryBuilder.OrderByRule.DESC)
-        		.limit(topn)
+        		.limit(topN)
         		.build();
         query.executeAndSaveInCSV(DEFAULT_FILE);
 
