@@ -24,7 +24,11 @@ public class VisualisationRequestProcessor implements RequestProcessor {
         JsonObjectBuilder builder = Json.createObjectBuilder();
 
         if (manager.getWebQuery().executeAndSaveResultIntoCsvFile(keyValuePairs)) {
-            String htmlFile = manager.getWebQuery().getHtmlFileName() + ".html";
+            String htmlFile = manager.getWebQuery().getHtmlFileName();
+
+            if (!htmlFile.contains(".html")) {
+                htmlFile = htmlFile.concat(".html");
+            }
 
             builder.add("src", GRAPH_HTML_FOLDER + htmlFile);
         } else {
