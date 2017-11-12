@@ -8,20 +8,20 @@ import assignment3.webserver.webrequest.WebRequest;
 
 public class WebQueryManager implements WebQuery {
 
-	private static final WebServerRegistry<WebQueryProcessor> registry =
+    private static final WebServerRegistry<WebQueryProcessor> registry =
             new WebServerRegistry<>(WebQueryProcessor.class.getPackage().getName());
 
-	private final WebServerManager manager;
-	private boolean latestResult = false;
-	private WebQueryProcessor queryProcessor;
+    private final WebServerManager manager;
+    private boolean latestResult = false;
+    private WebQueryProcessor queryProcessor;
 
-	public WebQueryManager(WebServerManager manager) {
-	    this.manager = manager;
+    public WebQueryManager(WebServerManager manager) {
+        this.manager = manager;
     }
 
     @Override
     public boolean executeAndSaveResultIntoCsvFile(WebRequest query) {
-	    latestResult = false;
+        latestResult = false;
 
         String queryType = query.getValue("premadeType");
         Optional<WebQueryProcessor> processor = registry.getHandler(queryType);
@@ -41,7 +41,7 @@ public class WebQueryManager implements WebQuery {
     }
 
     private void getProcessorAndExecute(WebQueryProcessor processor, WebRequest query) {
-	    queryProcessor = processor;
+        queryProcessor = processor;
         latestResult = processor.processAndSaveIntoCSV(manager, query);
     }
 }

@@ -1,17 +1,5 @@
 package assignment3.webserver.webquery;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import assignment3.schema.SchemaBase;
-import assignment3.schema.SchemaComparable;
-import assignment3.schema.aggregate.SchemaCount;
-import assignment3.schema.aggregate.SchemaMax;
-import assignment3.schema.aggregate.SchemaMin;
 import assignment3.webserver.webrequest.WebRequest;
 
 public interface WebQuery {

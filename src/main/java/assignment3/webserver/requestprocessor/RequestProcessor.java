@@ -1,7 +1,6 @@
 package assignment3.webserver.requestprocessor;
 
 import assignment3.webserver.WebServerManager;
-import assignment3.webserver.exceptions.WebServerException;
 import assignment3.webserver.webrequest.WebRequest;
 
 public interface RequestProcessor {
