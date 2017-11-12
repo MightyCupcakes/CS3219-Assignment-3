@@ -36,18 +36,18 @@ public class VisualisationRequestProcessor implements RequestProcessor {
 
         	builder.add("src", GRAPH_HTML_FOLDER + htmlFile);
         	builder.add("isEmpty", "false");
-        } else {
-        	// Something went wrong with the execution.
-        	builder.add("src", "");
-        	builder.add("isEmpty", "");
         	
-        } 
+            } else {
+                // Something went wrong with the execution.
+                builder.add("src", "error.html");
+                builder.add("isEmpty", "");
+
+            }
         } catch (Exception e) {
         	// empty query result that doesnt match any search criteria, alert user instead of loading a old d3 html file
         	if (e instanceof IndexOutOfBoundsException) {
               	builder.add("isEmpty", "true");
               	builder.add("src", "");
-              	return builder.build().toString();
         	}
         }
      

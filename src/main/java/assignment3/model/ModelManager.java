@@ -189,7 +189,7 @@ public class ModelManager implements Model {
 		for (List<String> valueList : resultLists) {
 			Iterator<String> valueIterator = valueList.iterator();
 			while (valueIterator.hasNext()) {
-				builder.append(valueIterator.next().replaceAll(",", ";"));
+				builder.append(valueIterator.next().replaceAll(",", ";").trim());
 				if (valueIterator.hasNext()) {
 					builder.append(CSV_SEPERATOR);
 				}

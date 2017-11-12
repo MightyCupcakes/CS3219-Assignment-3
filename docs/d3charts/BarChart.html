@@ -48,6 +48,7 @@
 </style>
 <body>
 <script src="//d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="../js/UtilityJs.js"></script>
 <script>
 
 var margin = {top: 80, right: 180, bottom: 80, left: 180},
@@ -87,7 +88,7 @@ d3.csv("d3SavedData/1.csv", type, function(error, data) {
       .attr("class", "title")
       .attr("x", x(data[0].x))
       .attr("y", -26)
-      .text("Top 10 authors for venue arXiv");
+      .text("Results");
 
   svg.append("g")
       .attr("class", "x axis")
@@ -103,7 +104,7 @@ d3.csv("d3SavedData/1.csv", type, function(error, data) {
   svg.append("text")
   .attr("text-anchor", "middle")
   .attr("transform", "translate(-25," + (height/2) + ")rotate(-90)")
-  .text("Number of papers published");
+  .text(getParameterByName("yAxis"));
 
   var bars = svg.selectAll(".bar")
       .data(data)
@@ -115,7 +116,7 @@ d3.csv("d3SavedData/1.csv", type, function(error, data) {
       .attr("height", function(d) { return height - y(d.y); })
       .on('mouseover', function(d) {
         tooltip.style('display', 'block');
-        tooltipcount.text("Papers published: " + d.y);
+        tooltipcount.text("Value: " + d.y);
        })
       .on('mouseout', function() {
          tooltip.style('display', 'none');
