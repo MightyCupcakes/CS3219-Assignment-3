@@ -73,7 +73,9 @@ public class WebServerTest {
         verify(exchange).getResponseBody();
 
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        WebServerConstants.TYPES_OF_GRAPH.forEach(graphTypeInfo -> builder.add(graphTypeInfo.graphName));
+        WebServerConstants.TYPES_OF_GRAPH.stream()
+                .filter(graphTypeInfo -> graphTypeInfo.showInAdvanced)
+                .forEach(graphTypeInfo -> builder.add(graphTypeInfo.graphName));
 
         assertEquals(outputStream.toString(), builder.build().toString());
     }
