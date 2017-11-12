@@ -23,6 +23,7 @@ import assignment3.logic.LogicManager;
 import assignment3.schema.SchemaBase;
 import assignment3.schema.SchemaPredicate;
 import assignment3.schema.aggregate.SchemaCount;
+import assignment3.schema.aggregate.SchemaCountUnique;
 import assignment3.webserver.WebServerConstants;
 import assignment3.webserver.WebServerManager;
 import assignment3.webserver.registry.RegisterProcessor;
@@ -32,7 +33,7 @@ import assignment3.webserver.webrequest.WebRequest;
 public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
     private static final Logic logic = new LogicManager();
     private static final String MULTI_CONF_A_YEAR = PREMADE_QUERIES.get(2).name;
-    private static final String CONF_TREND = PREMADE_QUERIES.get(6).name;
+    private static final String CONF_TREND = PREMADE_QUERIES.get(7).name;
     private static String requiredHtml;
 	@Override
 	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) throws Exception {
@@ -51,7 +52,7 @@ public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
 	   private void queryForAConf(WebServerManager manager, WebRequest webRequest) throws Exception {
 	        APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
 	        String conference = webRequest.getValue("conferenceValue");
-	        Query query = builder.select(ConferenceData.CITATION.year.as("x"), new SchemaCount(ConferenceData.CITATION.title).as("y"))
+	        Query query = builder.select(ConferenceData.CITATION.year.as("x"), new SchemaCountUnique(ConferenceData.CITATION.title).as("y"))
 	        		.from(conference)
 	        		.where(ConferenceData.CITATION.year.isNotNull().and(ConferenceData.CITATION.year.greaterThan(0)))
 	        		.groupBy(ConferenceData.CITATION.year)
@@ -68,7 +69,7 @@ public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
 	        for (String conference : confList) {
 	            APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
 	            Query query = builder.select(ConferenceData.CITATION.year.as("x"),
-	                new SchemaCount(ConferenceData.CITATION.title).as("y"))
+	                new SchemaCountUnique(ConferenceData.CITATION.title).as("y"))
 	                .from(conference)
 	                .where(ConferenceData.CITATION.year.equalsTo(year)
 	                        .and(ConferenceData.CITATION.year.isNotNull()))

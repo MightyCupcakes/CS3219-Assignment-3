@@ -24,6 +24,7 @@ import assignment3.api.Query;
 import assignment3.logic.Logic;
 import assignment3.logic.LogicManager;
 import assignment3.schema.aggregate.SchemaCount;
+import assignment3.schema.aggregate.SchemaCountUnique;
 import assignment3.webserver.WebServerManager;
 import assignment3.webserver.registry.RegisterProcessor;
 import assignment3.webserver.webrequest.WebRequest;
@@ -65,7 +66,7 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
         int startYear = getLowestYear(request);
         String conf = request.getValue("conferenceValue");
         builder = builder.select(ConferenceData.CITATION.year.as("x"),
-                new SchemaCount(ConferenceData.CITATION.title).as("y"))
+                new SchemaCountUnique(ConferenceData.CITATION.title).as("y"))
                 .from(conf)
                 .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(startYear)
                         .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(endYear)
@@ -83,7 +84,7 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
         String conf = request.getValue("conferenceValue");
         String venue = request.getValue("venueValue");
         builder = builder.select(ConferenceData.CITATION.year.as("x"),
-                new SchemaCount(ConferenceData.CITATION.title).as("y"))
+        		new SchemaCountUnique(ConferenceData.CITATION.title).as("y"))
                 .from(conf)
                 .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(startYear)
                         .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(endYear)

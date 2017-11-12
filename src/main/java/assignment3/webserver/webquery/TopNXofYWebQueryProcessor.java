@@ -40,7 +40,7 @@ public class TopNXofYWebQueryProcessor implements WebQueryProcessor{
         	count = new SchemaCount(base);      	
         } else {
         	base = (SchemaComparable) WebServerConstants.COLUMNS.get("Citation Title");
-        	count = new SchemaCount(base);
+        	count = new SchemaCountUnique(base);
         }
         
         builder = builder.select(selectAttrX.as("x"), count.as("y"));
