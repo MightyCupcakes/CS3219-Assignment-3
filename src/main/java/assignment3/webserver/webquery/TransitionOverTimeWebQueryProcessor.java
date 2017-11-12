@@ -41,17 +41,17 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         String premadeType = webRequest.getValue("premadeQuery");
         requiredHtmlFile = premadeType;
-        Query query;
+        Query query = null;
 
         if (premadeType.equals(QUERY_FOR_YEARS)) {
             query = getQueryForMultipleYears(builder, webRequest);
             requiredHtmlFile = "LineChart";
-            query.executeAndSaveInCSV("2");
         } else if (premadeType.equals(QUERY_FOR_CONFS)) {
-            requiredHtmlFile ="BarChart";
-            return false;
-        }
+        	query = getFilteredQueryForMultipleYears(builder, webRequest);
+            requiredHtmlFile ="LineChart";
 
+        }
+        query.executeAndSaveInCSV("2");
         return true;
     }
 
@@ -77,7 +77,22 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
     }
 
 
-
+    private static Query getFilteredQueryForMultipleYears(APIQueryBuilder builder, WebRequest request) {
+    	int endYear = getHighestYear(request);
+        int startYear = getLowestYear(request);
+        String conf = request.getValue("conferenceValue");
+        String venue = request.getValue("venueValue");
+        builder = builder.select(ConferenceData.CITATION.year.as("x"),
+                new SchemaCount(ConferenceData.CITATION.title).as("y"))
+                .from(conf)
+                .where(ConferenceData.CITATION.year.greaterThanOrEqualsTo(startYear)
+                        .and(ConferenceData.CITATION.year.lessThanOrEqualsTo(endYear)
+                                .and(ConferenceData.CITATION.year.isNotNull()
+                                		.and(ConferenceData.VENUE.equalsToIgnoreCase(venue)))))
+                .groupBy(ConferenceData.CITATION.year)
+                .orderBy(ConferenceData.CITATION.year, APIQueryBuilder.OrderByRule.ASC);
+        return builder.build();
+    }
 
     private static int getHighestYear(WebRequest request) {
         return Math.max(Integer.parseInt(request.getValue("startYearDate")), Integer.parseInt(request.getValue("endYearDate")));

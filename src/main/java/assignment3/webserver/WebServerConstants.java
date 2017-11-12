@@ -27,7 +27,7 @@ public final class WebServerConstants {
                             "Number of citations for a conference over a few years"),
                     new PremadeQueriesInfo("TransitionOverTime",
                             "Transition Over Time",
-                            "Number of citations for different conferences"),
+                            "Number of citations for a conference over a few years filtered by venue"),
                     new PremadeQueriesInfo("ContemporaryComparison",
                             "Contemporary comparison",
                             "Number of citations for different conferences in the same year"),

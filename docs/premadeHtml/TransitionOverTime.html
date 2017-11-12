@@ -11,12 +11,8 @@
 <div id ="TransitionOverTime" class ="col-sm-6">
 	<div class="form-group">
 		<label id ="conferenceText">conference</label>
-		<select class = "form-control" id ="conferenceValue" multiple="disabled">
+		<select class = "form-control" id ="conferenceValue" >
 			<option value= "A4" >A4</option>
-			<option value= "D12" >D12</option>
-			<option value= "J14" >J14</option>
-			<option value= "D15" >D15</option>
-			<option value= "Q14" >Q14</option>
 		</select>
 	</div>
 
@@ -28,6 +24,11 @@
 	<div class="form-group">
 		<label id ="endYearText">End Year </label>
 		<input id = "endYearDate"  type="text" class="form-control" readonly='true' value = "2017">
+	</div>
+
+	<div class="form-group">
+		<label id ="venueText">Filter by Venue </label>
+		<input id = "venueValue"  type="text" class="form-control" placeholder="Filter by a venue" value="ArXiv">
 	</div>
 
 	<input type="hidden" id="requestType" value="transitionovertime" />
@@ -59,25 +60,13 @@ $("#endYearDate").datepicker({
 
 });
 var conferenceSelect = $("#conferenceValue");
-if ($("#premade_query").val() != "Number of citations for different conferences") {
-	conferenceSelect.removeAttr("multiple");
-	$("#startYearText").text("Start year");
+if ($("#premade_query").val() != "Number of citations for a conference over a few years filtered by venue") {
+	$("#venueText").hide();
+	$("#venueValue").hide();
 } else {
-	$("#startYearText").text("Year");
-	$("#endYearText").hide();
-	$("#endYearDate").datepicker("destroy");
-	$("#endYearDate").hide();
+	$("#venueText").show();
+	$("#venueValue").show();
 }
-$("#premade_query").on('change', function() {
-if ($("#premade_query").val() != "Number of citations for different conferences") {
-	conferenceSelect.removeAttr("multiple");
-	$("#startYearText").text("Start year");
-} else {
-	$("#startYearText").text("Year");	
-	$("#endYearText").hide();
-	$("#endYearDate").datepicker("destroy");
-	$("#endYearDate").hide();
-}
-});
+
 </script>
 
