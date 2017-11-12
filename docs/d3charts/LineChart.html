@@ -43,7 +43,7 @@ var margin = {top: 30, right: 20, bottom: 40, left: 50},
 var parseDate = d3.time.format("%Y").parse;
 
 // for mouseover
-var bisectDate = d3.bisector(function(d) { return d.yearOfPublication; }).left;
+var bisectDate = d3.bisector(function(d) { return d.x; }).left;
 // Set the ranges
 var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
@@ -59,8 +59,8 @@ var yAxis = d3.svg.axis().scale(y)
  
 // Define the line
 var valueline = d3.svg.line()
-  .x(function(d) { return x(d.yearOfPublication); })
-  .y(function(d) { return y(d.count); });
+  .x(function(d) { return x(d.x); })
+  .y(function(d) { return y(d.y); });
     
 // Adds the svg canvas
 var svg = d3.select("body")
@@ -71,15 +71,15 @@ var svg = d3.select("body")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
  
 // Get the data
-d3.csv("3.csv", function(error, data) {
+d3.csv("d3SavedData/2.csv", function(error, data) {
   data.forEach(function(d) {
-    d.yearOfPublication = parseDate(d.yearOfPublication);
-    d.count = +d.count;
+    d.x = parseDate(d.x);
+    d.y = +d.y;
   });
  
   // Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.yearOfPublication; }));
-  y.domain([0, d3.max(data, function(d) { return d.count; })]);
+  x.domain(d3.extent(data, function(d) { return d.x; }));
+  y.domain([0, d3.max(data, function(d) { return d.y; })]);
  
   // Add the valueline path.
   svg.append("path")  
@@ -97,11 +97,12 @@ d3.csv("3.csv", function(error, data) {
     .attr("class", "y axis")
     .call(yAxis);
   // Add Title
+  /*
   svg.append("text")
     .attr("class", "title")
     .attr("x", x(data[0].yearOfPublication))
     .attr("y", -15)
-    .text("Total yearly publications for Venue ICSE");
+    .text("Total yearly publications for Venue ICSE");*/
   //add y axis text
   svg.append("text")
     .attr("text-anchor", "middle")
@@ -138,9 +139,9 @@ d3.csv("3.csv", function(error, data) {
           i = bisectDate(data, x0, 1),
           d0 = data[i - 1],
           d1 = data[i],
-          d = x0 - d0.yearOfPublication > d1.yearOfPublication - x0 ? d1 : d0;
-      focus.attr("transform", "translate(" + x(d.yearOfPublication) + "," + y(d.count) + ")");
-      focus.select("text").text( (" " + d.count));
+          d = x0 - d0.x > d1.x - x0 ? d1 : d0;
+      focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
+      focus.select("text").text( (" " + d.y));
   }   
  
 });
