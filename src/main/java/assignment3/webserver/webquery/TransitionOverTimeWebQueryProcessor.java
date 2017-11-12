@@ -5,7 +5,9 @@ import static assignment3.webserver.WebServerConstants.PREMADE_QUERIES;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.json.Json;
@@ -77,7 +79,7 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
         String conferenceValues = request.getValue("conferenceValue");
         int year = Integer.parseInt(request.getValue("startYearDate"));
         List<String> confList = Arrays.asList(conferenceValues.split(","));
-        List<String> resultList = new ArrayList<>();
+        Map<String, String> confResultMap = new HashMap<>();
         for (String conference : confList) {
             System.out.println("querying for " + conference);
             APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
@@ -89,12 +91,12 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
                 .groupBy(ConferenceData.CITATION.year)
                 .build();
             String result = query.execute();
-            resultList.add(result);
+            confResultMap.put(conference, result);
         }
-        String compiledResult = compileJsonResults(resultList);
+        String compiledResult = compileJsonResults(confResultMap);
         System.out.println(compiledResult);
         try {
-            logic.saveResultIntoCsv(compiledResult, "1.csv");
+            logic.saveResultIntoCsv(compiledResult, "1");
         } catch (Exception e) {
 ;
         }
@@ -109,31 +111,31 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
         return Math.min(Integer.parseInt(request.getValue("startYearDate")), Integer.parseInt(request.getValue("endYearDate")));
     }
 
-    private static String compileJsonResults(List<String> resultList) {
-        JsonReader jsonReader;
-        JsonArray jsonTuples;
-        JsonObjectBuilder objectBuilder;
+    private static String compileJsonResults(Map<String, String> confResultMap) {
+
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-        for (String result : resultList) {
-            System.out.println("BREAKING " + result);
+        confResultMap.forEach((conference, result) -> {
+            JsonReader jsonReader;
+            JsonArray jsonTuples;
+            JsonObjectBuilder objectBuilder;
+        	System.out.println("BREAKING " + result);
             jsonReader = Json.createReader(new StringReader(result));
             jsonTuples = jsonReader.readArray();
             for (int i=0; i<jsonTuples.size(); i++) {
                 JsonObject jsonTuple = jsonTuples.getJsonObject(i);
-                objectBuilder = addNewJsonObject(arrayBuilder, jsonTuple);
+                System.out.println(jsonTuple.toString() + "  LOL" + i);
+                objectBuilder = addNewJsonObject(arrayBuilder, jsonTuple, conference);
                 arrayBuilder.add(objectBuilder);
             }
-            
-        }
+        });
+
         return arrayBuilder.build().toString();
     }
-    private static JsonObjectBuilder addNewJsonObject(JsonArrayBuilder builder, JsonObject jsonTuple) {
+    private static JsonObjectBuilder addNewJsonObject(JsonArrayBuilder builder, JsonObject jsonTuple, String conference) {
         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-        for (Entry<String, JsonValue> entry : jsonTuple.entrySet()) {
-            String value = entry.getValue().toString();
-
-            objectBuilder.add(entry.getKey(), value);
-        }
+        objectBuilder.add("x", conference);
+        objectBuilder.add("y", jsonTuple.getJsonString("y"));
+       
         return objectBuilder;
     }
 
