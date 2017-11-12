@@ -34,7 +34,7 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
     private static final String QUERY_FOR_YEARS = PREMADE_QUERIES.get(0).name;
     private static final String QUERY_FOR_CONFS = PREMADE_QUERIES.get(1).name;
     private static String requiredHtmlFile = "barchart";
-    private static final Logic logic = new LogicManager();
+
 
     @Override
     public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) throws Exception {
@@ -48,9 +48,8 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
             requiredHtmlFile = "LineChart";
             query.executeAndSaveInCSV("2");
         } else if (premadeType.equals(QUERY_FOR_CONFS)) {
-            getQueryForMultipleConfs(manager, webRequest);
             requiredHtmlFile ="BarChart";
-            return true;
+            return false;
         }
 
         return true;
@@ -76,27 +75,7 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
 
         return builder.build();
     }
-    private static void getQueryForMultipleConfs(WebServerManager manager, WebRequest request) throws Exception {
-        String conferenceValues = request.getValue("conferenceValue");
-        int year = Integer.parseInt(request.getValue("startYearDate"));
-        List<String> confList = Arrays.asList(conferenceValues.split(","));
-        Map<String, String> confResultMap = new HashMap<>();
-        for (String conference : confList) {
-            APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
-            Query query = builder.select(ConferenceData.CITATION.year.as("x"),
-                new SchemaCount(ConferenceData.CITATION.title).as("y"))
-                .from(conference)
-                .where(ConferenceData.CITATION.year.equalsTo(year)
-                        .and(ConferenceData.CITATION.year.isNotNull()))
-                .groupBy(ConferenceData.CITATION.year)
-                .build();
-            String result = query.execute();
-            confResultMap.put(conference, result);
-        }
-        String compiledResult = compileJsonResults(confResultMap);
-        logic.saveResultIntoCsv(compiledResult, "1");
- 
-    }
+
 
 
 
@@ -107,30 +86,6 @@ public class TransitionOverTimeWebQueryProcessor implements WebQueryProcessor {
         return Math.min(Integer.parseInt(request.getValue("startYearDate")), Integer.parseInt(request.getValue("endYearDate")));
     }
 
-    private static String compileJsonResults(Map<String, String> confResultMap) {
 
-        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-        confResultMap.forEach((conference, result) -> {
-            JsonReader jsonReader;
-            JsonArray jsonTuples;
-            JsonObjectBuilder objectBuilder;
-            jsonReader = Json.createReader(new StringReader(result));
-            jsonTuples = jsonReader.readArray();
-            for (int i=0; i<jsonTuples.size(); i++) {
-                JsonObject jsonTuple = jsonTuples.getJsonObject(i);
-                objectBuilder = addNewJsonObject(arrayBuilder, jsonTuple, conference);
-                arrayBuilder.add(objectBuilder);
-            }
-        });
-
-        return arrayBuilder.build().toString();
-    }
-    private static JsonObjectBuilder addNewJsonObject(JsonArrayBuilder builder, JsonObject jsonTuple, String conference) {
-        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-        objectBuilder.add("x", conference);
-        objectBuilder.add("y", jsonTuple.getJsonString("y"));
-       
-        return objectBuilder;
-    }
 
 }

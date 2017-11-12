@@ -30,7 +30,7 @@ public final class WebServerConstants {
                             "Number of citations for different conferences"),
                     new PremadeQueriesInfo("ContemporaryComparison",
                             "Contemporary comparison",
-                            "Number of citations for two different venue held in the same year"),
+                            "Number of citations for different conferences in the same year"),
                     new PremadeQueriesInfo("TopNXOFY",
                             "Top N X of Y",
                             "Construct Top N X of Y Graph"),

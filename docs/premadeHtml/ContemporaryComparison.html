@@ -5,53 +5,44 @@
 .ui-datepicker-month {
 	display: none;
 }
-
+.hide { display: none;}
 </style>
 
 <div id ="ContemporaryComparison" class ="col-sm-6">
+	<div class="form-group">
+		<label id ="conferenceText">conference</label>
+		<select class = "form-control" id ="conferenceValue" multiple="disabled">
+			<option value= "A4" >A4</option>
+			<option value= "D12" >D12</option>
+			<option value= "J14" >J14</option>
+			<option value= "D15" >D15</option>
+			<option value= "Q14" >Q14</option>
+		</select>
+	</div>
 
 	<div class="form-group">
-		<label id = "secondvenue">First Venue</label>
-		<input class = "form-control" id ="firstVenue"  placeholder="Choose a Venue">
+		<label id = "startYearText">Start Year</label>
+		<input id = "startYearDate"  type="text" class="form-control" readonly='true' value ="2017">
 	</div>
 
-	<div class="form-group">
-		<label id ="firstvenue">Second Venue</label>
-		<input  class="form-control" id ="secondVenue" placeholder="Choose a Venue">
-	</div>
 
-	<div class="form-group">
-		<label id ="year">Year</label>
-		<input id = "Year"  type="text" class="form-control" readonly='true'>
-	</div>
-
-	<label>Search by</label>
-	<div class="form-check">
-		<label class ="form-check-label">
-			<input class="form-check-input" type="radio" name="searchType" id ="exact" checked="checked">
-				Exact Match
-		</label>
-	</div>
-	<div class="form-check">
-		<label class ="form-check-label">
-			<input class="form-check-input" type="radio" name="searchType" id="like">
-			Like
-		</label>
-	</div>
-	<input type="hidden" id="requestType" value="contemporary" />
-
+	<input type="hidden" id="requestType"  value="contemporary" />
 </div>
 
 <script>
-$("#Year").datepicker({
-changeMonth: false,
-changeYear: true,
-dateFormat: "yy",
-yearRange: "1975:2017",
-showButtonPanel: true,
-onClose: function(dateText, inst) { 
-$(this).datepicker('setDate', new Date(inst.selectedYear,1, 1));
-}
+
+$("#startYearDate").datepicker({
+	changeMonth: false,
+	changeYear: true,
+	dateFormat: "yy",
+	yearRange: "1975:2017",
+	showButtonPanel: true,
+	onClose: function(dateText, inst) { 
+		$(this).datepicker('setDate', new Date(inst.selectedYear,1, 1));
+	}
 
 });
+
+
 </script>
+
