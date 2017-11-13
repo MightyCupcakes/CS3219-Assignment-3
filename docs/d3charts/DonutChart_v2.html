@@ -1,174 +1,153 @@
 <!DOCTYPE html>
-	<html>
-	<head>
-	<meta charset="utf-8">
-	<title>Question 1</title>
-	<link rel="stylesheet" href="normalize.css">
-	<style>
+<meta charset="utf-8">
+<link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet" data-semver="3.0.1" data-require="normalize@*" />
 
-	#chart {
-		height: 360px;
-		margin: left; /* NEW */
-		position: relative;
-		width: 360px;
-	}
-	.tooltip {
-		background: #eee;
-		box-shadow: 0 0 5px #999999;
-		color: #333;
-		display: none;
-		font-size: 12px;
-		left: 130px;
-		padding: 10px;
-		position: absolute; 
-		text-align: center;
-		top: 95px;
-		width: 80px;
-		z-index: 10;
-	}
-	.legend {
-		font-size: 12px;
-	}
-	rect {
-		cursor: pointer;
-		stroke-width: 2;
-	}
-	rect.disabled {
-		fill: transparent !important;
-	}
-	h1 {
-		font-size: 22px;
-	}
-	</style>
-</head>
-
+<style>
+#pieChart {                                                 
+  height: 360px;                                             
+  position: relative;                                       
+  width: 360px;                                             
+}         
+.tooltip {                                                   
+  background: #f1f0f1;                                         
+  box-shadow: 0 0 5px #999999;                              
+  color: #333;                                           
+  display: none;                                                
+  font-size: 14px; 
+  font-family: Helvetica;   
+  left: 300px;                                                   
+  padding: 10px;                                                 
+  position: absolute;                                            
+  text-align: center;                                       
+  top: 220px;                                                     
+  width: 150px;                                                  
+  z-index: 10;                                                   
+} 
+<style>
+.legend {
+  font-size: 12px;
+}
+rect {
+  stroke-width: 2;
+}
+</style>:
+</style>
 <body>
-	<h1>Top 10 Authors based on number of publication for venue ArXiv</h1>
-	<div id="chart"></div>
-	<script src="d3.v4.min.js"></script>
-	<script>
-	(function(d3) {
-	'use strict';
-	<!-- NEW -->
-	var width = 480;
-	var height = 480;
-	var radius = Math.min(width, height) / 2;
-	var donutWidth = 90;
-	var legendRectSize = 18;
-	var legendSpacing = 4;
-	var color = d3.scaleOrdinal(d3.schemeCategory20b);
-	var svg = d3.select('#chart')
-				.append('svg')
-				.attr('width', width)
-				.attr('height', height)
-				.append('g')
-				.attr('transform', 'translate(' + (width / 2) +
-				',' + (height / 2) + ')');
-				var arc = d3.arc()
-				.innerRadius(radius - donutWidth)
-				.outerRadius(radius);
+  <div id ="pieChart"</div>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script>
+    //size of donut
+    var width = 860,
+    height = 500,
+    radius = Math.min(width, height) / 2;
+    var donutWidth = 105;   
+    var color = d3.scale.category20b();
+    //size of arc
+    var arc = d3.svg.arc()
+    .outerRadius(radius - donutWidth)
+    .innerRadius(radius );
+    //legend size
+    var legendRectSize = 108;
+    var legendSpacing = 40;
 
-	var pie = d3.pie()
-		.value(function(d) { return d.count; })
-		.sort(null);
-	var tooltip = d3.select('#chart')
-		.append('div')
-		.attr('class', 'tooltip');
-	tooltip.append('div')
-		.attr('class', 'name');
-	tooltip.append('div')
-		.attr('class', 'count');
-	tooltip.append('div')
-		.attr('class', 'percent');
-	d3.csv('Q1Ans.csv', function(error, dataset) {
-		dataset.forEach(function(d) {
-			d.count = +d.count;
-			d.enabled = true; // NEW
-	});
-	var path = svg.selectAll('path')
-			.data(pie(dataset))
-			.enter()
-			.append('path')
-			.attr('d', arc)
-			.attr('fill', function(d, i) {
-		return color(d.data.name);
-	}) // UPDATED (removed semicolon)
-		.each(function(d) { this._current = d; }); // NEW
-		path.on('mouseover', function(d) {
-		var total = d3.sum(dataset.map(function(d) {
-		return (d.enabled) ? d.count : 0; // UPDATED
-	}));
-	
-	var percent = Math.round(1000 * d.data.count / total) / 10;
-	tooltip.select('.name').html('Name: ' + d.data.name);
-	tooltip.select('.count').html('Count: ' + d.data.count);
-	tooltip.select('.percent').html(percent + '%');
-	tooltip.style('display', 'block');
-	});
-	path.on('mouseout', function() {
-	tooltip.style('display', 'none');
-	});
-	/* OPTIONAL
-	path.on('mousemove', function(d) {
-	tooltip.style('top', (d3.event.layerY + 10) + 'px')
-	.style('left', (d3.event.layerX + 10) + 'px');
-	});
-	*/
-	var legend = svg.selectAll('.legend')
-		.data(color.domain())
-		.enter()
-		.append('g')
-		.attr('class', 'legend')
-		.attr('transform', function(d, i) {
-		var height = legendRectSize + legendSpacing;
-		var offset = height * color.domain().length / 2;
-		var horz = -2 * legendRectSize;
-		var vert = i * height - offset;
-		return 'translate(' + horz + ',' + vert + ')';
-	});
-	legend.append('rect')
-			.attr('width', legendRectSize)
-			.attr('height', legendRectSize)
-			.style('fill', color)
-			.style('stroke', color) // UPDATED (removed semicolon)
-			.on('click', function(name) { // NEW
-		var rect = d3.select(this); // NEW
-		var enabled = true; // NEW
-		var totalEnabled = d3.sum(dataset.map(function(d) { // NEW
-		return (d.enabled) ? 1 : 0; // NEW
-	})); // NEW
-	if (rect.attr('class') === 'disabled') { // NEW
-		rect.attr('class', ''); // NEW
-	} else { // NEW
-		if (totalEnabled < 2) return; // NEW
-		rect.attr('class', 'disabled'); // NEW
-		enabled = false; // NEW
-	} // NEW
-	pie.value(function(d) { // NEW
-	if (d.name === name) d.enabled = enabled; // NEW
-	return (d.enabled) ? d.count : 0; // NEW
-	}); // NEW
-	path = path.data(pie(dataset)); // NEW
-	path.transition()
-		.duration(750)
-		.attrTween('d', function(d) {
-	// NEW
-	// NEW
-	// NEW
-	var interpolate = d3.interpolate(this._current, d); // NEW
-	this._current = interpolate(0); // NEW
-		return function(t) { // NEW
-		return arc(interpolate(t)); // NEW
-		}; // NEW
-	}); // NEW
-	}); // NEW
-	legend.append('text')
-		.attr('x', legendRectSize + legendSpacing)
-		.attr('y', legendRectSize - legendSpacing)
-		.text(function(d) { return d; });
-		});
-	})(window.d3);
-	
+    var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.y; });
+    //size of arc when hovered 
+    var arcHover = d3.svg.arc().
+    innerRadius(radius - donutWidth). 
+    outerRadius(radius + 10); 
+    //size of the page
+    var svgContainer = d3.select('#pieChart');
+    var svg = svgContainer.append("svg")
+    .attr("width", width + 600)
+    .attr("height", height + 50)
+    .append("g")
+    .attr("transform", "translate(" + (width /2 -80)  + "," + height / 2 + ")");
+
+    //tooltip for mouseover event
+    var tooltip = svgContainer.append('div').attr('class', 'tooltip');
+    var tooltipyear = tooltip.append('div').attr('class', 'year');
+    var tooltipcount = tooltip.append('div').attr('class', 'count');
+    var tooltippercent = tooltip.append('div').attr('class', 'percent');
+
+    d3.csv("d3SavedData/donutData.csv", function(error, data) {
+      data.forEach(function(d) { d.y=+d.y;});
+
+    //draw slices 
+    var g = svg.selectAll(".arc")
+    .data(pie(data))
+    .enter()
+    .append("g")
+    .attr("class", arc);
+
+    //fill data and add mouse over event
+    g.append("path")
+    .attr('d', arc)
+    .attr('class', 'path')
+    .style('fill', function(d) {
+      return color(d.data.x);
+    })
+    .on('mouseover', function(d) {
+     d3.select(this).transition()
+     .duration(500)
+     .attr("d", arcHover);
+     var total = d3.sum(data.map(function(d) { 
+      return d.y;
+    }));
+     var percent = Math.round(1000 * d.data.y / total) / 10;
+     tooltipyear.text(d.data.x);
+     tooltipcount.text(d.data.y);
+     tooltippercent.text("% of total: " + percent + "%");
+     tooltip.style('display', 'block');     
+   })
+    .on('mouseout', function() {
+     d3.select(this).transition()
+     .duration(500)
+     .attr("d", arc);    
+     tooltip.style('display', 'none');
+   });
+
+    //drawing the legend
+
+    var legend = svg.selectAll('.legend')
+    .data(color.domain())
+    .enter()
+    .append('g')
+    .attr('class', 'legend')
+    .attr('transform', function(d,i) {
+      var height = legendRectsize + legendSpacing;
+      var offset = height * color.domain().length/2;
+      var horz = -2 * legendRectSize;
+      var vert = i * height - offset;
+      return 'translate(' + horz + ',' + vert + ')';
+    });
+    legend.append('rect')
+    .attr('width', legendRectSize)
+    .attr('height', legendRectSize)
+    .style('fill', color)
+    .style('stroke', color);
+
+    legend.append('text')
+    .attr('x', legendRectSize + legendSpacing)
+    .attr('y', legendRectSize - legendSpacing)
+    .text(function(d) { return d; });
+/*
+    //add text to the slices
+    g.append("text")
+    .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+    .attr("dy", ".01em")
+    .text(function(d) { return d.data.x; });*/
+/*
+    //title
+    svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(500," + (height - 480) + ")")
+    .text("Number of papers published in ArXiv for the past 6 years");
+    */
+
+  });
+
+
 </script>
 </body>
-</html>
