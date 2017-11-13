@@ -39,27 +39,12 @@ public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
 	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) throws Exception {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         String premadeType = webRequest.getValue("premadeQuery");
-        if (premadeType.equals(MULTI_CONF_A_YEAR)) {
-        	getQueryForMultipleConfs(manager, webRequest);
-        	requiredHtml = "BarChart";
-        } else if (premadeType.equals(CONF_TREND)) {
-        	queryForAConf(manager, webRequest);
-        	requiredHtml = "LineChart";
-        }
+        getQueryForMultipleConfs(manager, webRequest);
+        requiredHtml = "BarChart";
+
 		return true;
 	}
-	
-	   private void queryForAConf(WebServerManager manager, WebRequest webRequest) throws Exception {
-	        APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
-	        String conference = webRequest.getValue("conferenceValue");
-	        Query query = builder.select(ConferenceData.CITATION.year.as("x"), new SchemaCountUnique(ConferenceData.CITATION.title).as("y"))
-	        		.from(conference)
-	        		.where(ConferenceData.CITATION.year.isNotNull().and(ConferenceData.CITATION.year.greaterThan(0)))
-	        		.groupBy(ConferenceData.CITATION.year)
-	        		.orderBy(ConferenceData.CITATION.year, APIQueryBuilder.OrderByRule.ASC)
-	        		.build();
-	        query.executeAndSaveInCSV("2");
-	}
+
 
 	private static void getQueryForMultipleConfs(WebServerManager manager, WebRequest request) throws Exception {
 	        String conferenceValues = request.getValue("conferenceValue");

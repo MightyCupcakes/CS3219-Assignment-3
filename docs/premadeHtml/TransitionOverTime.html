@@ -12,14 +12,25 @@
 	<div class="form-group">
 		<label id ="conferenceText">conference</label>
 		<select class = "form-control" id ="conferenceValue" >
-			<option value= "A4" >A4</option>		
+			<option value= "A4" >A4</option>
+			<option value= "D12" >D12</option>
+			<option value= "D13" >D13</option>
+			<option value= "D14" >D14</option>	
+			<option value= "D14" >D15</option>				
+			<option value= "J14" >J14</option>
+			<option value= "D15" >W14</option>
+			<option value= "W14" >Q14</option>		
 		</select>
 		<label id ="conferenceText2">conference</label>
 		<select class = "form-control" id ="conferenceValue2" >
 			<option value= "D12" >D12</option>
+			<option value= "D13" >D13</option>
+			<option value= "D14" >D14</option>	
+			<option value= "D14" >D15</option>				
 			<option value= "J14" >J14</option>
-			<option value= "D15" >D15</option>
-			<option value= "Q14" >Q14</option>		
+			<option value= "D15" >W14</option>
+			<option value= "Q14" >Q14</option>	
+			<option value= "W14" >Q14</option>				
 		</select>
 	</div>
 
@@ -65,9 +76,6 @@ if ($("#premade_query").val() == "Number of citations for 2 conference over a fe
 
 	$("#conferenceValue option[value='A4']").remove();
 	$("#conferenceValue").append($('<option>', { value: "D12", text: "D12" }));
-	$("#conferenceValue").append($('<option>', { value: "J14", text: "J14" }));
-	$("#conferenceValue").append($('<option>', { value: "D15", text: "D15" }));
-	$("#conferenceValue").append($('<option>', { value: "Q14", text: "Q14" }));	
 } else {
 	$("#conferenceText2").hide();
 	$("#conferenceValue2").hide();
