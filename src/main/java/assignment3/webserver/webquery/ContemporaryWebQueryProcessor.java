@@ -33,8 +33,6 @@ import assignment3.webserver.webrequest.WebRequest;
 public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
 
     private static final Logic logic = new LogicManager();
-    private static final String MULTI_CONF_A_YEAR = PREMADE_QUERIES.get(2).name;
-    private static final String CONF_TREND = PREMADE_QUERIES.get(7).name;
     private static String requiredHtml;
 
     @Override
@@ -42,7 +40,7 @@ public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         String premadeType = webRequest.getValue("premadeQuery");
         getQueryForMultipleConfs(manager, webRequest);
-        requiredHtml = "BarChart?yAxis=Num Of Cited Documents";
+        requiredHtml = "BarChart.html?yAxis=Num Of Cited Documents";
 
 		return true;
 	}
