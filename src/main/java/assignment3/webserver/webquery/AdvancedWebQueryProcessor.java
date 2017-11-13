@@ -48,7 +48,7 @@ public class AdvancedWebQueryProcessor implements WebQueryProcessor {
     }
 
     @Override
-    public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest query) throws QueryException, Exception {
+    public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest query) throws Exception {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
 
         List<WebServerConstants.GraphTypeInfo> graphInfoList = WebServerConstants.TYPES_OF_GRAPH.stream()

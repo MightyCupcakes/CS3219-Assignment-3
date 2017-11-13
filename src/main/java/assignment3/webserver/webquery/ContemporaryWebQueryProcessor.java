@@ -31,16 +31,18 @@ import assignment3.webserver.webrequest.WebRequest;
 
 @RegisterProcessor( requestType = "Contemporary comparison")
 public class ContemporaryWebQueryProcessor implements WebQueryProcessor {
+
     private static final Logic logic = new LogicManager();
     private static final String MULTI_CONF_A_YEAR = PREMADE_QUERIES.get(2).name;
     private static final String CONF_TREND = PREMADE_QUERIES.get(7).name;
     private static String requiredHtml;
-	@Override
+
+    @Override
 	public boolean processAndSaveIntoCSV(WebServerManager manager, WebRequest webRequest) throws Exception {
         APIQueryBuilder builder = manager.getAPI().getQueryBuilder();
         String premadeType = webRequest.getValue("premadeQuery");
         getQueryForMultipleConfs(manager, webRequest);
-        requiredHtml = "BarChart";
+        requiredHtml = "BarChart?yAxis=Num Of Cited Documents";
 
 		return true;
 	}
